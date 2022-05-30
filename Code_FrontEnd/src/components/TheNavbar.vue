@@ -67,6 +67,9 @@ const page = ref("#accueil");
       <a class="navbar-item" href="#agendaClasse">
         Agenda des classes
       </a>
+      <a class="navbar-item" href="#detailCours">
+        Détails du cours
+      </a>
     </div>
 
     <div class="navbar-end">

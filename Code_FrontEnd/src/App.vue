@@ -6,6 +6,7 @@ import AgendaClasse from './AgendaClasse.vue';
 import Login from './Login.vue';
 import Evenements from './Evenements.vue';
 import Accueil from './Accueil.vue';
+import DetailCours from './DetailCours.vue';
 
   const routes = {
     '#accueil': {
@@ -24,6 +25,10 @@ import Accueil from './Accueil.vue';
       label: 'Login',
       component: Login,
     },
+    '#detailCours':{
+      label : 'Detail cours',
+      component : DetailCours,
+    }
   };
 
   const hash = ref(window.location.hash);
