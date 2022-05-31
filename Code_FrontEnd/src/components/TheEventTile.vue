@@ -1,6 +1,6 @@
 <script setup>
 defineProps({
-    cours: {
+    titre: {
         type: String,
     },
     debut: {
@@ -12,24 +12,21 @@ defineProps({
     classe: {
         type: String,
     },
-    salle: {
+    lieu: {
         type: String,
     },
 });
 </script>
 
 <template>
-    <article class="tile is-child notification is-primary has-text-left-mobile">
-        <p class="is-size-4 has-text-weight-bold">{{ cours }}</p>
+    <article class="tile is-child notification is-warning has-text-left-mobile">
+        <p class="is-size-4 has-text-weight-bold">{{ titre }}</p>
         <p class="is-size-6">{{ debut }} - {{ fin }}</p>
         <p class="is-size-5">
             <span class="icon">
-                <i class="fa fa-map-marker "></i>
+                <i class="fa fa-map-marker is-large"></i>
             </span>
-            {{ salle }}
+            {{ lieu }}
         </p>
     </article>
 </template>
-
-<style scoped>
-</style>
