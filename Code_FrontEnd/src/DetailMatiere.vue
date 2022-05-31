@@ -2,6 +2,14 @@
 import detailsMatieres from './components/detailsMatieres.vue';
 import BaseBoutonRetour from './components/BaseBoutonRetour.vue';
 import Breadcrums from './components/Breadcrums.vue';
+// import { useFetch } from '../composables/fetch.js';
+
+// const { data: remarques } = useFetch(
+//   ""
+// );
+// à mettre dans le composant
+// v-for="remarque in remarques" :titre="remarque.titre" :description="remarque.description" :visibilite="remarque.visibilite" :user="remarque.fk_user" :date="remarque.date" :matiere="remarque.fk_matiere"
+
 </script>
 
 <template>
