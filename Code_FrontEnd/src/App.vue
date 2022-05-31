@@ -6,7 +6,7 @@ import AgendaClasse from './AgendaClasse.vue';
 import Login from './Login.vue';
 import Evenements from './Evenements.vue';
 import Accueil from './Accueil.vue';
-import DetailCours from './DetailCours.vue';
+import DetailMatiere from './DetailMatiere.vue';
 
   const routes = {
     '#accueil': {
@@ -27,7 +27,7 @@ import DetailCours from './DetailCours.vue';
     },
     '#detailCours':{
       label : 'Detail cours',
-      component : DetailCours,
+      component : DetailMatiere,
     }
   };
 
