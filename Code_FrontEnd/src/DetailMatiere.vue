@@ -1,7 +1,7 @@
 <script setup>
-import detailsMatieres from './components/detailsMatieres.vue';
-import BaseBoutonRetour from './components/BaseBoutonRetour.vue';
-import Breadcrums from './components/Breadcrums.vue';
+import detailsMatieres from './components/TheDetailsMatieres.vue';
+import BaseBoutonRetour from './components/TheReturnButton.vue';
+import TheBreadcrums from './components/TheBreadcrums.vue';
 // import { useFetch } from '../composables/fetch.js';
 
 // const { data: remarques } = useFetch(
@@ -13,8 +13,9 @@ import Breadcrums from './components/Breadcrums.vue';
 </script>
 
 <template>
-    <breadcrums></breadcrums>
-    <base-bouton-retour></base-bouton-retour>
+    <the-breadcrums></the-breadcrums>
+    <base-bouton-retour>
+    </base-bouton-retour>
     <details-matieres></details-matieres>
 </template>
 

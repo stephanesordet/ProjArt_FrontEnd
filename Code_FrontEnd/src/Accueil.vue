@@ -2,7 +2,7 @@
 import { def } from "@vue/shared";
 import { computed, ref, watchEffect } from "vue";
 import { useFetch } from "../composables/fetch";
-import TheTile from "./components/TheTile.vue";
+import CardCours from "./components/CardCours.vue";
 
 const { data: horaires } = useFetch(
   "https://chabloz.eu/files/horaires/all.json"
@@ -47,12 +47,8 @@ let selected = ref(null);
     </div>
     <div>
       <div class="buttons is-mobile columns is-centered mx-1 my-1">
-        <button
-          v-for="classe in Classes"
-          :key="classe"
-          @click="selected = classe"
-          class="column button has-background-info has-text-white is-medium is-one-fifth-mobile"
-        >
+        <button v-for="classe in Classes" :key="classe" @click="selected = classe"
+          class="column button has-background-info has-text-white is-medium is-one-fifth-mobile">
           {{ classe }}
         </button>
       </div>
@@ -68,20 +64,14 @@ let selected = ref(null);
     <div class="columns is-centered tile is-ancestor">
       <div class="column is-three-quarters">
         <div class="tile is-parent is-vertical">
-          <the-tile
-            v-for="horaire in horaires"
-            :key="horaire.start"
-            v-show="horaire.class == selected"
-            :debut="horaire.start"
-            :fin="horaire.start"
-            :cours="horaire.label"
-            :salle="horaire.room"
-          >
-          </the-tile>
+          <card-cours v-for="horaire in horaires" :key="horaire.start" v-show="horaire.class == selected"
+            :debut="horaire.start" :fin="horaire.start" :cours="horaire.label" :salle="horaire.room">
+          </card-cours>
         </div>
       </div>
     </div>
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+</style>

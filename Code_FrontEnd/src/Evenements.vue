@@ -1,6 +1,6 @@
 <script setup>
-import TheEventTileVue from './components/TheEventTile.vue';
-
+import CardEvent from './components/CardEvent.vue';
+import TheCardWrapper from './components/TheCardWrapper.vue';
 </script>
 
 <template>
@@ -11,28 +11,16 @@ import TheEventTileVue from './components/TheEventTile.vue';
         <option>With options</option>
       </select>
     </div>
-    <div class="columns is-centered tile is-ancestors my-1 mx-1">
-      <div class="column is-three-quarters">
-        <the-event-tile-vue :debut="'19:30'" :fin="'23:00'" :titre="'AGE - Soirée culture G'" :lieu="'Bar de la gare'">
-        </the-event-tile-vue>
-        <the-event-tile-vue :debut="'19:30'" :fin="'23:00'" :titre="'AGE - Soirée culture G'" :lieu="'Bar de la gare'">
-        </the-event-tile-vue>
-        <the-event-tile-vue :debut="'19:30'" :fin="'23:00'" :titre="'AGE - Soirée culture G'" :lieu="'Bar de la gare'">
-        </the-event-tile-vue>
-        <the-event-tile-vue :debut="'19:30'" :fin="'23:00'" :titre="'AGE - Soirée culture G'" :lieu="'Bar de la gare'">
-        </the-event-tile-vue>
-        <the-event-tile-vue :debut="'19:30'" :fin="'23:00'" :titre="'AGE - Soirée culture G'" :lieu="'Bar de la gare'">
-        </the-event-tile-vue>
-        <the-event-tile-vue :debut="'19:30'" :fin="'23:00'" :titre="'AGE - Soirée culture G'" :lieu="'Bar de la gare'">
-        </the-event-tile-vue>
-        <the-event-tile-vue :debut="'19:30'" :fin="'23:00'" :titre="'AGE - Soirée culture G'" :lieu="'Bar de la gare'">
-        </the-event-tile-vue>
-        <the-event-tile-vue :debut="'19:30'" :fin="'23:00'" :titre="'AGE - Soirée culture G'" :lieu="'Bar de la gare'">
-        </the-event-tile-vue>
-        <the-event-tile-vue :debut="'19:30'" :fin="'23:00'" :titre="'AGE - Soirée culture G'" :lieu="'Bar de la gare'">
-        </the-event-tile-vue>
-      </div>
-    </div>
+    <the-card-wrapper>
+      <card-event :debut="'19:30'" :fin="'23:00'" :titre="'AGE - Soirée culture G'" :lieu="'Bar de la gare'">
+      </card-event>
+      <card-event :debut="'19:30'" :fin="'23:00'" :titre="'AGE - Soirée culture G'" :lieu="'Bar de la gare'">
+      </card-event>
+      <card-event :debut="'19:30'" :fin="'23:00'" :titre="'AGE - Soirée culture G'" :lieu="'Bar de la gare'">
+      </card-event>
+      <card-event :debut="'19:30'" :fin="'23:00'" :titre="'AGE - Soirée culture G'" :lieu="'Bar de la gare'">
+      </card-event>
+    </the-card-wrapper>
     <div id="fixedbutton">
       <span class="icon is-large has-text-danger">
         <i class="fa fa-4x fa-plus-circle"></i>
