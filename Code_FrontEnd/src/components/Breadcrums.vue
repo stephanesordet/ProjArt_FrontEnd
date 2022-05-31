@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <nav class="breadcrumb column is-family-sans-serif" aria-label="breadcrumbs">
+  <nav class="breadcrumb column is-family-sans-serif is-responsive" aria-label="breadcrumbs">
     <h5 class="has-text-left">HEIG-VD</h5>
     <strong><ul>
       <li><a href="#">Agenda personnel</a></li>
