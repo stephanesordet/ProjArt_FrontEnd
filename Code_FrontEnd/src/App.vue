@@ -1,42 +1,52 @@
 <script setup>
-import { ref, computed } from 'vue';
-import HelloWorld from './components/HelloWorld.vue'
-import TheNavbar from './components/TheNavbar.vue';
-import AgendaClasse from './AgendaClasse.vue';
-import Login from './Login.vue';
-import Evenements from './Evenements.vue';
-import Accueil from './Accueil.vue';
-import DetailMatiere from './DetailMatiere.vue';
+import { ref, computed } from "vue";
+import HelloWorld from "./components/HelloWorld.vue";
+import TheNavbar from "./components/TheNavbar.vue";
+import AgendaClasse from "./AgendaClasse.vue";
+import Login from "./Login.vue";
+import Evenements from "./Evenements.vue";
+import Accueil from "./Accueil.vue";
+import DetailMatiere from "./DetailMatiere.vue";
+import Notifications from "./Notifications.vue";
 
-  const routes = {
-    '#accueil': {
-      label: 'Accueil',
-      component: Accueil,
-    },
-    '#evenements': {
-      label: 'Evenements',
-      component: Evenements,
-    },
-    '#agendaClasse': {
-      label: 'Agenda Classe',
-      component: AgendaClasse,
-    },
-    '#login': {
-      label: 'Login',
-      component: Login,
-    },
-    '#detailMatiere':{
-      label : 'Detail matiere',
-      component : DetailMatiere,
-    }
-  };
+const routes = {
+  "#accueil": {
+    label: "Accueil",
+    component: Accueil,
+  },
+  "#evenements": {
+    label: "Evenements",
+    component: Evenements,
+  },
+  "#agendaClasse": {
+    label: "Agenda Classe",
+    component: AgendaClasse,
+  },
+  "#login": {
+    label: "Login",
+    component: Login,
+  },
+  "#detailMatiere": {
+    label: "Detail matiere",
+    component: DetailMatiere,
+  },
+  "#notifications": {
+    label: "Notifications",
+    component: Notifications,
+  },
+};
 
-  const hash = ref(window.location.hash);
+const hash = ref(window.location.hash);
 
-  window.addEventListener('hashchange', () => hash.value = window.location.hash);
+window.addEventListener(
+  "hashchange",
+  () => (hash.value = window.location.hash)
+);
 
-  const curHash = computed(() => routes[hash.value] ? hash.value : Object.keys(routes)[0]);
-  const curComponent = computed(() => routes[curHash.value].component);
+const curHash = computed(() =>
+  routes[hash.value] ? hash.value : Object.keys(routes)[0]
+);
+const curComponent = computed(() => routes[curHash.value].component);
 </script>
 
 <template>
@@ -45,7 +55,7 @@ import DetailMatiere from './DetailMatiere.vue';
   <main>
     <template v-for="(route, hash) of routes">
       <div v-show="hash == curHash">
-        <component :is="route.component"/>
+        <component :is="route.component" />
       </div>
     </template>
   </main>
