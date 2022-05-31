@@ -25,8 +25,8 @@ import DetailMatiere from './DetailMatiere.vue';
       label: 'Login',
       component: Login,
     },
-    '#detailCours':{
-      label : 'Detail cours',
+    '#detailMatiere':{
+      label : 'Detail matiere',
       component : DetailMatiere,
     }
   };

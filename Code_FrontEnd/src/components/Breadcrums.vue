@@ -3,15 +3,13 @@
 </script>
 
 <template>
-
+  <nav class="breadcrumb" aria-label="breadcrumbs">
+    <ul>
+      <li><a href="#">Agenda personnel</a></li>
+      <li class="is-active"><a href="#" aria-current="page">LabVeilSoc</a></li>
+    </ul>
+  </nav>
 </template>
-<nav class="breadcrumb" aria-label="breadcrumbs">
-  <ul>
-    <li><a href="#">Bulma</a></li>
-    <li><a href="#">Documentation</a></li>
-    <li><a href="#">Components</a></li>
-    <li class="is-active"><a href="#" aria-current="page">Breadcrumb</a></li>
-  </ul>
-</nav>
+  
 <style scoped>
 </style>
