@@ -1,5 +1,21 @@
 <script setup>
-
+defineProps({
+    titre: {
+        type: String,
+    },
+    description: {
+        type: String,
+    },
+    visibilite: {
+        type: Boolean,
+    },
+    user: {
+        type: String,
+    },
+    date: {
+        type: Date,
+    },
+});
 </script>
 
 <template>
@@ -14,13 +30,13 @@
                     <span class="icon is-small">
                         <i class="fa fa-circle fa-solid has-text-info"></i>
                     </span>
-                    <span class="has-text-info is-size-5">Saskia Faulk</span>
+                    <span class="has-text-info is-size-5">Saskia Faulk {{ user }} - {{ titre }}</span>
                     <span class="icon is-small">
                         <i class="fa fa-eye"></i>
                     </span>
                 </div>
-                <p><em>30 mars 2022</em></p>
-                <p><strong>Rendre article film</strong></p>
+                <p><em>30 mars 2022 - {{ date }}</em></p>
+                <p><strong>Rendre article film - {{ description }}</strong></p>
             </div>
             <div class="column">
                 <div class="icon-text">
@@ -51,13 +67,13 @@
             <div class="column buttons">
                 <button class="button is-danger">
                     <span class="icon is-medium has-text-danger-dark">
-                        <i class="fa fa-solid fa-circle-plus"></i>
+                        <i class="fa fa-solid fa-plus"></i>
                     </span>
                     <span>Ajouter une remarque</span>
-                </button>
+                </button><br>
                 <button class="button is-danger">
                     <span class="icon is-medium has-text-danger-dark">
-                        <i class="fa fa-regular fa-clock"></i>
+                        <i class="fa fa-solid fa-rotate-right"></i>
                     </span>
                     <span>Annoncer un retard</span>
                 </button>
