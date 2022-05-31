@@ -1,10 +1,9 @@
 <script setup>
-import detailsCours from './components/detailsCours.vue';
+import detailsMatieres from './components/detailsMatieres.vue';
 </script>
 
 <template>
-    <h1>Detail du cours</h1>
-    <details-cours></details-cours>
+    <details-matieres></details-matieres>
 </template>
 
 <style scoped>
