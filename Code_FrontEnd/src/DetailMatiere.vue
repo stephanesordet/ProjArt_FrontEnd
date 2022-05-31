@@ -1,8 +1,10 @@
 <script setup>
 import detailsMatieres from './components/detailsMatieres.vue';
+import BaseBoutonRetour from './components/BaseBoutonRetour.vue';
 </script>
 
 <template>
+    <base-bouton-retour></base-bouton-retour>
     <details-matieres></details-matieres>
 </template>
 
