@@ -1,26 +1,26 @@
 <script setup>
-defineProps({
-    titre: {
-        type: String,
-    },
-    description: {
-        type: String,
-    },
-    visibilite: {
-        type: Boolean,
-    },
-    user: {
-        type: String,
-    },
-    date: {
-        type: Date,
-    },
-});
+// defineProps({
+//     titre: {
+//         type: String,
+//     },
+//     description: {
+//         type: String,
+//     },
+//     visibilite: {
+//         type: Boolean,
+//     },
+//     user: {
+//         type: String,
+//     },
+//     date: {
+//         type: Date,
+//     },
+// });
 </script>
 
 <template>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <div class="columns is-family-sans-serif">
+    <div class="columns is-family-sans-serif is-responsive">
         <div class="box content is-half is-offset-one-quarter has-background-light has-text-left column">
             <h2>LabVeilSoc</h2>
             <p class="is-size-6"><em>Saskia Faulk</em></p>
@@ -30,13 +30,13 @@ defineProps({
                     <span class="icon is-small">
                         <i class="fa fa-circle fa-solid has-text-info"></i>
                     </span>
-                    <span class="has-text-info is-size-5">Saskia Faulk {{ user }} - {{ titre }}</span>
+                    <span class="has-text-info is-size-5">Saskia Faulk <!-- {{ user }} - {{ titre }} -->></span>
                     <span class="icon is-small">
                         <i class="fa fa-eye"></i>
                     </span>
                 </div>
-                <p><em>30 mars 2022 - {{ date }}</em></p>
-                <p><strong>Rendre article film - {{ description }}</strong></p>
+                <p><em>30 mars 2022 <!-- {{ date }} --></em></p>
+                <p><strong>Rendre article film <!--  {{ description }} --></strong></p>
             </div>
             <div class="column">
                 <div class="icon-text">
