@@ -97,6 +97,6 @@ const props = defineProps({
 }
 
 .navbar-item img {
-  max-height: 7rem;
+  max-height: 7.5rem;
 }
 </style>

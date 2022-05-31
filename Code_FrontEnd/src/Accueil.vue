@@ -13,7 +13,7 @@ const Classes = computed(() => {
   if (!horaires.value?.length) {
     return [];
   } else {
-    horaires.value.forEach(element => {
+    horaires.value.forEach((element) => {
       if (!tabClasse.includes(element.class)) {
         tabClasse.push(element.class);
       }
@@ -27,7 +27,7 @@ const Matieres = computed(() => {
   if (!horaires.value?.length) {
     return [];
   } else {
-    horaires.value.forEach(element => {
+    horaires.value.forEach((element) => {
       if (!tabMatieres.includes(element.label)) {
         tabMatieres.push(element.label);
       }
@@ -47,8 +47,12 @@ let selected = ref(null);
     </div>
     <div>
       <div class="buttons is-mobile columns is-centered mx-1 my-1">
-        <button v-for="classe in Classes" :key="classe" @click="selected = classe"
-          class="column button has-background-info has-text-white is-medium is-one-fifth-mobile">
+        <button
+          v-for="classe in Classes"
+          :key="classe"
+          @click="selected = classe"
+          class="column button has-background-info has-text-white is-medium is-one-fifth-mobile"
+        >
           {{ classe }}
         </button>
       </div>
@@ -56,14 +60,23 @@ let selected = ref(null);
     <div class="select is-danger">
       <select>
         <option>Tous les cours</option>
-        <option v-for="matiere in Matieres" :key="matiere">{{ matiere }}</option>
+        <option v-for="matiere in Matieres" :key="matiere">
+          {{ matiere }}
+        </option>
       </select>
     </div>
     <div class="columns is-centered tile is-ancestor">
       <div class="column is-three-quarters">
         <div class="tile is-parent is-vertical">
-          <the-tile v-for="horaire in horaires" :key="horaire.start" v-show="horaire.class == selected"
-            :debut="horaire.start" :fin="horaire.start" :cours="horaire.label" :salle="horaire.room">
+          <the-tile
+            v-for="horaire in horaires"
+            :key="horaire.start"
+            v-show="horaire.class == selected"
+            :debut="horaire.start"
+            :fin="horaire.start"
+            :cours="horaire.label"
+            :salle="horaire.room"
+          >
           </the-tile>
         </div>
       </div>
@@ -71,5 +84,4 @@ let selected = ref(null);
   </div>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>
