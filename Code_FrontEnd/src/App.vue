@@ -1,6 +1,5 @@
 <script setup>
 import { ref, computed } from "vue";
-import HelloWorld from "./components/HelloWorld.vue";
 import TheNavbar from "./components/TheNavbar.vue";
 import AgendaClasse from "./AgendaClasse.vue";
 import Login from "./Login.vue";
