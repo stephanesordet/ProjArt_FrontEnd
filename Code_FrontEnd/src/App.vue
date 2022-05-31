@@ -8,6 +8,7 @@ import Evenements from "./Evenements.vue";
 import Accueil from "./Accueil.vue";
 import DetailMatiere from "./DetailMatiere.vue";
 import Notifications from "./Notifications.vue";
+import AjoutCours from "./AjoutCours.vue";
 
 const routes = {
   "#accueil": {
@@ -33,6 +34,10 @@ const routes = {
   "#notifications": {
     label: "Notifications",
     component: Notifications,
+  },
+  "#ajoutCours": {
+    label: "Ajouter un cours",
+    component: AjoutCours,
   },
 };
 
