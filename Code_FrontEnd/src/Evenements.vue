@@ -1,8 +1,9 @@
 <script setup>
+import FormCalendar from './components/FormCalendar.vue';
 </script>
 
 <template>
-    <h1>Events</h1>
+    <FormCalendar></FormCalendar>
 </template>
 
 <style scoped>
