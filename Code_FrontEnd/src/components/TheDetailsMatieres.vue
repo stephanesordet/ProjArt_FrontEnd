@@ -17,7 +17,7 @@
 //     },
 //     matiere :{
 //         type: String,
-// }
+//     }
 // });
 import BaseModal from './BaseModal.vue';
 
@@ -31,7 +31,6 @@ function showModal(etat) {
     } else {
         document.getElementById('modal').classList.remove('is-active');
     }
-
 }
 </script>
 
@@ -102,8 +101,7 @@ function showModal(etat) {
                     </span>
                     <span>Annoncer un retard</span>
                 </button>
-                <the-modal id='modal' @confirm="envoieRetard(), showModal(false)" @cancel="showModal(false)">
-                </the-modal>
+                <base-modal id='modal' @confirm="envoieRetard(), showModal(false)" @cancel="showModal(false)"></base-modal>
             </div>
         </div>
     </div>
