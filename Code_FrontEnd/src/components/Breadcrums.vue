@@ -3,11 +3,12 @@
 </script>
 
 <template>
-  <nav class="breadcrumb" aria-label="breadcrumbs">
-    <ul>
+  <nav class="breadcrumb column is-family-sans-serif" aria-label="breadcrumbs">
+    <h5 class="has-text-left">HEIG-VD</h5>
+    <strong><ul>
       <li><a href="#">Agenda personnel</a></li>
       <li class="is-active"><a href="#" aria-current="page">LabVeilSoc</a></li>
-    </ul>
+    </ul></strong>
   </nav>
 </template>
   
