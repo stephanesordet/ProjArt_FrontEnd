@@ -12,7 +12,6 @@ import AjoutCours from "./AjoutCours.vue";
 import DetailEvent from "./DetailEvent.vue";
 import TheBreadcrums from './components/TheBreadcrums.vue';
 import TheReturnButton from "./components/TheReturnButton.vue";
-import { crumbs } from "../composables/breadcrums";
 const routes = {
   "#accueil": {
     label: "Accueil",
@@ -50,17 +49,22 @@ const routes = {
 const hash = ref(window.location.hash);
 window.addEventListener(
   "hashchange",
-  () => (hash.value = window.location.hash)
+  () => {
+    hash.value = window.location.hash;
+    // crumbs = mietteDePain(hash.value);
+    // console.log(crumbs[0]);
+  }
 );
 const curHash = computed(() =>
   routes[hash.value] ? hash.value : Object.keys(routes)[0]
 );
 const curComponent = computed(() => routes[curHash.value].component);
+
 </script>
 
 <template>
   <TheNavbar :routes="routes" :curHash="curHash"></TheNavbar>
-  <the-breadcrums :element1="crumbs.element1"></the-breadcrums>
+  <the-breadcrums></the-breadcrums>
   <the-return-button></the-return-button>
   <main>
     <template v-for="(route, hash) of routes">

@@ -2,7 +2,6 @@
 import { def } from "@vue/shared";
 import { computed, ref, watchEffect } from "vue";
 import { useFetch } from "../composables/fetch";
-import CardCoursVue from "./components/CardCours.vue";
 import CardCours from "./components/CardCours.vue";
 
 const { data: horaires } = useFetch(
@@ -44,14 +43,14 @@ Matieres = computed(() => {
 watchEffect(() => {
   console.log(selectedMatiere.value)
 })
+
+function afficheForm() {
+  console.log(4);
+}
 </script>
 
 <template>
   <div class="main mx-1 my-1">
-    <div class="blocks has-text-left main mx-4 my-4">
-      <p class="has-text-weight-bold">HEIG-VD</p>
-      <p>Horaires des cours</p>
-    </div>
     <div>
       <div class="buttons is-mobile columns is-centered mx-1 my-1">
         <button v-for="classe in Classes" :key="classe"
@@ -72,20 +71,31 @@ watchEffect(() => {
     <div class="columns is-centered tile is-ancestor">
       <div class="column is-three-quarters">
         <div v-if="selectedMatiere != 'Tous les cours'" class="tile is-parent is-vertical">
-          <card-cours-vue v-for="horaire in horaires" :key="horaire.start"
+          <card-cours v-for="horaire in horaires" :key="horaire.start"
             v-show="selectedClasse == horaire.class && selectedMatiere == horaire.label" :debut="horaire.start"
             :fin="horaire.start" :cours="horaire.label" :salle="horaire.room">
-          </card-cours-vue>
+          </card-cours>
         </div>
+
         <div v-else class="tile is-parent is-vertical">
-          <card-cours-vue v-for="horaire in horaires" :key="horaire.start" v-show="selectedClasse == horaire.class"
+          <card-cours v-for="horaire in horaires" :key="horaire.start" v-show="selectedClasse == horaire.class"
             :debut="horaire.start" :fin="horaire.start" :cours="horaire.label" :salle="horaire.room">
-          </card-cours-vue>
+          </card-cours>
+
         </div>
       </div>
     </div>
+    <button class="button is-pulled-right" id="fixedbutton" @click="afficheForm()">
+      <span class="icon is-large has-text-danger">
+        <i class="fa fa-4x fa-plus-square"></i>
+      </span>
+    </button>
   </div>
 </template>
-
-<style scoped>
+<style>
+#fixedbutton {
+  position: fixed;
+  bottom: 20px;
+  right: 40px;
+}
 </style>

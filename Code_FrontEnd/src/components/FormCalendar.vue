@@ -64,12 +64,12 @@ function addCours() {
       <div class="field">
         <label class="label">Date</label>
         <div class="control">
-          <input
+          <!--           <input
             type="date"
             data-display-mode="inline"
             data-is-range="true"
             data-close-on-select="false"
-          />
+          /> -->
           <input
             v-model="date"
             class="input"

@@ -1,59 +1,73 @@
-import { ref } from "vue";
-
-const hash = ref(window.location.hash);
-export let crumbs = {};
-
 // import { useFetch } from '../composables/fetch.js';
 
 // const { data: remarques } = useFetch(
 //   ""
 // );
 
-window.addEventListener("hashchange",() => {
-    hash.value = window.location.hash;
-    switch (hash.value){
-        case "#accueil" :
+export function mietteDePain(hash) {
+    let crumbs = {};
+    switch (hash) {
+        case "#accueil":
             crumbs = {
-                element1 : "Horaire des cours",
+                element1: "Horaire des cours",
+                // element2 : " "
             }
-        break;
-        case "#login" :
+            break;
+        case "#login":
             crumbs = {
-                element1 : "Login",
+                element1: "Login",
+                // element2 : " "
             }
-        break;
-        case "#agendaPerso" :
+            break;
+        case "#agendaPerso":
             crumbs = {
-                element1 : "Agenda Personnel",
+                element1: "Agenda Personnel",
+                // element2 : " "
             }
-        break;
-        case "#detailMatiere" :
+            break;
+        case "#detailMatiere":
             crumbs = {
-                element1 : "Agenda Personnel",
-                // element2 : remarques.fk_matiere
+                element1: "Agenda Personnel",
+                // element2 : "LabVeilSoc" //matiere.id
             }
-        break;
+            break;
         case "#detailRemarque":
             crumbs = {
-                element1 : "Agenda Personnel",
-                // element2 : remarques.titre
+                element1: "Agenda Personnel",
+                // element2 : "Regarder film" //remarques.titre
             }
-        break;
-        case "#evenements" :
+            break;
+        case "#ajoutRemarque":
             crumbs = {
-                element1 : "Evénements",
+                element1: "Agenda Personnel",
+                // element2 : "Nouvelle remarque privée"
             }
-        break;
-        case "#detailEvenement" :
+            break;
+        case "#evenements":
             crumbs = {
-                element1 : "Evènement",
-                // element2 : remarques.fk_matiere
+                element1: "Evénements",
+                // element2 : " "
             }
-        break;
-        case "#ajoutDate" :
-
-        break;
-
+            break;
+        case "#detailEvenement":
+            crumbs = {
+                element1: "Evènement",
+                // element2 : "Titre événement" //evenement.titre
+            }
+            break;
+        case "#ajoutDate":
+            crumbs = {
+                element1: "Horaire des cours",
+                // element2 : "Ajouter une date"
+            }
+            break;
+        case "#notifications":
+            crumbs = {
+                element1: "Notifications",
+                // element2 : " "
+            }
+            break;
     }
+    return [crumbs.element1];
 }
-);
+
