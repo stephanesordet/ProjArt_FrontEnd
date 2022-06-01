@@ -1,9 +1,7 @@
 <script setup>
-import TheReturnButton from './components/TheReturnButton.vue';
 </script>
 
 <template>
-  <the-return-button></the-return-button>
   <section class="hero is-primary is-fullheight">
     <!-- To accept bulma's icons -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />

@@ -1,11 +1,9 @@
 <script setup>
 import CardEvent from './components/CardEvent.vue';
 import TheCardWrapper from './components/TheCardWrapper.vue';
-import TheReturnButton from './components/TheReturnButton.vue';
 </script>
 
 <template>
-  <the-return-button></the-return-button>
   <div class="main my-4 mx-4">
     <div class="select is-danger">
       <select>
