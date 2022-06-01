@@ -1,21 +1,16 @@
 <script setup></script>
 
 <template>
-  <form class="main my-4 mx-4">
-    <div class="containerInputs">
-      <slot></slot>
-    </div>
+  <form
+    class="box content is-half is-offset-one-quarter has-background-light has-text-left column"
+  >
+    <slot></slot>
   </form>
 </template>
 
 <style scoped>
 form {
   background-color: #ebeeef;
-  padding: 20px;
-}
-
-.containerInputs {
-  background-color: #ffffff;
   display: flex;
   flex-direction: column;
   justify-content: center;

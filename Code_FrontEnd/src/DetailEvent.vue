@@ -12,22 +12,22 @@ import TheDetailsRemarques from './components/TheDetailsRemarques.vue';
 // v-for="remarque in remarques" :titre="remarque.titre" :description="remarque.description" :visibilite="remarque.visibilite" :user="remarque.fk_user" :date="remarque.date" :matiere="remarque.fk_matiere"
 
 function changeFormatDate() {
-let myDate = "2012-10-16 11:00:28";
+    let myDate = "2012-10-16 11:00:28";
 
-myDate = myDate.replace(' ', 'T');
-const z = 'Z';
-myDate = myDate.concat(z);
-// console.log(myDate);
+    myDate = myDate.replace(' ', 'T');
+    const z = 'Z';
+    myDate = myDate.concat(z);
+    // console.log(myDate);
 
-const time = new Date((myDate)).toLocaleTimeString('fr-FR', {
-day: 'numeric',
-month: 'long',
-year: 'numeric',
-  hour: '2-digit',
-  minute: '2-digit',
-  
-})
-console.log(time)
+    const time = new Date((myDate)).toLocaleTimeString('fr-FR', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+
+    })
+    console.log(time)
 }
 
 
@@ -39,8 +39,7 @@ changeFormatDate();
 </script>
 
 <template>
-    <base-bouton-retour>
-    </base-bouton-retour>
+    <the-breadcrums></the-breadcrums>
     <the-details-event></the-details-event>
     <br>
     <the-details-remarques></the-details-remarques>

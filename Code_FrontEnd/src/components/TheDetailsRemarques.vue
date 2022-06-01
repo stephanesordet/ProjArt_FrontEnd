@@ -25,7 +25,7 @@
 <template>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <div class="columns is-family-sans-serif is-responsive">
-        <div class="box content is-half is-offset-one-quarter has-background-light has-text-left column">
+        <div class="box content is-half is-offset-one-quarter has-background-light has-text-left column is-responsive">
             <h2>MetRech - Regarder Film
                 <!-- {{matiere}}-{{titre}}-->
             </h2>
@@ -46,7 +46,7 @@
                 </p>
 
                
-                    <div class="column buttons">
+                    <div class="column buttons is-pulled-right">
                 <button class="button is-danger">
                     <span>Supprimer</span>
                 </button>
@@ -68,12 +68,10 @@
 
 .box{
    
-   padding: 3rem;
+   padding-bottom: 5rem;
+   
     
 }
-/* .button{
-    position: relative;
-    right:  -25rem;
-} */
+
 
 </style>

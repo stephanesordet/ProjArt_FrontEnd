@@ -3,12 +3,12 @@ import TheReturnButtonVue from "./components/TheReturnButton.vue";
 import { ref, computed } from "vue";
 import TheNavbar from "./components/TheNavbar.vue";
 import AgendaClasse from "./AgendaClasse.vue";
-import Login from "./Login.vue";
+import Login from "./FormLogin.vue";
 import Evenements from "./Evenements.vue";
 import Accueil from "./Accueil.vue";
 import DetailMatiere from "./DetailMatiere.vue";
 import Notifications from "./Notifications.vue";
-import AjoutCours from "./AjoutCours.vue";
+import AjoutCours from "./FormAjoutCours.vue";
 import DetailEvent from "./DetailEvent.vue";
 import TheBreadcrums from "./components/TheBreadcrums.vue";
 import TheReturnButton from "./components/TheReturnButton.vue";
@@ -47,20 +47,15 @@ const routes = {
   },
 };
 const hash = ref(window.location.hash);
-
-window.addEventListener(
-  "hashchange",
-  () => {
-    hash.value = window.location.hash;
-    // crumbs = mietteDePain(hash.value);
-    // console.log(crumbs[0]);
-  }
-);
+window.addEventListener("hashchange", () => {
+  hash.value = window.location.hash;
+  // crumbs = mietteDePain(hash.value);
+  // console.log(crumbs[0]);
+});
 const curHash = computed(() =>
   routes[hash.value] ? hash.value : Object.keys(routes)[0]
 );
 const curComponent = computed(() => routes[curHash.value].component);
-
 </script>
 
 <template>
