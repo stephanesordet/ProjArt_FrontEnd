@@ -31,7 +31,7 @@ defineProps({
     </div> -->
 
   
-<div class="columns ">
+<!-- <div class="columns ">
   <div class="is-half is-offset-one-quarter has-text-left column">
 
 <div class="box is-child notification is-primary has-text-left-mobile has-icons-right">
@@ -59,7 +59,19 @@ defineProps({
 
     </div>
     </div>
+ -->
 
+ <article class="tile is-child notification is-primary has-text-left-mobile has-icons-right">
+   <span class="icon is-right">
+                <i class="fa fa-solid fa-circle "></i>
+            </span>
+        <p class="is-size-4 has-text-weight-bold">{{ user }}- {{object}}</p>
+        <p class="is-size-6">{{envoiHeure}}</p>
+        <p class="is-size-5">
+            
+            {{ message }}
+        </p>
+    </article>
 
   
 </template>
