@@ -16,9 +16,14 @@ defineProps({
         type: String,
     },
 });
+
+function modifCours(){
+    console.log(4);
+}
 </script>
 
 <template>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <article class="tile is-child notification is-light has-text-left-mobile">
         <p class="is-size-4 has-text-weight-bold">{{ cours }}</p>
         <p class="is-size-6">{{ debut }} - {{ fin }}</p>
@@ -28,6 +33,11 @@ defineProps({
             </span>
             {{ salle }}
         </p>
+        <button class="button is-pulled-right is-white has-background-light" @click="modifCours()">
+            <span class="icon is-small">
+                <i class ="fa fa-pencil"></i>
+            </span>
+        </button>
     </article>
 </template>
 
