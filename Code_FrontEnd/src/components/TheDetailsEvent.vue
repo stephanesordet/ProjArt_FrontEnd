@@ -36,6 +36,7 @@
         is-half is-offset-one-quarter
         has-background-light has-text-left
         column
+        is-responsive
       "
     >
       <h2>
@@ -76,8 +77,8 @@
       <br />
       <br />
       <br />
-      <div class="column buttons">
-        <button class="button is-danger">
+      <div class="column buttons is-pulled-right ">
+        <button class="button is-danger ">
           <span>Supprimer</span>
         </button>
         <button class="button is-danger">
@@ -90,10 +91,8 @@
 
 <style scoped>
 .box {
-  padding: 3rem;
+  padding: 20px;
+  margin: 10px;
 }
-/* .button {
-  position: absolute;
-  right: -25rem;
-} */
+
 </style>

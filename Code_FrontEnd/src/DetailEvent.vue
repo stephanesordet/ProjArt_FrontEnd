@@ -40,8 +40,6 @@ changeFormatDate();
 
 <template>
     <the-breadcrums></the-breadcrums>
-    <base-bouton-retour>
-    </base-bouton-retour>
     <the-details-event></the-details-event>
     <br>
     <the-details-remarques></the-details-remarques>
