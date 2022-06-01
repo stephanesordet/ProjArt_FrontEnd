@@ -1,43 +1,23 @@
 <script setup>
+import { ref, watchEffect } from 'vue';
 
-defineProps({
-  element1: {
-    type: String,
-  },
-  // element2: {
-  //   type: String,
-  // },
+let hashUrl = ref(window.location.hash);
+let bread = ref(null)
+window.addEventListener('hashchange', () => {
+  hashUrl.value = window.location.hash;
+  bread.value = window.location.hash.slice(1)
 });
-
-// let deuxElements = false;
-
-// if (element2 === " ") {
-//   deuxElements = false;
-// } else {
-//   deuxElements = true;
-// }
 
 </script>
 
 <template>
-  <!-- <nav class="breadcrumb column is-family-sans-serif is-responsive" aria-label="breadcrumbs">
-    <h5 class="has-text-left">HEIG-VD</h5>
-    <strong>
+  <nav class="main mx-1 my-1">
+    <nav class="breadcrumb" aria-label="breadcrumbs">
       <ul>
-        <li>
-          <a href="#">
-            {{ element1 }}
-          </a>
-        </li>
-           <li v-show="deuxElements" class="is-active">
-            <a href="#" aria-current="page">
-              {{ element2 }}
-            </a>
-          </li>
+        <li><a :href="hashUrl" aria-current="page"> {{ bread }} </a></li>
       </ul>
-    </strong>
-  </nav> -->
-  <!-- <router-link></router-link> -->
+    </nav>
+  </nav>
 </template>
   
 <style scoped>

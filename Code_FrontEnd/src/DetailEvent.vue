@@ -39,7 +39,6 @@ changeFormatDate();
 </script>
 
 <template>
-    <the-breadcrums></the-breadcrums>
     <base-bouton-retour>
     </base-bouton-retour>
     <the-details-event></the-details-event>

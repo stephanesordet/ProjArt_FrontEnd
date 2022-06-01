@@ -40,17 +40,14 @@ Matieres = computed(() => {
   return tabMatieres;
 });
 
-watchEffect(() => {
-  console.log(selectedMatiere.value)
-})
-
 function afficheForm() {
-  console.log(4);
+  console.log(4)
 }
+
 </script>
 
 <template>
-  <div class="main mx-1 my-1">
+  <div class="main mx-4 my-1">
     <div>
       <div class="buttons is-mobile columns is-centered mx-1 my-1">
         <button v-for="classe in Classes" :key="classe"
@@ -78,18 +75,20 @@ function afficheForm() {
         </div>
 
         <div v-else class="tile is-parent is-vertical">
-          <card-cours v-for="horaire in horaires" :key="horaire.start" v-show="selectedClasse == horaire.class"
+          <card-cours v-for="horaire in horaires" :key="horaire.id" v-show="selectedClasse == horaire.class"
             :debut="horaire.start" :fin="horaire.start" :cours="horaire.label" :salle="horaire.room">
           </card-cours>
 
         </div>
       </div>
     </div>
-    <button class="button is-pulled-right" id="fixedbutton" @click="afficheForm()">
-      <span class="icon is-large has-text-danger">
-        <i class="fa fa-4x fa-plus-square"></i>
-      </span>
-    </button>
+    <div>
+      <button class="button is-pulled-right" id="fixedbutton" @click="afficheForm()">
+        <span class="icon is-large has-text-danger">
+          <i class="fa fa-4x fa-plus-square"></i>
+        </span>
+      </button>
+    </div>
   </div>
 </template>
 <style>

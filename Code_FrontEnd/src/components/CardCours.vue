@@ -1,4 +1,5 @@
 <script setup>
+
 defineProps({
     cours: {
         type: String,
@@ -17,14 +18,14 @@ defineProps({
     },
 });
 
-function modifCours(){
+function modifCours() {
     console.log(4);
 }
 </script>
 
 <template>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <article class="tile is-child notification is-light has-text-left-mobile">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
         <p class="is-size-4 has-text-weight-bold">{{ cours }}</p>
         <p class="is-size-6">{{ debut }} - {{ fin }}</p>
         <p class="is-size-5">
@@ -35,7 +36,7 @@ function modifCours(){
         </p>
         <button class="button is-pulled-right is-white has-background-light" @click="modifCours()">
             <span class="icon is-small">
-                <i class ="fa fa-pencil"></i>
+                <i class="fa fa-pencil"></i>
             </span>
         </button>
     </article>

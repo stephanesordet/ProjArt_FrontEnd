@@ -14,16 +14,14 @@ import TheBreadCrums from "./components/TheBreadcrums.vue";
 
 <template>
   <!--   <the-card-notif v-for="notif in notifs" :key="notif.id" :user="notif.user" :object="notif.object" :message="notif.message" :envoiHeureDate="notif.envoiHeureDate"></the-card-notif>
- --> 
-<the-card-wrapper>
-      <card-notif :user="'AGE'" :object="'Soirée CultureG'" :envoiHeure="'13:05'" :message="'Venez nombreux !'">
-      </card-notif>
-    </the-card-wrapper>
+ -->
+  <the-card-wrapper>
+    <card-notif :user="'AGE'" :object="'Soirée CultureG'" :envoiHeure="'13:05'" :message="'Venez nombreux !'">
+    </card-notif>
+  </the-card-wrapper>
 
 
 </template>
 
-<style scoped> 
-
-
+<style scoped>
 </style>

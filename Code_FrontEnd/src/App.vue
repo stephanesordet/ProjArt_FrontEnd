@@ -10,7 +10,7 @@ import DetailMatiere from "./DetailMatiere.vue";
 import Notifications from "./Notifications.vue";
 import AjoutCours from "./AjoutCours.vue";
 import DetailEvent from "./DetailEvent.vue";
-import TheBreadcrums from './components/TheBreadcrums.vue';
+import TheBreadcrums from "./components/TheBreadcrums.vue";
 import TheReturnButton from "./components/TheReturnButton.vue";
 const routes = {
   "#accueil": {
@@ -47,6 +47,7 @@ const routes = {
   },
 };
 const hash = ref(window.location.hash);
+
 window.addEventListener(
   "hashchange",
   () => {
