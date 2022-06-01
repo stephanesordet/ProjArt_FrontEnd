@@ -71,9 +71,9 @@
    padding: 3rem;
     
 }
-.button{
+/* .button{
     position: relative;
     right:  -25rem;
-}
+} */
 
 </style>
