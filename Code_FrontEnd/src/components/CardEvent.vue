@@ -16,6 +16,10 @@ defineProps({
         type: String,
     },
 });
+
+function modifCours(){
+    console.log(4);
+}
 </script>
 
 <template>
@@ -28,6 +32,11 @@ defineProps({
             </span>
             {{ lieu }}
         </p>
+        <button class="button is-pulled-right is-white has-background-light" @click="modifCours()">
+            <span class="icon is-small">
+                <i class ="fa fa-pencil"></i>
+            </span>
+        </button>
     </article>
 </template>
 
