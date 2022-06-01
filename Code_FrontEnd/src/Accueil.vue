@@ -55,7 +55,7 @@ watchEffect(() => {
     <div>
       <div class="buttons is-mobile columns is-centered mx-1 my-1">
         <button v-for="classe in Classes" :key="classe"
-          @click="selectedClasse = classe, selectedMatiere == 'Tous les cours'"
+          @click="selectedClasse = classe, selectedMatiere = 'Tous les cours'"
           class="column button has-background-info has-text-white is-medium is-one-fifth-mobile">
           {{ classe }}
         </button>
