@@ -1,5 +1,5 @@
 <script setup>
-import CardEventVue from './components/CardEvent.vue';
+import CardEvent from './components/CardEvent.vue';
 import TheCardWrapper from './components/TheCardWrapper.vue';
 </script>
 
@@ -12,8 +12,8 @@ import TheCardWrapper from './components/TheCardWrapper.vue';
       </select>
     </div>
     <the-card-wrapper>
-      <card-event-vue :debut="'19:30'" :fin="'23:00'" :titre="'AGE - Soirée culture G'" :lieu="'Bar de la gare'">
-      </card-event-vue>
+      <card-event :debut="'19:30'" :fin="'23:00'" :titre="'AGE - Soirée culture G'" :lieu="'Bar de la gare'">
+      </card-event>
     </the-card-wrapper>
     <div id="fixedbutton">
       <span class="icon is-large has-text-link">
