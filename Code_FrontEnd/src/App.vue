@@ -8,6 +8,9 @@ import Accueil from "./Accueil.vue";
 import DetailMatiere from "./DetailMatiere.vue";
 import Notifications from "./Notifications.vue";
 import AjoutCours from "./AjoutCours.vue";
+import BaseBoutonRetour from './components/TheReturnButton.vue';
+import TheBreadcrums from './components/TheBreadcrums.vue';
+import { crumbs } from "../composables/breadcrums";
 
 const routes = {
   "#accueil": {
@@ -55,7 +58,8 @@ const curComponent = computed(() => routes[curHash.value].component);
 
 <template>
   <TheNavbar :routes="routes" :curHash="curHash"></TheNavbar>
-
+  <the-breadcrums :element1 ="crumbs.element1"></the-breadcrums>
+  <base-bouton-retour></base-bouton-retour>
   <main>
     <template v-for="(route, hash) of routes">
       <div v-show="hash == curHash">
