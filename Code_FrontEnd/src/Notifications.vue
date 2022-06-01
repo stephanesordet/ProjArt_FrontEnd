@@ -18,7 +18,7 @@ import TheBreadCrums from "./components/TheBreadcrums.vue";
 <the-card-wrapper>
       <card-notif :user="'AGE'" :object="'Soirée CultureG'" :envoiHeure="'13:05'" :message="'Venez nombreux !'">
       </card-notif>
-    <the-card-wrapper></the-card-wrapper>
+    </the-card-wrapper>
 
 
 </template>
