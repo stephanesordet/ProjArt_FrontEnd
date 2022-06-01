@@ -1,3 +1,4 @@
+import TheReturnButtonVue from "./components/TheReturnButton.vue";
 <script setup>
 import { ref, computed } from "vue";
 import TheNavbar from "./components/TheNavbar.vue";
@@ -8,8 +9,8 @@ import Accueil from "./Accueil.vue";
 import DetailMatiere from "./DetailMatiere.vue";
 import Notifications from "./Notifications.vue";
 import AjoutCours from "./AjoutCours.vue";
-import BaseBoutonRetour from './components/TheReturnButton.vue';
 import TheBreadcrums from './components/TheBreadcrums.vue';
+import TheReturnButton from "./components/TheReturnButton.vue";
 import { crumbs } from "../composables/breadcrums";
 
 const routes = {
@@ -59,7 +60,7 @@ const curComponent = computed(() => routes[curHash.value].component);
 <template>
   <TheNavbar :routes="routes" :curHash="curHash"></TheNavbar>
   <the-breadcrums :element1 ="crumbs.element1"></the-breadcrums>
-  <base-bouton-retour></base-bouton-retour>
+  <the-return-button></the-return-button>
   <main>
     <template v-for="(route, hash) of routes">
       <div v-show="hash == curHash">
