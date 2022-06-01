@@ -12,7 +12,6 @@ import AjoutCours from "./AjoutCours.vue";
 import DetailEvent from "./DetailEvent.vue";
 import TheBreadcrums from './components/TheBreadcrums.vue';
 import TheReturnButton from "./components/TheReturnButton.vue";
-import { crumbs } from "../composables/breadcrums";
 const routes = {
   "#accueil": {
     label: "Accueil",
@@ -65,7 +64,7 @@ const curComponent = computed(() => routes[curHash.value].component);
 
 <template>
   <TheNavbar :routes="routes" :curHash="curHash"></TheNavbar>
-  <the-breadcrums :element1="crumbs.element1"></the-breadcrums>
+  <the-breadcrums></the-breadcrums>
   <the-return-button></the-return-button>
   <main>
     <template v-for="(route, hash) of routes">
