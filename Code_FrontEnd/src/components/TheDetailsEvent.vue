@@ -92,8 +92,8 @@
 .box {
   padding: 3rem;
 }
-.button {
-  position: relative;
+/* .button {
+  position: absolute;
   right: -25rem;
-}
+} */
 </style>

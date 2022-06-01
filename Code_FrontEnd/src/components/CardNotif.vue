@@ -9,7 +9,7 @@ defineProps({
   message: {
     type: String,
   },
-  envoiHeureDate: {
+  envoiHeure: {
     type: String,
   },
 });
@@ -22,7 +22,7 @@ defineProps({
   <div class="is-half is-offset-one-quarter has-text-left column">
 <div class="box">
         <p>
-          <strong> {{ user}} - {{ object}} </strong>  <small>{{envoiHeureDate}}</small>
+          <strong> {{ user}} - {{ object}} </strong>  <small>{{envoiHeure}}</small>
           <br>
           {{message}}
         </p>
