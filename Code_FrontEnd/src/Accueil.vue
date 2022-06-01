@@ -43,6 +43,10 @@ Matieres = computed(() => {
 watchEffect(() => {
   console.log(selectedMatiere.value)
 })
+
+function afficheForm() {
+  console.log(4);
+}
 </script>
 
 <template>
@@ -72,15 +76,26 @@ watchEffect(() => {
             :fin="horaire.start" :cours="horaire.label" :salle="horaire.room">
           </card-cours>
         </div>
+
         <div v-else class="tile is-parent is-vertical">
           <card-cours v-for="horaire in horaires" :key="horaire.start" v-show="selectedClasse == horaire.class"
             :debut="horaire.start" :fin="horaire.start" :cours="horaire.label" :salle="horaire.room">
           </card-cours>
+
         </div>
       </div>
     </div>
+    <button class="button is-pulled-right" id="fixedbutton" @click="afficheForm()">
+      <span class="icon is-large has-text-danger">
+        <i class="fa fa-4x fa-plus-square"></i>
+      </span>
+    </button>
   </div>
 </template>
-
-<style scoped>
+<style>
+#fixedbutton {
+  position: fixed;
+  bottom: 20px;
+  right: 40px;
+}
 </style>
