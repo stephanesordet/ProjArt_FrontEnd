@@ -61,9 +61,9 @@ defineProps({
     </div>
  -->
 
- <article class="tile is-child notification is-primary has-text-left-mobile has-icons-right">
-   <span class="icon is-right">
-                <i class="fa fa-solid fa-circle "></i>
+ <article class="tile is-child notification is-light has-text-left-mobile ">
+   <span class="icon ">
+                <i class="fa fa-solid fa-circle fa-lg "></i>
             </span>
         <p class="is-size-4 has-text-weight-bold">{{ user }}- {{object}}</p>
         <p class="is-size-6">{{envoiHeure}}</p>
@@ -78,4 +78,25 @@ defineProps({
 
 
 <style scoped>
+.icon {
+  color: #ff3860;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+
+  
+
+}
+
+article {
+  border-left-width: 15px;
+  border-style: solid;
+  border-color: #ff3860;
+  border-right-width: 0px;
+  border-top-width: 0px;
+  border-bottom-width: 0px;
+ 
+
+
+}
 </style>
