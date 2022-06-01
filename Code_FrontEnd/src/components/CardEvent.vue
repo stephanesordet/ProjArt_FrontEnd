@@ -33,13 +33,12 @@ defineProps({
 
 
 <style scoped>
-
-    article {
-        border-left-width: 15px;
-        border-style: solid;
-        border-color: #ff3860;
-        border-right-width: 0px;
-        border-top-width: 0px;
-        border-bottom-width: 0px;
-    }
+article {
+    border-left-width: 15px;
+    border-style: solid;
+    border-color: #ff3860;
+    border-right-width: 0px;
+    border-top-width: 0px;
+    border-bottom-width: 0px;
+}
 </style>

@@ -9,14 +9,10 @@ import Accueil from "./Accueil.vue";
 import DetailMatiere from "./DetailMatiere.vue";
 import Notifications from "./Notifications.vue";
 import AjoutCours from "./AjoutCours.vue";
-<<<<<<< HEAD
 import DetailEvent from "./DetailEvent.vue";
-=======
 import TheBreadcrums from './components/TheBreadcrums.vue';
 import TheReturnButton from "./components/TheReturnButton.vue";
 import { crumbs } from "../composables/breadcrums";
->>>>>>> 45c1862e18e41e9e8a2fed09977362f65ef3de73
-
 const routes = {
   "#accueil": {
     label: "Accueil",
@@ -51,14 +47,11 @@ const routes = {
     component: DetailEvent,
   },
 };
-
 const hash = ref(window.location.hash);
-
 window.addEventListener(
   "hashchange",
   () => (hash.value = window.location.hash)
 );
-
 const curHash = computed(() =>
   routes[hash.value] ? hash.value : Object.keys(routes)[0]
 );
@@ -67,7 +60,7 @@ const curComponent = computed(() => routes[curHash.value].component);
 
 <template>
   <TheNavbar :routes="routes" :curHash="curHash"></TheNavbar>
-  <the-breadcrums :element1 ="crumbs.element1"></the-breadcrums>
+  <the-breadcrums :element1="crumbs.element1"></the-breadcrums>
   <the-return-button></the-return-button>
   <main>
     <template v-for="(route, hash) of routes">
