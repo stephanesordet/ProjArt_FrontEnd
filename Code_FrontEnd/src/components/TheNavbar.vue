@@ -36,6 +36,10 @@ const props = defineProps({
     required: true,
   },
 });
+
+function afficheNotif(){
+  console.log(4);
+}
 </script>
 
 <template>
@@ -44,14 +48,12 @@ const props = defineProps({
       <a class="navbar-item" href="#accueil">
         <img id="logoNavbar" src="../assets/logoProjArt.png" />
       </a>
-
-      <a
-        role="button"
-        class="navbar-burger"
-        data-target="navMenu"
-        aria-label="menu"
-        aria-expanded="false"
-      >
+      <button class="button is-large is-white mt-6" @click="afficheNotif()">
+        <span class="icon">
+          <i class="fa fa-regular fa-bell"></i>
+        </span>
+      </button>
+      <a role="button" class="navbar-burger mt-6" data-target="navMenu" aria-label="menu" aria-expanded="false">
         <span aria-hidden="true"></span>
         <span aria-hidden="true"></span>
         <span aria-hidden="true"></span>
@@ -69,7 +71,6 @@ const props = defineProps({
         <a class="navbar-item" href="#ajoutCours"> Ajouter un cours </a>
         <a class="navbar-item" href="#DetailEvent"> Details Event </a>
       </div>
-
       <div class="navbar-end">
         <div class="navbar-item">
           <div class="buttons">
