@@ -67,6 +67,7 @@ const props = defineProps({
         <a class="navbar-item" href="#detailMatiere"> Détails de la matière </a>
         <a class="navbar-item" href="#notifications"> Notifications </a>
         <a class="navbar-item" href="#ajoutCours"> Ajouter un cours </a>
+        <a class="navbar-item" href="#DetailEvent"> Details Event </a>
       </div>
 
       <div class="navbar-end">

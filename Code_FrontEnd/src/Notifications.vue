@@ -1,9 +1,9 @@
 <script setup>
 import TheCardWrapper from "./components/TheCardWrapper.vue";
 import CardNotif from "./components/CardNotif.vue";
-import TheReturnButton from "./components/TheReturnButton.vue";
 import { useFetch } from "../composables/fetch";
-import TheReturnButton from "./components/TheReturnButton.vue";
+//import TheReturnButton from "./components/TheReturnButton.vue";
+import TheBreadCrums from "./components/TheBreadcrums.vue";
 
 /* const { data: notif } = useFetch(
   ""
@@ -13,9 +13,9 @@ import TheReturnButton from "./components/TheReturnButton.vue";
 
 
 <template>
-  <the-return-button></the-return-button>
-  <h1>notif</h1>
-<the-return-button> </the-return-button>
+  
+ <the-bread-crums></the-bread-crums>
+
   <!--   <the-card-notif v-for="notif in notifs" :key="notif.id" :user="notif.user" :object="notif.object" :message="notif.message" :envoiHeureDate="notif.envoiHeureDate"></the-card-notif>
  --> 
 <the-card-wrapper>
@@ -27,4 +27,6 @@ import TheReturnButton from "./components/TheReturnButton.vue";
 </template>
 
 <style scoped> 
+
+
 </style>

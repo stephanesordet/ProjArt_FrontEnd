@@ -19,7 +19,7 @@ defineProps({
 </script>
 
 <template>
-    <article class="tile is-child notification is-primary has-text-left-mobile">
+    <article class="tile is-child notification is-light has-text-left-mobile">
         <p class="is-size-4 has-text-weight-bold">{{ cours }}</p>
         <p class="is-size-6">{{ debut }} - {{ fin }}</p>
         <p class="is-size-5">
@@ -32,4 +32,13 @@ defineProps({
 </template>
 
 <style scoped>
+
+    article {
+        border-left-width: 15px;
+        border-style: solid;
+        border-color: #ff3860;
+        border-right-width: 0px;
+        border-top-width: 0px;
+        border-bottom-width: 0px;
+    }
 </style>
