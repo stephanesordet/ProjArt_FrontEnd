@@ -1,12 +1,12 @@
-<script setup></script>
+<script setup>
+import TheReturnButton from './components/TheReturnButton.vue';
+</script>
 
 <template>
+  <the-return-button></the-return-button>
   <section class="hero is-primary is-fullheight">
     <!-- To accept bulma's icons -->
-    <link
-      rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-    />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
     <div class="hero-body">
       <div class="container">
         <div class="columns is-centered">
@@ -15,12 +15,7 @@
               <div class="field">
                 <label for="" class="label">Adresse mail</label>
                 <div class="control has-icons-left">
-                  <input
-                    type="email"
-                    placeholder="example@gmail.com"
-                    class="input"
-                    required
-                  />
+                  <input type="email" placeholder="example@gmail.com" class="input" required />
                   <span class="icon is-small is-left">
                     <i class="fa fa-envelope"></i>
                   </span>
@@ -29,12 +24,7 @@
               <div class="field">
                 <label for="" class="label">Mot de passe</label>
                 <div class="control has-icons-left">
-                  <input
-                    type="password"
-                    placeholder="*******"
-                    class="input"
-                    required
-                  />
+                  <input type="password" placeholder="*******" class="input" required />
                   <span class="icon is-small is-left">
                     <i class="fa fa-lock"></i>
                   </span>
@@ -57,4 +47,5 @@
   </section>
 </template>
 
-<style scoped></style>
+<style scoped>
+</style>
