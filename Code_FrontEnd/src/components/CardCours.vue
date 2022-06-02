@@ -50,5 +50,6 @@ article {
     border-right-width: 0px;
     border-top-width: 0px;
     border-bottom-width: 0px;
+    padding-bottom: 40px;
 }
 </style>
