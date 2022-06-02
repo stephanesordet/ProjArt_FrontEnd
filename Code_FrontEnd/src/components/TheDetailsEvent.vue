@@ -77,11 +77,11 @@
       <br />
       <br />
       <br />
-      <div class="column buttons is-pulled-right ">
-        <button class="button is-danger ">
+      <div class="column buttons is-pulled-right  ">
+        <button class="button is-danger is-rounded ">
           <span>Supprimer</span>
         </button>
-        <button class="button is-danger">
+        <button class="button is-danger is-rounded">
           <span>Modifer</span>
         </button>
       </div>
@@ -90,9 +90,19 @@
 </template>
 
 <style scoped>
-.box {
+
+div {
+  background-color: #ebeeef;
+  display: flex;
+  flex-direction: column;
+  align-items: left;
   padding: 20px;
-  margin: 10px;
+}
+
+div .buttons{
+background-color:transparent;
+  display:block;
+  text-align: right;
 }
 
 </style>

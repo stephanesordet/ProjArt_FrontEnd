@@ -95,7 +95,7 @@ function showModal(etat) {
                     </span>
                     <span>Ajouter une remarque</span>
                 </button><br>
-                <button class="button is-danger" @click="showModal(true)" id="show-modal">
+                <button class="button is-danger " @click="showModal(true)" id="show-modal">
                     <span class="icon is-medium has-text-danger-dark">
                         <i class="fa fa-solid fa-rotate-right"></i>
                     </span>
@@ -108,4 +108,10 @@ function showModal(etat) {
 </template>
 
 <style scoped>
+div {
+  background-color: #ebeeef;
+  flex-direction: column;
+  align-items: left;
+  padding: 20px;
+}
 </style>
