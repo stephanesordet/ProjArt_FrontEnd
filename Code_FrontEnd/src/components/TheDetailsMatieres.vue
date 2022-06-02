@@ -114,4 +114,9 @@ div {
   align-items: left;
   padding: 20px;
 }
+.icon-text {
+     display:block;
+  text-align: left;
+
+}
 </style>
