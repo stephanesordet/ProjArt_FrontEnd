@@ -44,7 +44,7 @@ Matieres = computed(() => {
 });
 
 function afficheForm() {
-  console.log(4);
+  alert("aaa");
 }
 </script>
 

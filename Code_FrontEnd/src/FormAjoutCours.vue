@@ -1,8 +1,10 @@
 <script setup>
+import { ref, computed } from "vue";
 import BaseForm from "./components/BaseForm.vue";
+import BaseFormModal from "./components/BaseFormModal.vue";
 import BaseInputSubmit from "./components/BaseInputSubmit.vue";
 import BaseInput from "./components/BaseInput.vue";
-import { ref, computed } from "vue";
+import BaseModalForm from "./components/BaseModalForm.vue";
 
 /*import bulmaCalendar from "bulma-calendar/dist/js/bulma-calendar.min.js";
 <!-- https://bulma-calendar.onrender.com/-->
@@ -141,89 +143,6 @@ function addCours() {
           class="input"
           type="text"
           placeholder="Entrez le lieu d'une classe"
-        />
-      </template>
-    </BaseInput>
-
-    <BaseInputSubmit>
-      <input
-        type="submit"
-        class="button is-danger is-rounded"
-        value="Ajouter le cours"
-      />
-    </BaseInputSubmit>
-  </BaseForm>
-
-  <!-- AJOUT EVENT  -->
-  <BaseForm @submit.prevent="addEvent()">
-    <!--     <link
-      href="~bulma-calendar/dist/css/bulma-calendar.min.css"
-      rel="stylesheet"
-    /> -->
-    <h1 class="title is-1">Nouveau évènement</h1>
-
-    <BaseInput>
-      <template v-slot:label>Date</template>
-      <template v-slot:input>
-        <input
-          v-model="date"
-          class="input"
-          type="date"
-          placeholder="Entrez une date"
-        />
-        <!--           <input
-            type="date"
-            data-display-mode="inline"
-            data-is-range="true"
-            data-close-on-select="false"
-          /> -->
-      </template>
-    </BaseInput>
-
-    <BaseInput>
-      <template v-slot:label>Titre</template>
-      <template v-slot:input>
-        <input
-          v-model="eventTitle"
-          class="input"
-          type="text"
-          placeholder="Entrez le nom de l'évènement"
-        />
-      </template>
-    </BaseInput>
-
-    <BaseInput>
-      <template v-slot:label>Description</template>
-      <template v-slot:input>
-        <input
-          v-model="eventDescription"
-          class="input"
-          type="text"
-          placeholder="Entrez la description de l'évènement"
-        />
-      </template>
-    </BaseInput>
-
-    <BaseInput>
-      <template v-slot:label>Heure de début</template>
-      <template v-slot:input>
-        <input
-          v-model="heureDebut"
-          class="input"
-          type="time"
-          placeholder="Entrez une heure de début"
-        />
-      </template>
-    </BaseInput>
-
-    <BaseInput>
-      <template v-slot:label>Heure de fin</template>
-      <template v-slot:input>
-        <input
-          v-model="heureFin"
-          class="input"
-          type="time"
-          placeholder="Entrez une heure de fin"
         />
       </template>
     </BaseInput>
@@ -378,8 +297,10 @@ function addCours() {
     </BaseInputSubmit>
   </BaseForm>
 
+  <!-- MODAL FORM  -->
+  <!-- <BaseModalForm> -->
   <!-- AJOUT NOTIFICATION  -->
-  <BaseForm @submit.prevent="addNotification()">
+  <BaseFormModal @submit.prevent="addNotification()">
     <!--     <link
       href="~bulma-calendar/dist/css/bulma-calendar.min.css"
       rel="stylesheet"
@@ -416,8 +337,8 @@ function addCours() {
         class="button is-danger is-rounded"
         value="Ajouter le cours"
       />
-    </BaseInputSubmit>
-  </BaseForm>
+    </BaseInputSubmit> </BaseFormModal
+  ><!-- </BaseModalForm> -->
 </template>
 
 <style scoped></style>
