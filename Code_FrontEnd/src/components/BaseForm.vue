@@ -10,7 +10,6 @@
 
 <style scoped>
 form {
-  background-color: #ebeeef;
   display: flex;
   flex-direction: column;
   justify-content: center;
