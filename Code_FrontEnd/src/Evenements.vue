@@ -1,4 +1,5 @@
 <script setup>
+import { ref } from "vue";
 import CardEvent from "./components/CardEvent.vue";
 import TheCardWrapper from "./components/TheCardWrapper.vue";
 import BaseFormModal from "./components/BaseFormModal.vue";
@@ -6,9 +7,9 @@ import BaseInputSubmit from "./components/BaseInputSubmit.vue";
 import BaseInput from "./components/BaseInput.vue";
 import BaseModalForm from "./components/BaseModalForm.vue";
 
-function afficheForm() {
-  alert("salut");
-}
+function afficheForm() {}
+
+let showModalForm = ref(false);
 </script>
 
 <template>
@@ -32,6 +33,7 @@ function afficheForm() {
       class="button is-right js-modal-trigger"
       data-target="modal-js-example"
       id="fixedbutton"
+      @click="showModalForm = !showModalForm"
     >
       <span class="icon is-large has-text-danger">
         <i class="fa fa-4x fa-plus-square"></i>
@@ -40,7 +42,10 @@ function afficheForm() {
   </div>
 
   <!-- MODAL FORM  -->
-  <BaseModalForm>
+  <BaseModalForm
+    :class="{ 'is-active': showModalForm }"
+    @close="showModalForm = false"
+  >
     <!-- AJOUT EVENT  -->
     <BaseFormModal @submit.prevent="addEvent()">
       <!--     <link

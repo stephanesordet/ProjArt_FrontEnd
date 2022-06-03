@@ -3,6 +3,10 @@ import { def } from "@vue/shared";
 import { computed, ref, watchEffect } from "vue";
 import { useFetch } from "../composables/fetch";
 import CardCours from "./components/CardCours.vue";
+import BaseFormModal from "./components/BaseFormModal.vue";
+import BaseInputSubmit from "./components/BaseInputSubmit.vue";
+import BaseInput from "./components/BaseInput.vue";
+import BaseModalForm from "./components/BaseModalForm.vue";
 
 const { data: horaires } = useFetch(
   "https://chabloz.eu/files/horaires/all.json"
@@ -11,6 +15,7 @@ const { data: horaires } = useFetch(
 let selectedClasse = ref("IM48");
 let selectedMatiere = ref("Tous les cours");
 let Matieres = ref([]);
+let showModalForm = ref(false);
 
 const Classes = computed(() => {
   const tabClasse = [];
@@ -115,9 +120,10 @@ function afficheForm() {
     </div>
     <div>
       <button
-        class="button is-pulled-right"
+        class="button is-right js-modal-trigger"
+        data-target="modal-js-example"
         id="fixedbutton"
-        @click="afficheForm()"
+        @click="showModalForm = !showModalForm"
       >
         <span class="icon is-large has-text-danger">
           <i class="fa fa-4x fa-plus-square"></i>
@@ -125,6 +131,106 @@ function afficheForm() {
       </button>
     </div>
   </div>
+  <!-- MODAL FORM  -->
+  <BaseModalForm
+    :class="{ 'is-active': showModalForm }"
+    @close="showModalForm = false"
+  >
+    <!-- AJOUT COURS  -->
+    <BaseFormModal @submit.prevent="addCours()">
+      <!--     <link
+      href="~bulma-calendar/dist/css/bulma-calendar.min.css"
+      rel="stylesheet"
+    /> -->
+      <h1 class="title is-1">Nouveau cours</h1>
+
+      <BaseInput>
+        <template v-slot:label>Date</template>
+        <template v-slot:input>
+          <input
+            v-model="date"
+            class="input"
+            type="date"
+            placeholder="Entrez une date"
+          />
+          <!--           <input
+            type="date"
+            data-display-mode="inline"
+            data-is-range="true"
+            data-close-on-select="false"
+          /> -->
+        </template>
+      </BaseInput>
+
+      <BaseInput>
+        <template v-slot:label>Classe</template>
+        <template v-slot:input>
+          <div class="select">
+            <select v-model="classe">
+              <option>Classe 1</option>
+              <option>Classe 2</option>
+            </select>
+          </div>
+        </template>
+      </BaseInput>
+
+      <BaseInput>
+        <template v-slot:label>Matière</template>
+        <template v-slot:input>
+          <div class="select">
+            <select v-model="matiere">
+              <option>Matière 1</option>
+              <option>Matière 2</option>
+            </select>
+          </div>
+        </template>
+      </BaseInput>
+
+      <BaseInput>
+        <template v-slot:label>Heure de début</template>
+        <template v-slot:input>
+          <input
+            v-model="heureDebut"
+            class="input"
+            type="time"
+            placeholder="Entrez une heure de début"
+          />
+        </template>
+      </BaseInput>
+
+      <BaseInput>
+        <template v-slot:label>Heure de fin</template>
+        <template v-slot:input>
+          <input
+            v-model="heureFin"
+            class="input"
+            type="time"
+            placeholder="Entrez une heure de fin"
+          />
+        </template>
+      </BaseInput>
+
+      <BaseInput>
+        <template v-slot:label>Lieu</template>
+        <template v-slot:input>
+          <input
+            v-model="lieu"
+            class="input"
+            type="text"
+            placeholder="Entrez le lieu d'une classe"
+          />
+        </template>
+      </BaseInput>
+
+      <BaseInputSubmit>
+        <input
+          type="submit"
+          class="button is-danger is-rounded"
+          value="Ajouter le cours"
+        />
+      </BaseInputSubmit>
+    </BaseFormModal>
+  </BaseModalForm>
 </template>
 <style>
 #fixedbutton {
