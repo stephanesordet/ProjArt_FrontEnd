@@ -49,8 +49,6 @@ const routes = {
 const hash = ref(window.location.hash);
 window.addEventListener("hashchange", () => {
   hash.value = window.location.hash;
-  // crumbs = mietteDePain(hash.value);
-  // console.log(crumbs[0]);
 });
 const curHash = computed(() =>
   routes[hash.value] ? hash.value : Object.keys(routes)[0]

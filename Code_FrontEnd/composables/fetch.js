@@ -13,3 +13,18 @@ export function useFetch(url) {
 
   return { data };
 }
+
+export function useFetchLogin(user, mdp) {
+  
+  async function loadHtml() {
+    const res = await fetch('http://127.0.0.1:8000/api/login/' + mdp + '/' + user);
+    const html = await res.text();
+    if(html == 'user found and connected'){
+      sessionStorage.setItem('user', user);
+    }
+  }
+
+  loadHtml();
+  
+}
+

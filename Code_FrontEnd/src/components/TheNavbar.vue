@@ -37,7 +37,7 @@ const props = defineProps({
   },
 });
 
-function afficheNotif(){
+function afficheNotif() {
   console.log(4);
 }
 </script>
@@ -77,6 +77,7 @@ function afficheNotif(){
             <a class="button is-primary" href="#login">
               <strong>Se connecter</strong>
             </a>
+
           </div>
         </div>
       </div>

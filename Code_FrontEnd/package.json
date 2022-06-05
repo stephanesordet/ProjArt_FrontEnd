@@ -10,6 +10,7 @@
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.1.1",
     "bulma-calendar": "^6.1.18",
+    "moment": "^2.29.3",
     "primeicons": "^5.0.0",
     "primevue": "^3.12.6",
     "vue": "^3.2.25"

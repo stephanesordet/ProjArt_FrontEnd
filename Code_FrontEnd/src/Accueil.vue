@@ -1,46 +1,40 @@
 <script setup>
 import { def } from "@vue/shared";
-import { computed, ref, watchEffect } from "vue";
-import { useFetch } from "../composables/fetch";
+import { computed, ref, watch, watchEffect } from "vue";
+import { useFetch, useFetchLogin } from "../composables/fetch";
+import { randomColor } from "../composables/randomColor";
 import CardCours from "./components/CardCours.vue";
 
-const { data: horaires } = useFetch(
-  "https://chabloz.eu/files/horaires/all.json"
-);
-
-let selectedClasse = ref("IM48");
 let selectedMatiere = ref("Tous les cours");
-let Matieres = ref([]);
+
+const { data: matieres } = useFetch("http://127.0.0.1:8000/api/matiere");
+
+const { data: classes } = useFetch("http://127.0.0.1:8000/api/classes");
+
+const { data: coursClasse } = useFetch('http://127.0.0.1:8000/api/cours/classe/IM49-2');
+
+const CoursClasse = computed(() => {
+  const tabCours = [];
+  if (!coursClasse.value?.length) {
+    return [];
+  } else {
+    coursClasse.value.forEach((element) => {
+      tabCours.push(element)
+    });
+  }
+  return tabCours;
+});
 
 const Classes = computed(() => {
   const tabClasse = [];
-  if (!horaires.value?.length) {
+  if (!classes.value?.length) {
     return [];
   } else {
-    horaires.value.forEach((element) => {
-      if (!tabClasse.includes(element.class)) {
-        tabClasse.push(element.class);
-      }
+    classes.value.forEach((element) => {
+      tabClasse.push(element.id);
     });
   }
   return tabClasse;
-});
-
-Matieres = computed(() => {
-  const tabMatieres = [];
-  if (!horaires.value?.length) {
-    return [];
-  } else {
-    horaires.value.forEach((element) => {
-      if (
-        !tabMatieres.includes(element.label) &&
-        element.class == selectedClasse.value
-      ) {
-        tabMatieres.push(element.label);
-      }
-    });
-  }
-  return tabMatieres;
 });
 
 function afficheForm() {
@@ -52,14 +46,14 @@ function afficheForm() {
   <div class="main mx-4 my-1">
     <div>
       <div class="buttons is-mobile columns is-centered mx-1 my-1">
-        <button
-          v-for="classe in Classes"
-          :key="classe"
-          @click="
-            (selectedClasse = classe), (selectedMatiere = 'Tous les cours')
-          "
-          class="column button has-background-light has-text-black is-medium is-one-fifth-mobile is-danger"
-        >
+        <button v-for="classe in Classes" :key="classe" @click="
+          coursClasse.value = useFetch('http://127.0.0.1:8000/api/cours/classe/' + classe)
+        " class="
+            column
+            button
+            has-background-light has-text-black
+            is-medium is-one-fifth-mobile is-danger
+          ">
           {{ classe }}
         </button>
       </div>
@@ -69,56 +63,29 @@ function afficheForm() {
         <option @click="selectedMatiere = 'Tous les cours'">
           Tous les cours
         </option>
-        <option
-          v-for="matiere in Matieres"
-          :key="matiere"
-          @click="selectedMatiere = matiere"
-        >
-          {{ matiere }}
+        <option v-for="cours in CoursClasse" :key="cours.id" @click="selectedMatiere = cours.matiere_id">
+          {{ cours.matiere_id }}
         </option>
       </select>
     </div>
     <div class="columns is-centered tile is-ancestor">
       <div class="column is-three-quarters">
-        <div
-          v-if="selectedMatiere != 'Tous les cours'"
-          class="tile is-parent is-vertical"
-        >
-          <card-cours
-            v-for="horaire in horaires"
-            :key="horaire.start"
-            v-show="
-              selectedClasse == horaire.class &&
-              selectedMatiere == horaire.label
-            "
-            :debut="horaire.start"
-            :fin="horaire.start"
-            :cours="horaire.label"
-            :salle="horaire.room"
-          >
+        <div v-if="selectedMatiere != 'Tous les cours'" class="tile is-parent is-vertical">
+          <card-cours v-for="cours in coursClasse" :key="cours.id" v-show="selectedMatiere == cours.matiere_id"
+            :debut="cours.Debut" :fin="cours.Fin" :cours="cours.matiere_id" :salle="cours.salle_id">
           </card-cours>
         </div>
 
         <div v-else class="tile is-parent is-vertical">
-          <card-cours
-            v-for="horaire in horaires"
-            :key="horaire.id"
-            v-show="selectedClasse == horaire.class"
-            :debut="horaire.start"
-            :fin="horaire.start"
-            :cours="horaire.label"
-            :salle="horaire.room"
-          >
+          <card-cours v-for="cours in coursClasse" :key="cours.id" :debut="cours.Debut" :fin="cours.Fin"
+            :cours="cours.matiere_id" :salle="cours.salle_id">
+
           </card-cours>
         </div>
       </div>
     </div>
     <div>
-      <button
-        class="button is-pulled-right"
-        id="fixedbutton"
-        @click="afficheForm()"
-      >
+      <button class="button is-pulled-right" id="fixedbutton" @click="afficheForm()">
         <span class="icon is-large has-text-danger">
           <i class="fa fa-4x fa-plus-square"></i>
         </span>
