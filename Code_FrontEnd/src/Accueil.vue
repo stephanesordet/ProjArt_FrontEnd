@@ -2,7 +2,6 @@
 import { def } from "@vue/shared";
 import { computed, ref, watch, watchEffect } from "vue";
 import { useFetch, useFetchLogin } from "../composables/fetch";
-import { randomColor } from "../composables/randomColor";
 import CardCours from "./components/CardCours.vue";
 import BaseFormModal from "./components/BaseFormModal.vue";
 import BaseInputSubmit from "./components/BaseInputSubmit.vue";
@@ -46,6 +45,7 @@ const Classes = computed(() => {
 function afficheForm() {
   alert("aaa");
 }
+
 </script>
 
 <template>

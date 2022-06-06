@@ -1,8 +1,18 @@
 <script setup>
-import { ref } from "vue";
+import { computed, ref, watchEffect } from "vue";
 const page = ref("#accueil");
+const user = ref(null);
+const session = ref(false)
+
 window.addEventListener("hashchange", () => {
   page.value = window.location.hash;
+
+   if (sessionStorage.getItem('user')) {
+        session.value = true
+        user.value = sessionStorage.getItem('user');
+    }else{
+        session.value = false
+    }
 });
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -24,8 +34,19 @@ document.addEventListener("DOMContentLoaded", () => {
       $target.classList.toggle("is-active");
     });
   });
+
+  
 });
 
+
+function killSession(){
+  sessionStorage.removeItem('user')
+}
+
+function reload(){
+  window.location.reload()
+  window.location.hash = "#accueil"
+}
 const props = defineProps({
   routes: {
     type: Object,
@@ -74,10 +95,12 @@ function afficheNotif() {
       <div class="navbar-end">
         <div class="navbar-item">
           <div class="buttons">
-            <a class="button is-primary" href="#login">
+            <a v-if="!session" class="button is-primary" href="#login">
               <strong>Se connecter</strong>
             </a>
-
+            <a v-else @click="killSession(), reload()" class="button is-primary" href="#accueil">
+              <strong>Logout</strong>
+            </a>
           </div>
         </div>
       </div>

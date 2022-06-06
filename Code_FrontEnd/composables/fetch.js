@@ -1,5 +1,6 @@
 import { ref } from "vue";
 
+
 export function useFetch(url) {
   const data = ref(null);
 
@@ -16,15 +17,17 @@ export function useFetch(url) {
 
 export function useFetchLogin(user, mdp) {
   
+
   async function loadHtml() {
     const res = await fetch('http://127.0.0.1:8000/api/login/' + mdp + '/' + user);
     const html = await res.text();
     if(html == 'user found and connected'){
-      sessionStorage.setItem('user', user);
+      console.log('hello')
+      return true;
     }
   }
 
   loadHtml();
-  
+
 }
 

@@ -6,6 +6,21 @@ import { useFetchLogin } from '../composables/fetch';
 let email = ref('')
 let password = ref('')
 
+async function userLogin(email, password) {
+  const status =  computed(()=>{
+    useFetchLogin(email, password)
+  })
+
+if(status){
+  alert("Connexion réussie")
+  sessionStorage.setItem('user', email)
+  window.location.href = "#accueil"
+  window.location.reload()
+  
+}else{
+  alert("Connexion échouée")
+}
+}
 </script>
 
 <template>
@@ -36,7 +51,7 @@ let password = ref('')
                 </div>
               </div>
               <div class="field">
-                <button @click="useFetchLogin(email, password)" class="button is-success">Connexion</button>
+                <button @click="userLogin(email, password)" class="button is-success">Connexion</button>
               </div>
             </form>
           </div>
