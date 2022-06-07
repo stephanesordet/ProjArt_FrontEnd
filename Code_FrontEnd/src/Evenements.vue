@@ -1,15 +1,45 @@
 <script setup>
-import { ref } from "vue";
+import { ref, computed, watchEffect } from "vue";
 import CardEvent from "./components/CardEvent.vue";
 import TheCardWrapper from "./components/TheCardWrapper.vue";
 import BaseFormModal from "./components/BaseFormModal.vue";
 import BaseInputSubmit from "./components/BaseInputSubmit.vue";
 import BaseInput from "./components/BaseInput.vue";
 import BaseModalForm from "./components/BaseModalForm.vue";
+import axios from "axios";
+import { useFetch } from "../composables/fetch.js";
 
-function afficheForm() {}
+const showModalForm = ref(false);
 
-let showModalForm = ref(false);
+//Traitement du form after submit
+const Titre = ref("");
+const Description = ref("");
+const Lieu = ref("");
+const Debut = ref("");
+const Fin = ref("");
+
+function addEvent() {
+  axios
+    .post("http://localhost:8000/api/event/create", {
+      Titre: Titre.value,
+      Description: Description.value,
+      Lieu: Lieu.value,
+      Debut: Debut.value,
+      Fin: Fin.value,
+      user_Email: "lucas.cuennet@heig-vd.ch",
+    })
+    .then((res) => {
+      //Perform Success Action
+      console.log(res);
+    })
+    .catch((error) => {
+      // error.response.status Check status code
+      console.log(error);
+    })
+    .finally(() => {
+      //Perform action in always
+    });
+}
 </script>
 
 <template>
@@ -55,28 +85,10 @@ let showModalForm = ref(false);
       <h1 class="title is-1">Nouveau évènement</h1>
 
       <BaseInput>
-        <template v-slot:label>Date</template>
-        <template v-slot:input>
-          <input
-            v-model="date"
-            class="input"
-            type="date"
-            placeholder="Entrez une date"
-          />
-          <!--           <input
-            type="date"
-            data-display-mode="inline"
-            data-is-range="true"
-            data-close-on-select="false"
-          /> -->
-        </template>
-      </BaseInput>
-
-      <BaseInput>
         <template v-slot:label>Titre</template>
         <template v-slot:input>
           <input
-            v-model="eventTitle"
+            v-model="Titre"
             class="input"
             type="text"
             placeholder="Entrez le nom de l'évènement"
@@ -88,7 +100,7 @@ let showModalForm = ref(false);
         <template v-slot:label>Description</template>
         <template v-slot:input>
           <input
-            v-model="eventDescription"
+            v-model="Description"
             class="input"
             type="text"
             placeholder="Entrez la description de l'évènement"
@@ -97,26 +109,50 @@ let showModalForm = ref(false);
       </BaseInput>
 
       <BaseInput>
-        <template v-slot:label>Heure de début</template>
+        <template v-slot:label>Lieu</template>
         <template v-slot:input>
           <input
-            v-model="heureDebut"
+            v-model="Lieu"
             class="input"
-            type="time"
-            placeholder="Entrez une heure de début"
+            type="text"
+            placeholder="Entrez la description de l'évènement"
           />
         </template>
       </BaseInput>
 
       <BaseInput>
-        <template v-slot:label>Heure de fin</template>
+        <template v-slot:label>Date de début</template>
         <template v-slot:input>
           <input
-            v-model="heureFin"
+            v-model="Debut"
             class="input"
-            type="time"
-            placeholder="Entrez une heure de fin"
+            type="datetime-local"
+            placeholder="Entrez une date de début"
           />
+          <!--           <input
+            type="date"
+            data-display-mode="inline"
+            data-is-range="true"
+            data-close-on-select="false"
+          /> -->
+        </template>
+      </BaseInput>
+
+      <BaseInput>
+        <template v-slot:label>Date de fin</template>
+        <template v-slot:input>
+          <input
+            v-model="Fin"
+            class="input"
+            type="datetime-local"
+            placeholder="Entrez une date de fin"
+          />
+          <!--           <input
+            type="date"
+            data-display-mode="inline"
+            data-is-range="true"
+            data-close-on-select="false"
+          /> -->
         </template>
       </BaseInput>
 
@@ -124,7 +160,7 @@ let showModalForm = ref(false);
         <input
           type="submit"
           class="button is-danger is-rounded"
-          value="Ajouter le cours"
+          value="Ajouter l'événement"
         />
       </BaseInputSubmit>
     </BaseFormModal>
