@@ -1,18 +1,14 @@
 <script setup>
 import { def } from "@vue/shared";
 import { computed, ref, watch, watchEffect } from "vue";
-import { useFetch, useFetchLogin } from "../composables/fetch";
+import { useFetch } from "../composables/fetch";
 import CardCours from "./components/CardCours.vue";
-import BaseFormModal from "./components/BaseFormModal.vue";
-import BaseInputSubmit from "./components/BaseInputSubmit.vue";
-import BaseInput from "./components/BaseInput.vue";
-import BaseModalForm from "./components/BaseModalForm.vue";
 
-let selectedMatiere = ref("Tous les cours");
+const { data: cours } = useFetch("http://localhost:8000/api/cours");
 
-const { data: matieres } = useFetch("http://127.0.0.1:8000/api/matiere");
+const { data: classes } = useFetch("http://localhost:8000/api/classes");
 
-const { data: classes } = useFetch("http://127.0.0.1:8000/api/classes");
+const { data: matieres } = useFetch("http://localhost:8000/api/matiere");
 
 const { data: coursClasse } = useFetch("http://127.0.0.1:8000/api/cours/classe/IM49-2");
 
@@ -27,23 +23,12 @@ const CoursClasse = computed(() => {
   }
   return tabCours;
 });
+let selectedClasse = ref("IM48");
+let selectedMatiere = ref("Tous les cours");
 let Matieres = ref([]);
-let showModalForm = ref(false);
-
-const Classes = computed(() => {
-  const tabClasse = [];
-  if (!classes.value?.length) {
-    return [];
-  } else {
-    classes.value.forEach((element) => {
-      tabClasse.push(element.id);
-    });
-  }
-  return tabClasse;
-});
 
 function afficheForm() {
-  alert("aaa");
+  console.log(4);
 }
 </script>
 
@@ -109,12 +94,7 @@ function afficheForm() {
       </div>
     </div>
     <div>
-      <button
-        class="button is-right js-modal-trigger"
-        data-target="modal-js-example"
-        id="fixedbutton"
-        @click="showModalForm = !showModalForm"
-      >
+      <button class="button is-pulled-right" id="fixedbutton" @click="afficheForm()">
         <span class="icon is-large has-text-danger">
           <i class="fa fa-4x fa-plus-square"></i>
         </span>

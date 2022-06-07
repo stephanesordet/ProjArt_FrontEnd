@@ -7,12 +7,11 @@ const session = ref(false)
 window.addEventListener("hashchange", () => {
   page.value = window.location.hash;
 
-   if (sessionStorage.getItem('user')) {
-        session.value = true
-        user.value = sessionStorage.getItem('user');
-    }else{
-        session.value = false
-    }
+  if (sessionStorage.getItem('user')) {
+    session.value = true
+  } else {
+    session.value = false
+  }
 });
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -34,19 +33,15 @@ document.addEventListener("DOMContentLoaded", () => {
       $target.classList.toggle("is-active");
     });
   });
-
-  
 });
 
-
-function killSession(){
+function reload() {
   sessionStorage.removeItem('user')
+  setTimeout(() => {
+    window.location.reload()
+  }, 500)
 }
 
-function reload(){
-  window.location.reload()
-  window.location.hash = "#accueil"
-}
 const props = defineProps({
   routes: {
     type: Object,
@@ -64,7 +59,7 @@ function afficheNotif() {
 </script>
 
 <template>
-  <nav class="navbar" role="navigation" aria-label="main navigation">
+  <nav v-show="session" class="navbar" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
       <a class="navbar-item" href="#accueil">
         <img id="logoNavbar" src="../assets/logoProjArt.png" />
@@ -84,7 +79,6 @@ function afficheNotif() {
     <div id="navMenu" class="navbar-menu">
       <div class="navbar-start">
         <a class="navbar-item" href="#accueil"> Accueil </a>
-
         <a class="navbar-item" href="#evenements"> Evenements </a>
         <a class="navbar-item" href="#agendaClasse"> Agenda des classes </a>
         <a class="navbar-item" href="#detailMatiere"> Détails de la matière </a>
@@ -95,11 +89,36 @@ function afficheNotif() {
       <div class="navbar-end">
         <div class="navbar-item">
           <div class="buttons">
-            <a v-if="!session" class="button is-primary" href="#login">
-              <strong>Se connecter</strong>
-            </a>
-            <a v-else @click="killSession(), reload()" class="button is-primary" href="#accueil">
+            <a @click="reload()" class="button is-primary" href="#accueil">
               <strong>Logout</strong>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <nav v-show="!session" class="navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="#accueil">
+        <img id="logoNavbar" src="../assets/logoProjArt.png" />
+      </a>
+      <a role="button" class="navbar-burger mt-6" data-target="navMenu" aria-label="menu" aria-expanded="false">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+
+    <div id="navMenu" class="navbar-menu">
+      <div class="navbar-start">
+        <a class="navbar-item" href="#accueil"> Accueil </a>
+      </div>
+      <div class="navbar-end">
+        <div class="navbar-item">
+          <div class="buttons">
+            <a class="button is-primary" href="#login">
+              <strong>Se connecter</strong>
             </a>
           </div>
         </div>

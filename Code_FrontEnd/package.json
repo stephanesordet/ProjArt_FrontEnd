@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.1.1",
+    "axios": "^0.27.2",
     "bulma-calendar": "^6.1.18",
     "moment": "^2.29.3",
     "primeicons": "^5.0.0",
