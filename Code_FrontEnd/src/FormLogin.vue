@@ -1,32 +1,36 @@
 <script setup>
-import { watchPostEffect } from '@vue/runtime-core';
-import { ref, computed, watch, watchEffect } from 'vue';
-import { useFetchLogin } from '../composables/fetch';
+import { watchPostEffect } from "@vue/runtime-core";
+import { ref, computed, watch, watchEffect } from "vue";
+import { useFetchLogin } from "../composables/fetch";
 
-let email = ref('')
-let password = ref('')
+let email = ref("");
+let password = ref("");
 
-function userLogin(email, password) {
-  const status = computed(() => {
-    useFetchLogin(email, password)
-  })
+async function userLogin(email, password) {
+  //using then, status is useFetchLogin, if status is true alert ok
+  useFetchLogin(email, password);
 
+  // const status = useFetchLogin(email, password);
+  // console.log(status);
 
-  if (status) {
-    sessionStorage.setItem('user', email)
-    window.location.href = "#accueil"
-    setTimeout(() => {
-      window.location.reload()
-    }, 500)
-
-  }
+  // if (status) {
+  //   alert("Connexion réussie");
+  //   sessionStorage.setItem("user", email);
+  //   window.location.href = "#accueil";
+  //   window.location.reload();
+  // } else {
+  //   alert("Connexion échouée");
+  // }
 }
 </script>
 
 <template>
   <section class="hero is-primary is-fullheight">
     <!-- To accept bulma's icons -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
     <div class="hero-body">
       <div class="container">
         <div class="columns is-centered">
@@ -35,7 +39,13 @@ function userLogin(email, password) {
               <div class="field">
                 <label for="" class="label">Adresse mail</label>
                 <div class="control has-icons-left">
-                  <input v-model="email" type="email" placeholder="example@gmail.com" class="input" required />
+                  <input
+                    v-model="email"
+                    type="email"
+                    placeholder="example@gmail.com"
+                    class="input"
+                    required
+                  />
                   <span class="icon is-small is-left">
                     <i class="fa fa-envelope"></i>
                   </span>
@@ -44,14 +54,22 @@ function userLogin(email, password) {
               <div class="field">
                 <label for="" class="label">Mot de passe</label>
                 <div class="control has-icons-left">
-                  <input v-model="password" type="password" placeholder="*******" class="input" required />
+                  <input
+                    v-model="password"
+                    type="password"
+                    placeholder="*******"
+                    class="input"
+                    required
+                  />
                   <span class="icon is-small is-left">
                     <i class="fa fa-lock"></i>
                   </span>
                 </div>
               </div>
               <div class="field">
-                <button @click="userLogin(email, password)" class="button is-success">Connexion</button>
+                <button @click="userLogin(email, password)" class="button is-success">
+                  Connexion
+                </button>
               </div>
             </form>
           </div>
@@ -61,5 +79,4 @@ function userLogin(email, password) {
   </section>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>
