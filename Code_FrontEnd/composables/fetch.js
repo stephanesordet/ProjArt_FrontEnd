@@ -16,11 +16,11 @@ export function useFetch(url) {
   return { data };
 }
 
-export async function useFetchLogin(user, mdp) {
+/* export async function useFetchLogin(user, mdp) {
   console.log(mdp);
   async function loadHtml(email, password) {
-    const u = /* encodeURIComponent */(email);
-    const p = /* encodeURIComponent */(password);
+    const u =  encodeURIComponent (email);
+    const p =  encodeURIComponent (password);
     const res = await fetch('http://127.0.0.1:8000/api/login/' + p + '/' + u);
     const html = await res.text();
     if(html == 'user found and connected'){
@@ -39,4 +39,6 @@ export async function useFetchLogin(user, mdp) {
 
  loadHtml(user, mdp);
 
-}
+} */
+
+

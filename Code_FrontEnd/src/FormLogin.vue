@@ -1,12 +1,12 @@
 <script setup>
 import { watchPostEffect } from "@vue/runtime-core";
 import { ref, computed, watch, watchEffect } from "vue";
-import { useFetchLogin } from "../composables/fetch";
+import axios from "axios";
 
 let email = ref("");
 let password = ref("");
 
-async function userLogin(email, password) {
+/* async function userLogin(email, password) {
   //using then, status is useFetchLogin, if status is true alert ok
   useFetchLogin(email, password);
 
@@ -21,6 +21,24 @@ async function userLogin(email, password) {
   // } else {
   //   alert("Connexion échouée");
   // }
+} */
+
+function useFetchLogin(password, email) { 
+  axios
+  .post('http://localhost:8000/api/login?Email=' + email + '&Password=' + password, {
+  })
+  .then((res) => {
+    //Perform Success Action
+    console.log(res);
+  })
+  .catch((error) => {
+    // error.response.status Check status code
+    console.log(error);
+  })
+  .finally(() => {
+    //Perform action in always
+  });
+
 }
 </script>
 
@@ -35,7 +53,7 @@ async function userLogin(email, password) {
       <div class="container">
         <div class="columns is-centered">
           <div class="column is-5-tablet is-4-desktop is-3-widescreen">
-            <form action="" class="box">
+            <form @submit.prevent="useFetchLogin(password, email)" class="box">
               <div class="field">
                 <label for="" class="label">Adresse mail</label>
                 <div class="control has-icons-left">
@@ -67,7 +85,7 @@ async function userLogin(email, password) {
                 </div>
               </div>
               <div class="field">
-                <button @click="userLogin(email, password)" class="button is-success">
+                <button class="button is-success">
                   Connexion
                 </button>
               </div>
