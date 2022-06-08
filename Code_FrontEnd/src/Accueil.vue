@@ -13,23 +13,20 @@ const { data: cours } = useFetch("http://localhost:8000/api/cours");
 
 const { data: classes } = useFetch("http://localhost:8000/api/classes");
 
-const { data: matieres } = useFetch("http://localhost:8000/api/matiere");
+const selectedClasses = ref("IM49-1");
 
 const { data: coursClasse } = useFetch(
-  "http://127.0.0.1:8000/api/cours/classe/"
-)
 
-const Classes = computed(() => {
-  const tabClasses = [];
-  if (!classes.value?.length) {
-    return [];
-  } else {
-    classes.value.forEach((element) => {
-      tabClasses.push(element);
-    });
-  }
-  return tabClasses;
-});
+  "http://127.0.0.1:8000/api/cours/classe/" + selectedClasses.value
+);
+
+const role = ref(sessionStorage.getItem("role"))
+
+const date = new Date();
+const dateStr =
+  date.getFullYear() + "-" +
+  ("00" + (date.getMonth() + 1)).slice(-2) + "-" +
+  ("00" + date.getDate()).slice(-2);
 
 const CoursClasse = computed(() => {
   const tabCours = [];
@@ -37,16 +34,59 @@ const CoursClasse = computed(() => {
     return [];
   } else {
     coursClasse.value.forEach((element) => {
-      tabCours.push(element);
+      if (element.Debut > dateStr) {
+        tabCours.push(element);
+      }
     });
+    let duplicates = []
+    const tempArray = tabCours.sort()
+    for (let i = 0; i < tempArray.length; i++) {
+      let j = i + 1;
+      if (j >= tempArray.length) break;
+      if (tempArray[j].id === tempArray[i].id) {
+        duplicates.push(tempArray[i])
+      }
+    }
+    for (let i = 0; i < tabCours.length; i++) {
+      duplicates.forEach((element) => {
+        if (tabCours[i].id === element.id) {
+          tabCours.splice(i, 1);
+          tabCours[i].salle_id += " " + element.salle_id;
+        }
+      });
+    }
+
   }
+  alert("fetch");
   return tabCours;
 });
-let selectedClasse = ref("IM48");
-let selectedMatiere = ref("Tous les cours");
-let Matieres = ref([]);
 
-const role = ref(sessionStorage.getItem("role"))
+const Classes = computed(() => {
+  const tabClasse = [];
+  if (!classes.value?.length) {
+    return [];
+  } else {
+    classes.value.forEach((element) => {
+      tabClasse.push(element);
+    });
+  }
+  return tabClasse;
+});
+
+const Matiere = computed(() => {
+  const tabMatiere = [];
+  if (!coursClasse.value?.length) {
+    return [];
+  } else {
+    coursClasse.value.forEach((element) => {
+      tabMatiere.push(element.matiere_id);
+    });
+  }
+  const uniqueMatiere = new Set(tabMatiere);
+  console.log(uniqueMatiere);
+  return uniqueMatiere;
+});
+
 function afficheForm() {
   console.log(4);
 }
@@ -54,7 +94,7 @@ function afficheForm() {
 let showModalForm = ref(false);
 
 //Traitement du form after submit
-const date = ref("");
+const dateCours = ref("");
 const selectedclasseModal = ref("");
 const heureDebut = ref("");
 const heureFin = ref("");
@@ -64,7 +104,7 @@ const lieu = ref("");
 const selectedClasseModal = ref("");
 
 watchEffect(() => {
-  console.log(date.value);
+  console.log(dateCours.value);
   console.log(selectedclasseModal.value);
   console.log(heureDebut.value);
   console.log(heureFin.value);
@@ -96,8 +136,8 @@ async function addCours() {
     const cours = await axios.post(
       "http://localhost:8000/api/cours/create",
       {
-        Debut: date.value + ' ' + heureDebut.value,
-        Fin: date.value + ' ' + heureFin.value,
+        Debut: dateCours.value + ' ' + heureDebut.value,
+        Fin: dateCours.value + ' ' + heureFin.value,
         matiere_id: matiere.value,
       }
     )
@@ -109,39 +149,61 @@ async function addCours() {
     console.log(e)
   }
 }
+
+function valueHasChanged(event) {
+  const cours = document.querySelectorAll('.cours');
+
+  cours.forEach(coursSolo => {
+    coursSolo.style.display = 'none';
+  });
+
+  const val = event.target.value
+
+  if (val === 'Tous les cours') {
+    cours.forEach(coursSolo => {
+      coursSolo.style.display = 'block';
+    });
+  } else {
+    const boxes = document.querySelectorAll('.' + val);
+
+    boxes.forEach(box => {
+      box.style.display = 'block';
+    });
+  }
+}
+
+function valueHasClicked(event) {
+  const classe = event.target.innerHTML;
+
+  selectedClasses.value = classe;
+}
 </script>
 
 <template>
   <div class="main mx-4 my-1">
     <div>
       <div class="buttons is-mobile columns is-centered mx-1 my-1">
-        <button v-for="classe in Classes" :key="classe" class=" column button has-background-light has-text-black
-          is-medium is-one-fifth-mobile is-danger">
+        <button v-for="classe in Classes" :key="classe" @click="valueHasClicked($event)"
+          class="column button has-background-light has-text-black is-medium is-one-fifth-mobile is-danger">
           {{ classe.id }}
         </button>
       </div>
     </div>
     <div class="select is-danger">
-      <select>
-        <option @click="selectedMatiere = 'Tous les cours'">
+      <select @change="valueHasChanged($event)">
+        <option>
           Tous les cours
         </option>
-        <option v-for="cours in CoursClasse" :key="cours.id" @click="selectedMatiere = cours.matiere_id">
-          {{ cours.matiere_id }}
+        <option v-for="matiere in Matiere" :key="matiere">
+          {{ matiere }}
         </option>
       </select>
     </div>
     <div class="columns is-centered tile is-ancestor">
       <div class="column is-three-quarters">
-        <div v-if="selectedMatiere != 'Tous les cours'" class="tile is-parent is-vertical">
-          <card-cours v-for="cours in coursClasse" :key="cours.id" v-show="selectedMatiere == cours.matiere_id"
-            :debut="cours.Debut" :fin="cours.Fin" :cours="cours.matiere_id" :salle="cours.salle_id">
-          </card-cours>
-        </div>
-
-        <div v-else class="tile is-parent is-vertical">
-          <card-cours v-for="cours in coursClasse" :key="cours.id" :debut="cours.Debut" :fin="cours.Fin"
-            :cours="cours.matiere_id" :salle="cours.salle_id">
+        <div class="tile is-parent is-vertical">
+          <card-cours v-for="cours in CoursClasse" :id="cours.id" :class="cours.matiere_id" class="cours"
+            :key="cours.id" :debut="cours.Debut" :fin="cours.Fin" :cours="cours.matiere_id" :salle="cours.salle_id">
           </card-cours>
         </div>
       </div>

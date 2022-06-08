@@ -3,27 +3,36 @@ import { computed, ref, watchEffect } from "vue";
 
 const page = ref("#accueil");
 const user = ref(null);
-const session = ref(false)
+const session = ref(false);
 const role = ref(null);
+
+window.addEventListener("load", () => {
+  if (sessionStorage.getItem("user")) {
+    session.value = true;
+    role.value = sessionStorage.getItem("role");
+  } else {
+    session.value = false;
+  }
+});
+
+window.addEventListener("hashchange", () => {
+  page.value = window.location.hash;
+  if (sessionStorage.getItem("user")) {
+    session.value = true;
+    role.value = sessionStorage.getItem("role");
+  } else {
+    session.value = false;
+  }
+});
 
 window.addEventListener('load', () => {
   if (sessionStorage.getItem('user')) {
     session.value = true
-    role.value = sessionStorage.getItem('role')
+
   } else {
     session.value = false
   }
 })
-
-window.addEventListener("hashchange", () => {
-  page.value = window.location.hash;
-  if (sessionStorage.getItem('user')) {
-    session.value = true
-    role.value = sessionStorage.getItem('role')
-  } else {
-    session.value = false
-  }
-});
 
 document.addEventListener("DOMContentLoaded", () => {
   // Get all "navbar-burger" elements
@@ -47,10 +56,10 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function reload() {
-  sessionStorage.removeItem('user')
-  sessionStorage.removeItem('role')
-  window.location.hash = '#accueil'
-  window.location.reload()
+  sessionStorage.removeItem("user");
+  sessionStorage.removeItem("role");
+  window.location.hash = "#accueil";
+  window.location.reload();
 }
 
 const props = defineProps({
@@ -70,8 +79,12 @@ function afficheNotif() {
 </script>
 
 <template>
-
-  <nav v-show="session" class="navbar" role="navigation" aria-label="main navigation">
+  <nav
+    v-show="session"
+    class="navbar"
+    role="navigation"
+    aria-label="main navigation"
+  >
     <div class="navbar-brand">
       <a class="navbar-item" href="#accueil">
         <img id="logoNavbar" src="../assets/logoProjArt.png" />
@@ -81,7 +94,13 @@ function afficheNotif() {
           <i class="fa fa-regular fa-bell"></i>
         </span>
       </button>
-      <a role="button" class="navbar-burger mt-6" data-target="navMenu" aria-label="menu" aria-expanded="false">
+      <a
+        role="button"
+        class="navbar-burger mt-6"
+        data-target="navMenu"
+        aria-label="menu"
+        aria-expanded="false"
+      >
         <span aria-hidden="true"></span>
         <span aria-hidden="true"></span>
         <span aria-hidden="true"></span>
@@ -91,7 +110,12 @@ function afficheNotif() {
     <div class="navbar-menu">
       <div class="navbar-start">
         <a class="navbar-item" href="#accueil"> Accueil </a>
-        <a v-show="role != 'Administration' && role != 'AGE'" class="navbar-item" href="#agendaClasse"> Agenda personnel
+        <a
+          v-show="role != 'Administration' && role != 'AGE'"
+          class="navbar-item"
+          href="#agendaClasse"
+        >
+          Agenda personnel
         </a>
         <a class="navbar-item" href="#evenements"> Evenements </a>
         <a class="navbar-item" href="#notifications"> Notifications </a>
@@ -108,12 +132,23 @@ function afficheNotif() {
     </div>
   </nav>
 
-  <nav v-show="!session" class="navbar" role="navigation" aria-label="main navigation">
+  <nav
+    v-show="!session"
+    class="navbar"
+    role="navigation"
+    aria-label="main navigation"
+  >
     <div class="navbar-brand">
       <a class="navbar-item" href="#accueil">
         <img id="logoNavbar" src="../assets/logoProjArt.png" />
       </a>
-      <a role="button" class="navbar-burger mt-6" data-target="navMenu" aria-label="menu" aria-expanded="false">
+      <a
+        role="button"
+        class="navbar-burger mt-6"
+        data-target="navMenu"
+        aria-label="menu"
+        aria-expanded="false"
+      >
         <span aria-hidden="true"></span>
         <span aria-hidden="true"></span>
         <span aria-hidden="true"></span>

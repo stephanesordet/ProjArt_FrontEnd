@@ -15,15 +15,28 @@ defineProps({
   salle: {
     type: String,
   },
+  id: {
+    type: Number,
+  },
 });
 
 function modifCours() {
-  console.log(4);
+  console.log("modifCours");
+}
+
+function deleteCours() {
+  console.log("deleteCours");
+}
+
+function voirDetails(id) {
+  console.log("details");
+  window.location.hash = "#detailMatiere/" + id;
+  console.log(id);
 }
 </script>
 
 <template>
-  <article class="tile is-child notification is-light has-text-left-mobile">
+  <article class='tile is-child notification is-light has-text-left-mobile'>
     <link
       rel="stylesheet"
       href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
@@ -38,10 +51,28 @@ function modifCours() {
     </p>
     <button
       class="button is-pulled-right is-white has-background-light"
+      @click="deleteCours()"
+    >
+      <span class="icon is-small">
+        <i class="fa fa-trash"></i>
+      </span>
+    </button>
+
+    <button
+      class="button is-pulled-right is-white has-background-light"
       @click="modifCours()"
     >
       <span class="icon is-small">
         <i class="fa fa-pencil"></i>
+      </span>
+    </button>
+
+    <button
+      class="button is-pulled-right is-white has-background-light"
+      @click="voirDetails(id)"
+    >
+      <span class="icon is-small">
+        <i class="fa fa-info"></i>
       </span>
     </button>
   </article>

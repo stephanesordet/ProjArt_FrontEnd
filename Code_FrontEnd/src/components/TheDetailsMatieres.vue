@@ -145,10 +145,6 @@ let showModalForm = ref(false);
   >
     <!-- AJOUT REMARQUE COURS -->
     <BaseFormModal @submit.prevent="addRemarqueCours()">
-      <!--     <link
-      href="~bulma-calendar/dist/css/bulma-calendar.min.css"
-      rel="stylesheet"
-    /> -->
       <h1 class="title is-1">Nouvelle remarque pour : nomCours</h1>
 
       <div class="field" style="width: 300px">
@@ -171,12 +167,6 @@ let showModalForm = ref(false);
             type="date"
             placeholder="Entrez une date"
           />
-          <!--           <input
-            type="date"
-            data-display-mode="inline"
-            data-is-range="true"
-            data-close-on-select="false"
-          /> -->
         </template>
       </BaseInput>
 
@@ -216,12 +206,6 @@ let showModalForm = ref(false);
 </template>
 
 <style scoped>
-/* div {
-  background-color: #ebeeef;
-  flex-direction: column;
-  align-items: left;
-  padding: 20px;
-} */
 .icon-text {
   display: block;
   text-align: left;

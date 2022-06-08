@@ -29,7 +29,7 @@ const routes = {
     label: "Login",
     component: Login,
   },
-  "#detailMatiere": {
+  "#detailMatiere/": {
     label: "Detail matiere",
     component: DetailMatiere,
   },
