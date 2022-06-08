@@ -1,5 +1,5 @@
 <script setup>
-import detailsMatieres from './components/TheDetailsMatieres.vue';
+import TheDetailsMatieres from "./components/TheDetailsMatieres.vue";
 // import { useFetch } from '../composables/fetch.js';
 
 // const { data: remarques } = useFetch(
@@ -7,12 +7,11 @@ import detailsMatieres from './components/TheDetailsMatieres.vue';
 // );
 // à mettre dans le composant détails matières
 // v-for="remarque in remarques" :titre="remarque.titre" :description="remarque.description" :visibilite="remarque.visibilite" :user="remarque.fk_user" :date="remarque.date" :matiere="remarque.fk_matiere"
-// 
-
+//
 </script>
 
 <template>
-    <details-matieres></details-matieres>
+  <TheDetails-matieres></TheDetails-matieres>
 </template>
 
 <style scoped>
