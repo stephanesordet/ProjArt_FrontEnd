@@ -55,7 +55,7 @@ function addEvent() {
       console.log(error);
     })
     .finally(() => {
-      //Perform action in always
+      window.location.reload();
     });
 }
 </script>
@@ -69,12 +69,22 @@ function addEvent() {
       </select>
     </div>
     <the-card-wrapper>
-      <card-event v-for="events in allEvents" :debut="events.Debut" :fin="events.Fin" :titre="events.Titre"
-        :lieu="events.Lieu" :description="events.Description">
+      <card-event
+        v-for="events in allEvents"
+        :debut="events.Debut"
+        :fin="events.Fin"
+        :titre="events.Titre"
+        :lieu="events.Lieu"
+        :description="events.Description"
+      >
       </card-event>
     </the-card-wrapper>
-    <button class="button is-right js-modal-trigger" data-target="modal-js-example" id="fixedbutton"
-      @click="showModalForm = !showModalForm">
+    <button
+      class="button is-right js-modal-trigger"
+      data-target="modal-js-example"
+      id="fixedbutton"
+      @click="showModalForm = !showModalForm"
+    >
       <span class="icon is-large has-text-danger">
         <i class="fa fa-4x fa-plus-square"></i>
       </span>
@@ -82,7 +92,10 @@ function addEvent() {
   </div>
 
   <!-- MODAL FORM  -->
-  <BaseModalForm :class="{ 'is-active': showModalForm }" @close="showModalForm = false">
+  <BaseModalForm
+    :class="{ 'is-active': showModalForm }"
+    @close="showModalForm = false"
+  >
     <!-- AJOUT EVENT  -->
     <BaseFormModal @submit="addEvent()">
       <h1 class="title is-1">Nouveau évènement</h1>
@@ -90,40 +103,69 @@ function addEvent() {
       <BaseInput>
         <template v-slot:label>Titre</template>
         <template v-slot:input>
-          <input v-model="Titre" class="input" type="text" placeholder="Entrez le nom de l'évènement" />
+          <input
+            v-model="Titre"
+            class="input"
+            type="text"
+            placeholder="Entrez le nom de l'évènement"
+          />
         </template>
       </BaseInput>
 
       <BaseInput>
         <template v-slot:label>Description</template>
         <template v-slot:input>
-          <input v-model="Description" class="input" type="text" placeholder="Entrez la description de l'évènement" />
+          <input
+            v-model="Description"
+            class="input"
+            type="text"
+            placeholder="Entrez la description de l'évènement"
+          />
         </template>
       </BaseInput>
 
       <BaseInput>
         <template v-slot:label>Lieu</template>
         <template v-slot:input>
-          <input v-model="Lieu" class="input" type="text" placeholder="Entrez la description de l'évènement" />
+          <input
+            v-model="Lieu"
+            class="input"
+            type="text"
+            placeholder="Entrez la description de l'évènement"
+          />
         </template>
       </BaseInput>
 
       <BaseInput>
         <template v-slot:label>Date de début</template>
         <template v-slot:input>
-          <input v-model="Debut" class="input" type="datetime-local" placeholder="Entrez une date de début" />
+          <input
+            v-model="Debut"
+            class="input"
+            type="datetime-local"
+            placeholder="Entrez une date de début"
+          />
         </template>
       </BaseInput>
 
       <BaseInput>
         <template v-slot:label>Date de fin</template>
         <template v-slot:input>
-          <input v-model="Fin" class="input" type="datetime-local" placeholder="Entrez une date de fin" />
+          <input
+            v-model="Fin"
+            class="input"
+            type="datetime-local"
+            placeholder="Entrez une date de fin"
+          />
         </template>
       </BaseInput>
 
       <BaseInputSubmit>
-        <input type="submit" class="button is-danger is-rounded" value="Ajouter l'événement" />
+        <input
+          type="submit"
+          class="button is-danger is-rounded"
+          value="Ajouter l'événement"
+        />
       </BaseInputSubmit>
     </BaseFormModal>
   </BaseModalForm>
