@@ -55,7 +55,7 @@ function addEvent() {
       console.log(error);
     })
     .finally(() => {
-      //Perform action in always
+      window.location.reload();
     });
 }
 </script>
