@@ -7,8 +7,10 @@ const session = ref(false)
 window.addEventListener("hashchange", () => {
   page.value = window.location.hash;
 
+  console.log(page.value)
   if (sessionStorage.getItem('user')) {
     session.value = true
+    console.log(session.value)
   } else {
     session.value = false
   }
@@ -37,9 +39,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function reload() {
   sessionStorage.removeItem('user')
-  setTimeout(() => {
-    window.location.reload()
-  }, 500)
+  sessionStorage.removeItem('role')
+  window.location.hash = '#accueil'
+  window.location.reload()
 }
 
 const props = defineProps({
@@ -52,7 +54,9 @@ const props = defineProps({
     required: true,
   },
 });
-
+watchEffect(() => {
+  console.log(session.value)
+})
 function afficheNotif() {
   console.log(4);
 }
@@ -76,7 +80,7 @@ function afficheNotif() {
       </a>
     </div>
 
-    <div id="navMenu" class="navbar-menu">
+    <div class="navbar-menu">
       <div class="navbar-start">
         <a class="navbar-item" href="#accueil"> Accueil </a>
         <a class="navbar-item" href="#evenements"> Evenements </a>
@@ -110,7 +114,7 @@ function afficheNotif() {
       </a>
     </div>
 
-    <div id="navMenu" class="navbar-menu">
+    <div class="navbar-menu">
       <div class="navbar-start">
         <a class="navbar-item" href="#accueil"> Accueil </a>
       </div>

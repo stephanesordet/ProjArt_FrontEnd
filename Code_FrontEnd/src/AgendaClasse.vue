@@ -6,11 +6,16 @@ import TheCardWrapper from "./components/TheCardWrapper.vue";
 
 const user = ref(null);
 const session = ref(false);
+
 const { data: cours } = useFetch(
   "http://127.0.0.1:8000/api/cours/user/" + sessionStorage.getItem("user")
-);
+)
 
 const tabCours = window.addEventListener("hashchange", () => {
+  cours.value = useFetch(
+    "http://127.0.0.1:8000/api/cours/user/" + sessionStorage.getItem("user")
+  )
+
   if (
     window.location.hash == "#agendaClasse" &&
     sessionStorage.getItem("user")
@@ -40,14 +45,8 @@ const userCours = computed(() => {
     <div class="columns is-centered tile is-ancestor">
       <div class="column is-three-quarters">
         <the-card-wrapper>
-          <card-cours
-            v-for="cours in userCours"
-            :key="cours.id"
-            :debut="cours.Debut"
-            :fin="cours.Fin"
-            :cours="cours.matiere_id"
-            :salle="cours.salle_id"
-          >
+          <card-cours v-for="cours in userCours" :key="cours.id" :debut="cours.Debut" :fin="cours.Fin"
+            :cours="cours.matiere_id" :salle="cours.salle_id">
           </card-cours>
         </the-card-wrapper>
       </div>
@@ -59,4 +58,5 @@ const userCours = computed(() => {
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+</style>
