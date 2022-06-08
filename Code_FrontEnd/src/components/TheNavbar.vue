@@ -4,11 +4,12 @@ import { computed, ref, watchEffect } from "vue";
 const page = ref("#accueil");
 const user = ref(null);
 const session = ref(false)
+const role = ref(null);
 
 window.addEventListener('load', () => {
   if (sessionStorage.getItem('user')) {
     session.value = true
-
+    role.value = sessionStorage.getItem('role')
   } else {
     session.value = false
   }
@@ -18,6 +19,7 @@ window.addEventListener("hashchange", () => {
   page.value = window.location.hash;
   if (sessionStorage.getItem('user')) {
     session.value = true
+    role.value = sessionStorage.getItem('role')
   } else {
     session.value = false
   }
@@ -68,6 +70,7 @@ function afficheNotif() {
 </script>
 
 <template>
+
   <nav v-show="session" class="navbar" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
       <a class="navbar-item" href="#accueil">
@@ -88,12 +91,10 @@ function afficheNotif() {
     <div class="navbar-menu">
       <div class="navbar-start">
         <a class="navbar-item" href="#accueil"> Accueil </a>
+        <a v-show="role != 'Administration' && role != 'AGE'" class="navbar-item" href="#agendaClasse"> Agenda personnel
+        </a>
         <a class="navbar-item" href="#evenements"> Evenements </a>
-        <a class="navbar-item" href="#agendaClasse"> Agenda des classes </a>
-        <a class="navbar-item" href="#detailMatiere"> Détails de la matière </a>
         <a class="navbar-item" href="#notifications"> Notifications </a>
-        <a class="navbar-item" href="#ajoutCours"> Ajouter un cours </a>
-        <a class="navbar-item" href="#DetailEvent"> Details Event </a>
       </div>
       <div class="navbar-end">
         <div class="navbar-item">

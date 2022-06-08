@@ -44,21 +44,9 @@ let showModalForm = ref(false);
     >
     </card-notif> -->
   </the-card-wrapper>
-  <button
-    class="button is-right js-modal-trigger"
-    data-target="modal-js-example"
-    id="fixedbutton"
-    @click="showModalForm = !showModalForm"
-  >
-    <span class="icon is-large has-text-danger">
-      <i class="fa fa-4x fa-plus-square"></i>
-    </span>
-  </button>
+
   <!-- MODAL FORM  -->
-  <BaseModalForm
-    :class="{ 'is-active': showModalForm }"
-    @close="showModalForm = false"
-  >
+  <BaseModalForm :class="{ 'is-active': showModalForm }" @close="showModalForm = false">
     <!-- AJOUT NOTIFICATION  -->
     <BaseFormModal @submit.prevent="addNotification()">
       <h1 class="title is-1">Nouvelle notification</h1>
@@ -66,35 +54,22 @@ let showModalForm = ref(false);
       <BaseInput>
         <template v-slot:label>Titre</template>
         <template v-slot:input>
-          <input
-            v-model="Objet"
-            class="input"
-            type="text"
-            placeholder="Entrez le nom de l'évènement"
-          />
+          <input v-model="Objet" class="input" type="text" placeholder="Entrez le nom de l'évènement" />
         </template>
       </BaseInput>
 
       <BaseInput>
         <template v-slot:label>Message</template>
         <template v-slot:input>
-          <input
-            v-model="Message"
-            class="input"
-            type="text"
-            placeholder="Entrez la description de l'évènement"
-          />
+          <input v-model="Message" class="input" type="text" placeholder="Entrez la description de l'évènement" />
         </template>
       </BaseInput>
 
       <BaseInputSubmit>
-        <input
-          type="submit"
-          class="button is-danger is-rounded"
-          value="Ajouter le cours"
-        />
-      </BaseInputSubmit> </BaseFormModal
-  ></BaseModalForm>
+        <input type="submit" class="button is-danger is-rounded" value="Ajouter le cours" />
+      </BaseInputSubmit>
+    </BaseFormModal>
+  </BaseModalForm>
 </template>
 
 <style scoped>

@@ -17,6 +17,7 @@ const { data: matieres } = useFetch("http://localhost:8000/api/matiere");
 const { data: coursClasse } = useFetch(
   "http://127.0.0.1:8000/api/cours/classe/"
 );
+const role = ref(sessionStorage.getItem("role"))
 
 const Classes = computed(() => {
   const tabClasses = [];
@@ -118,8 +119,8 @@ function addEvent() {
       </div>
     </div>
     <div>
-      <button class="button is-right js-modal-trigger" data-target="modal-js-example" id="fixedbutton"
-        @click="showModalForm = !showModalForm">
+      <button v-show="role == 'Administration'" class="button is-right js-modal-trigger" data-target="modal-js-example"
+        id="fixedbutton" @click="showModalForm = !showModalForm">
         <span class="icon is-large has-text-danger">
           <i class="fa fa-4x fa-plus-square"></i>
         </span>
