@@ -9,6 +9,34 @@ import BaseModalForm from "./components/BaseModalForm.vue";
 import axios from "axios";
 import { useFetch } from "../composables/fetch.js";
 
+const user = ref(null);
+const session = ref(false);
+const { data: events } = useFetch("http://127.0.0.1:8000/api/cours/");
+console.log(events);
+/* 
+const tabCours = window.addEventListener("hashchange", () => {
+  if (
+    window.location.hash == "#agendaClasse" &&
+    sessionStorage.getItem("user")
+  ) {
+    session.value = true;
+  } else {
+    session.value = false;
+  }
+});
+
+const userCours = computed(() => {
+  const tabCours = [];
+  if (!cours.value?.length) {
+    return [];
+  } else {
+    cours.value.forEach((element) => {
+      tabCours.push(element);
+    });
+  }
+  return tabCours;
+}); */
+
 const showModalForm = ref(false);
 
 //Traitement du form after submit
@@ -78,10 +106,6 @@ function addEvent() {
   >
     <!-- AJOUT EVENT  -->
     <BaseFormModal @submit.prevent="addEvent()">
-      <!--     <link
-      href="~bulma-calendar/dist/css/bulma-calendar.min.css"
-      rel="stylesheet"
-    /> -->
       <h1 class="title is-1">Nouveau évènement</h1>
 
       <BaseInput>
@@ -129,12 +153,6 @@ function addEvent() {
             type="datetime-local"
             placeholder="Entrez une date de début"
           />
-          <!--           <input
-            type="date"
-            data-display-mode="inline"
-            data-is-range="true"
-            data-close-on-select="false"
-          /> -->
         </template>
       </BaseInput>
 
@@ -147,12 +165,6 @@ function addEvent() {
             type="datetime-local"
             placeholder="Entrez une date de fin"
           />
-          <!--           <input
-            type="date"
-            data-display-mode="inline"
-            data-is-range="true"
-            data-close-on-select="false"
-          /> -->
         </template>
       </BaseInput>
 
