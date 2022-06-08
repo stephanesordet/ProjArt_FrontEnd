@@ -9,37 +9,26 @@ import BaseModalForm from "./components/BaseModalForm.vue";
 import axios from "axios";
 import { useFetch } from "../composables/fetch.js";
 
-const user = ref(null);
-const session = ref(false);
-const { data: events } = useFetch("http://127.0.0.1:8000/api/cours/");
+// ---------------------- Fetch data for all events -----------------------------
+const { data: events } = useFetch("http://127.0.0.1:8000/api/events/");
 console.log(events);
-/* 
-const tabCours = window.addEventListener("hashchange", () => {
-  if (
-    window.location.hash == "#agendaClasse" &&
-    sessionStorage.getItem("user")
-  ) {
-    session.value = true;
-  } else {
-    session.value = false;
-  }
-});
 
-const userCours = computed(() => {
-  const tabCours = [];
-  if (!cours.value?.length) {
+const allEvents = computed(() => {
+  const tabEvents = [];
+  if (!events.value?.length) {
     return [];
   } else {
-    cours.value.forEach((element) => {
-      tabCours.push(element);
+    events.value.forEach((element) => {
+      tabEvents.push(element);
     });
   }
-  return tabCours;
-}); */
+  return tabEvents;
+});
 
+// ---------------------- Boolean for showing the modal form -----------------------------
 const showModalForm = ref(false);
 
-//Traitement du form after submit
+// ---------------------- Traitement form after submit -----------------------------
 const Titre = ref("");
 const Description = ref("");
 const Lieu = ref("");
@@ -54,7 +43,8 @@ function addEvent() {
       Lieu: Lieu.value,
       Debut: Debut.value,
       Fin: Fin.value,
-      user_Email: "lucas.cuennet@heig-vd.ch",
+      // ---------------------- !!!!!!!!! CHANGER !!!!!!!!! -----------------------------
+      user_Email: "daniela.oberlojer@heig-vd.ch",
     })
     .then((res) => {
       //Perform Success Action
@@ -74,16 +64,18 @@ function addEvent() {
   <div class="main my-4 mx-4">
     <div class="select is-danger">
       <select>
-        <option>Tous les cours</option>
-        <option>With options</option>
+        <option>Tous les events</option>
+        <option>With options ?</option>
       </select>
     </div>
     <the-card-wrapper>
       <card-event
-        :debut="'19:30'"
-        :fin="'23:00'"
-        :titre="'AGE - Soirée culture G'"
-        :lieu="'Bar de la gare'"
+        v-for="events in allEvents"
+        :debut="events.Debut"
+        :fin="events.Fin"
+        :titre="events.Titre"
+        :lieu="events.Lieu"
+        :description="events.Description"
       >
       </card-event>
     </the-card-wrapper>
@@ -105,7 +97,7 @@ function addEvent() {
     @close="showModalForm = false"
   >
     <!-- AJOUT EVENT  -->
-    <BaseFormModal @submit.prevent="addEvent()">
+    <BaseFormModal @submit="addEvent()">
       <h1 class="title is-1">Nouveau évènement</h1>
 
       <BaseInput>
