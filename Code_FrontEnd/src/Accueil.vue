@@ -1,5 +1,6 @@
 <script setup>
 import { def } from "@vue/shared";
+import axios from "axios";
 import { computed, ref, watch, watchEffect } from "vue";
 import { useFetch } from "../composables/fetch";
 import CardCours from "./components/CardCours.vue";
@@ -16,8 +17,7 @@ const { data: matieres } = useFetch("http://localhost:8000/api/matiere");
 
 const { data: coursClasse } = useFetch(
   "http://127.0.0.1:8000/api/cours/classe/"
-);
-const role = ref(sessionStorage.getItem("role"))
+)
 
 const Classes = computed(() => {
   const tabClasses = [];
@@ -46,6 +46,7 @@ let selectedClasse = ref("IM48");
 let selectedMatiere = ref("Tous les cours");
 let Matieres = ref([]);
 
+const role = ref(sessionStorage.getItem("role"))
 function afficheForm() {
   console.log(4);
 }
@@ -53,21 +54,29 @@ function afficheForm() {
 let showModalForm = ref(false);
 
 //Traitement du form after submit
-const Titre = ref("");
-const Description = ref("");
-const Lieu = ref("");
-const Debut = ref("");
-const Fin = ref("");
+const date = ref("");
+const selectedclasseModal = ref("");
+const heureDebut = ref("");
+const heureFin = ref("");
+const matiere = ref("");
+const lieu = ref("");
 
-function addEvent() {
+const selectedClasseModal = ref("");
+
+watchEffect(() => {
+  console.log(date.value);
+  console.log(selectedclasseModal.value);
+  console.log(heureDebut.value);
+  console.log(heureFin.value);
+  console.log(matiere.value);
+  console.log(lieu.value);
+})
+/* function addCours() {
   axios
-    .post("http://localhost:8000/api/event/create", {
-      Titre: Titre.value,
-      Description: Description.value,
-      Lieu: Lieu.value,
-      Debut: Debut.value,
-      Fin: Fin.value,
-      user_Email: "lucas.cuennet@heig-vd.ch",
+    .post("http://localhost:8000/api/cours/create", {
+      Debut: date.value + ' ' + heureDebut.value,
+      Fin: date.value + ' ' + heureFin.value,
+      matiere_id: matiere.value,
     })
     .then((res) => {
       //Perform Success Action
@@ -78,8 +87,27 @@ function addEvent() {
       console.log(error);
     })
     .finally(() => {
-      //Perform action in always
-    });
+      window.location.reload();
+    })
+} */
+
+async function addCours() {
+  try {
+    const cours = await axios.post(
+      "http://localhost:8000/api/cours/create",
+      {
+        Debut: date.value + ' ' + heureDebut.value,
+        Fin: date.value + ' ' + heureFin.value,
+        matiere_id: matiere.value,
+      }
+    )
+      .then(() => {
+        window.location.reload();
+      })
+    console.log(cours)
+  } catch (e) {
+    console.log(e)
+  }
 }
 </script>
 
@@ -145,9 +173,10 @@ function addEvent() {
         <template v-slot:label>Classe</template>
         <template v-slot:input>
           <div class="select">
-            <select v-model="classe">
-              <option>Classe 1</option>
-              <option>Classe 2</option>
+            <select v-model="selectedclasseModal">
+              <option v-for="classe in Classes" @click="selectedclasseModal = classe.id">
+                {{ classe.id }}
+              </option>
             </select>
           </div>
         </template>
@@ -158,8 +187,7 @@ function addEvent() {
         <template v-slot:input>
           <div class="select">
             <select v-model="matiere">
-              <option>Matière 1</option>
-              <option>Matière 2</option>
+              <option>Droit2</option>
             </select>
           </div>
         </template>

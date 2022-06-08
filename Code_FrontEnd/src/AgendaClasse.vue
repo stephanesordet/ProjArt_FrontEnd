@@ -10,14 +10,23 @@ const session = ref(false);
 const { data: cours } = useFetch(
   "http://127.0.0.1:8000/api/cours/user/" + sessionStorage.getItem("user")
 )
-
-const tabCours = window.addEventListener("hashchange", () => {
-
+window.addEventListener("load", () => {
   if (
     window.location.hash == "#agendaClasse" &&
     sessionStorage.getItem("user")
   ) {
-    session.value = true;
+    session.value = sessionStorage.getItem("user");
+  } else {
+    session.value = false;
+  }
+});
+
+window.addEventListener("hashchange", () => {
+  if (
+    window.location.hash == "#agendaClasse" &&
+    sessionStorage.getItem("user")
+  ) {
+    session.value = sessionStorage.getItem("user");
   } else {
     session.value = false;
   }
@@ -38,7 +47,7 @@ const userCours = computed(() => {
 
 <template>
   <div v-if="session">
-    <h1>Voici votre horaire</h1>
+    <h1>Horaire de : <b>{{ session }}</b></h1>
     <div class="columns is-centered tile is-ancestor">
       <div class="column is-three-quarters">
         <the-card-wrapper>
