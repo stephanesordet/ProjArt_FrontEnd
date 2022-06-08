@@ -12,11 +12,17 @@ const { data: cours } = useFetch("http://localhost:8000/api/cours");
 
 const { data: classes } = useFetch("http://localhost:8000/api/classes");
 
-const { data: matieres } = useFetch("http://localhost:8000/api/matiere");
+const selectedClasses = ref("IM49-1");
 
 const { data: coursClasse } = useFetch(
-  "http://127.0.0.1:8000/api/cours/classe/IM49-2"
-);
+        "http://127.0.0.1:8000/api/cours/classe/"+selectedClasses.value
+      );
+
+const date = new Date();
+const dateStr =
+  date.getFullYear() + "-" +
+  ("00" + (date.getMonth() + 1)).slice(-2) + "-" +
+  ("00" + date.getDate()).slice(-2);
 
 const CoursClasse = computed(() => {
   const tabCours = [];
@@ -24,14 +30,58 @@ const CoursClasse = computed(() => {
     return [];
   } else {
     coursClasse.value.forEach((element) => {
-      tabCours.push(element);
+      if (element.Debut > dateStr) {
+        tabCours.push(element);
+      }
     });
+    let duplicates = []
+    const tempArray = tabCours.sort()
+    for (let i = 0; i < tempArray.length; i++) {
+      let j = i + 1;
+      if (j >= tempArray.length) break;
+      if (tempArray[j].id === tempArray[i].id) {
+        duplicates.push(tempArray[i])
+      }
+    }
+    for (let i = 0; i < tabCours.length; i++) {
+     duplicates.forEach((element) => {
+       if (tabCours[i].id === element.id) {
+          tabCours.splice(i, 1);
+          tabCours[i].salle_id += " " + element.salle_id;
+       }
+     });
+    }
+    
   }
+  alert("fetch");
   return tabCours;
 });
-let selectedClasse = ref("IM48");
-let selectedMatiere = ref("Tous les cours");
-let Matieres = ref([]);
+
+const Classes = computed(() => {
+  const tabClasse = [];
+  if (!classes.value?.length) {
+    return [];
+  } else {
+    classes.value.forEach((element) => {
+      tabClasse.push(element);
+    });
+  }
+  return tabClasse;
+});
+
+const Matiere = computed(() => {
+  const tabMatiere = [];
+  if (!coursClasse.value?.length) {
+    return [];
+  } else {
+    coursClasse.value.forEach((element) => {
+      tabMatiere.push(element.matiere_id);
+    });
+  }
+  const uniqueMatiere = new Set(tabMatiere);
+  console.log(uniqueMatiere);
+  return uniqueMatiere;
+});
 
 function afficheForm() {
   console.log(4);
@@ -68,78 +118,67 @@ function addEvent() {
       //Perform action in always
     });
 }
+
+    function valueHasChanged(event) {
+      const cours = document.querySelectorAll('.cours');
+
+      cours.forEach(coursSolo => {
+      coursSolo.style.display = 'none';
+      });
+
+      const val = event.target.value
+
+      if (val === 'Tous les cours') {
+        cours.forEach(coursSolo => {
+        coursSolo.style.display = 'block';
+        });
+      } else {
+        const boxes = document.querySelectorAll('.'+val);
+
+        boxes.forEach(box => {
+          box.style.display = 'block';
+        });
+      }
+    }
+
+    function valueHasClicked(event) {
+      const classe = event.target.innerHTML;
+      
+      selectedClasses.value = classe;
+    }
 </script>
 
 <template>
   <div class="main mx-4 my-1">
     <div>
       <div class="buttons is-mobile columns is-centered mx-1 my-1">
-        <button
-          v-for="classe in Classes"
-          :key="classe"
-          @click="
-            coursClasse.value = useFetch(
-              'http://127.0.0.1:8000/api/cours/classe/' + classe
-            ).value
-          "
-          class="column button has-background-light has-text-black is-medium is-one-fifth-mobile is-danger"
-        >
-          {{ classe }}
+        <button v-for="classe in Classes" :key="classe" @click="valueHasClicked($event)" class="column button has-background-light has-text-black is-medium is-one-fifth-mobile is-danger">
+          {{ classe.id }}
         </button>
       </div>
     </div>
     <div class="select is-danger">
-      <select>
-        <option @click="selectedMatiere = 'Tous les cours'">
+      <select @change="valueHasChanged($event)">
+        <option>
           Tous les cours
         </option>
-        <option
-          v-for="cours in CoursClasse"
-          :key="cours.id"
-          @click="selectedMatiere = cours.matiere_id"
-        >
-          {{ cours.matiere_id }}
+        <option v-for="matiere in Matiere" :key="matiere">
+          {{ matiere }}
         </option>
       </select>
     </div>
     <div class="columns is-centered tile is-ancestor">
       <div class="column is-three-quarters">
-        <div
-          v-if="selectedMatiere != 'Tous les cours'"
-          class="tile is-parent is-vertical"
-        >
-          <card-cours
-            v-for="cours in coursClasse"
-            :key="cours.id"
-            v-show="selectedMatiere == cours.matiere_id"
-            :debut="cours.Debut"
-            :fin="cours.Fin"
-            :cours="cours.matiere_id"
-            :salle="cours.salle_id"
-          >
-          </card-cours>
-        </div>
-
-        <div v-else class="tile is-parent is-vertical">
-          <card-cours
-            v-for="cours in coursClasse"
-            :key="cours.id"
-            :debut="cours.Debut"
-            :fin="cours.Fin"
-            :cours="cours.matiere_id"
-            :salle="cours.salle_id"
-          >
+        <div class="tile is-parent is-vertical">
+          <card-cours v-for="cours in CoursClasse" :id="cours.id" :class="cours.matiere_id" class="cours" :key="cours.id" :debut="cours.Debut" :fin="cours.Fin"
+            :cours="cours.matiere_id" :salle="cours.salle_id">
           </card-cours>
         </div>
       </div>
     </div>
     <div>
-      <button
-        class="button is-right js-modal-trigger"
-        data-target="modal-js-example"
-        id="fixedbutton"
-        @click="showModalForm = !showModalForm"
-      >
+      <button class="button is-right js-modal-trigger" data-target="modal-js-example" id="fixedbutton"
+        @click="showModalForm = !showModalForm">
         <span class="icon is-large has-text-danger">
           <i class="fa fa-4x fa-plus-square"></i>
         </span>
@@ -147,10 +186,7 @@ function addEvent() {
     </div>
   </div>
   <!-- MODAL FORM  -->
-  <BaseModalForm
-    :class="{ 'is-active': showModalForm }"
-    @close="showModalForm = false"
-  >
+  <BaseModalForm :class="{ 'is-active': showModalForm }" @close="showModalForm = false">
     <!-- AJOUT COURS  -->
     <BaseFormModal @submit.prevent="addCours()">
       ^
@@ -159,12 +195,7 @@ function addEvent() {
       <BaseInput>
         <template v-slot:label>Date</template>
         <template v-slot:input>
-          <input
-            v-model="date"
-            class="input"
-            type="date"
-            placeholder="Entrez une date"
-          />
+          <input v-model="date" class="input" type="date" placeholder="Entrez une date" />
         </template>
       </BaseInput>
 
@@ -195,45 +226,26 @@ function addEvent() {
       <BaseInput>
         <template v-slot:label>Heure de début</template>
         <template v-slot:input>
-          <input
-            v-model="heureDebut"
-            class="input"
-            type="time"
-            placeholder="Entrez une heure de début"
-          />
+          <input v-model="heureDebut" class="input" type="time" placeholder="Entrez une heure de début" />
         </template>
       </BaseInput>
 
       <BaseInput>
         <template v-slot:label>Heure de fin</template>
         <template v-slot:input>
-          <input
-            v-model="heureFin"
-            class="input"
-            type="time"
-            placeholder="Entrez une heure de fin"
-          />
+          <input v-model="heureFin" class="input" type="time" placeholder="Entrez une heure de fin" />
         </template>
       </BaseInput>
 
       <BaseInput>
         <template v-slot:label>Lieu</template>
         <template v-slot:input>
-          <input
-            v-model="lieu"
-            class="input"
-            type="text"
-            placeholder="Entrez le lieu d'une classe"
-          />
+          <input v-model="lieu" class="input" type="text" placeholder="Entrez le lieu d'une classe" />
         </template>
       </BaseInput>
 
       <BaseInputSubmit>
-        <input
-          type="submit"
-          class="button is-danger is-rounded"
-          value="Ajouter le cours"
-        />
+        <input type="submit" class="button is-danger is-rounded" value="Ajouter le cours" />
       </BaseInputSubmit>
     </BaseFormModal>
   </BaseModalForm>

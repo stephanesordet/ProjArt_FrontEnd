@@ -16,6 +16,15 @@ window.addEventListener("hashchange", () => {
   }
 });
 
+window.addEventListener('load', () => {
+  if (sessionStorage.getItem('user')) {
+    session.value = true
+
+  } else {
+    session.value = false
+  }
+})
+
 document.addEventListener("DOMContentLoaded", () => {
   // Get all "navbar-burger" elements
   const $navbarBurgers = Array.prototype.slice.call(
