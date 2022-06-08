@@ -1,16 +1,23 @@
 <script setup>
 import { computed, ref, watchEffect } from "vue";
+
 const page = ref("#accueil");
 const user = ref(null);
 const session = ref(false)
 
-window.addEventListener("hashchange", () => {
-  page.value = window.location.hash;
-
-  console.log(page.value)
+window.addEventListener('load', () => {
   if (sessionStorage.getItem('user')) {
     session.value = true
-    console.log(session.value)
+
+  } else {
+    session.value = false
+  }
+})
+
+window.addEventListener("hashchange", () => {
+  page.value = window.location.hash;
+  if (sessionStorage.getItem('user')) {
+    session.value = true
   } else {
     session.value = false
   }
@@ -54,9 +61,7 @@ const props = defineProps({
     required: true,
   },
 });
-watchEffect(() => {
-  console.log(session.value)
-})
+
 function afficheNotif() {
   console.log(4);
 }

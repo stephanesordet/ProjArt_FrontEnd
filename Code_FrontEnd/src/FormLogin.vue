@@ -27,7 +27,8 @@ function useFetchLogin(password, email) {
           sessionStorage.setItem('role', 'AGE')
         }
 
-        window.location.hash = '#accueil'
+        window.location.hash = '#agenda'
+        window.location.reload()
 
       } else if (res.data.includes('user found : error in password or username')) {
 

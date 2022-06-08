@@ -12,9 +12,6 @@ const { data: cours } = useFetch(
 )
 
 const tabCours = window.addEventListener("hashchange", () => {
-  cours.value = useFetch(
-    "http://127.0.0.1:8000/api/cours/user/" + sessionStorage.getItem("user")
-  )
 
   if (
     window.location.hash == "#agendaClasse" &&
