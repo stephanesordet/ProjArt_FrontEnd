@@ -50,6 +50,36 @@ function afficheForm() {
 }
 
 let showModalForm = ref(false);
+
+//Traitement du form after submit
+const Titre = ref("");
+const Description = ref("");
+const Lieu = ref("");
+const Debut = ref("");
+const Fin = ref("");
+
+function addEvent() {
+  axios
+    .post("http://localhost:8000/api/event/create", {
+      Titre: Titre.value,
+      Description: Description.value,
+      Lieu: Lieu.value,
+      Debut: Debut.value,
+      Fin: Fin.value,
+      user_Email: "lucas.cuennet@heig-vd.ch",
+    })
+    .then((res) => {
+      //Perform Success Action
+      console.log(res);
+    })
+    .catch((error) => {
+      // error.response.status Check status code
+      console.log(error);
+    })
+    .finally(() => {
+      //Perform action in always
+    });
+}
 </script>
 
 <template>

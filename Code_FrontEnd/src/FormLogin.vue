@@ -3,43 +3,47 @@ import { watchPostEffect } from "@vue/runtime-core";
 import { ref, computed, watch, watchEffect } from "vue";
 import axios from "axios";
 
-let email = ref('')
-let password = ref('')
-let session = ref(false)
+let email = ref("");
+let password = ref("");
+let session = ref(false);
 
 function useFetchLogin(password, email) {
   axios
-    .post('http://localhost:8000/api/login?Email=' + email + '&Password=' + password, {
-    })
+    .post(
+      "http://localhost:8000/api/login?Email=" +
+      email +
+      "&Password=" +
+      password,
+      {}
+    )
     .then((res) => {
+      if (res.data.includes("connected") || res.data.includes("DB")) {
+        console.log("Connected");
 
-      if (res.data.includes('connected') || res.data.includes('DB')) {
-
-        sessionStorage.setItem('user', email)
-        session.value = true
-        if (res.data.includes('Professeur')) {
-          sessionStorage.setItem('role', 'Professeur')
-        } else if (res.data.includes('Etudiant')) {
-          sessionStorage.setItem('role', 'Etudiant')
-        } else if (res.data.includes('Administration')) {
-          sessionStorage.setItem('role', 'Administration')
+        sessionStorage.setItem("user", email);
+        session.value = true;
+        if (res.data.includes("Professeur")) {
+          sessionStorage.setItem("role", "Professeur");
+        } else if (res.data.includes("Etudiant")) {
+          sessionStorage.setItem("role", "Etudiant");
+        } else if (res.data.includes("Administration")) {
+          sessionStorage.setItem("role", "Administration");
         } else {
-          sessionStorage.setItem('role', 'AGE')
+          sessionStorage.setItem("role", "AGE");
         }
 
-        window.location.hash = '#agenda'
+        window.location.hash = '#accueil'
         window.location.reload()
 
-      } else if (res.data.includes('user found : error in password or username')) {
-
-        console.log('mdp ou user')
-        session.value = false
-
+      } else if (
+        res.data.includes("user found : error in password or username")
+      ) {
+        console.log("mdp ou user");
+        session.value = false;
       } else {
-        console.log('pas de compte')
-        session.value = false
+        console.log("pas de compte");
+        session.value = false;
       }
-
     })
     .catch((error) => {
       // error.response.status Check status code
@@ -47,9 +51,6 @@ function useFetchLogin(password, email) {
     })
     .finally(() => {
       //Perform action in always
-
-
-
     });
 }
 </script>
@@ -82,9 +83,7 @@ function useFetchLogin(password, email) {
                 </div>
               </div>
               <div class="field">
-                <button class="button is-success">
-                  Connexion
-                </button>
+                <button class="button is-success">Connexion</button>
               </div>
             </form>
           </div>

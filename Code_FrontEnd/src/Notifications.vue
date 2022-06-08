@@ -1,32 +1,48 @@
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import TheCardWrapper from "./components/TheCardWrapper.vue";
 import CardNotif from "./components/CardNotif.vue";
 import { useFetch } from "../composables/fetch";
-//import TheReturnButton from "./components/TheReturnButton.vue";
 import TheBreadCrums from "./components/TheBreadcrums.vue";
 import BaseFormModal from "./components/BaseFormModal.vue";
 import BaseInputSubmit from "./components/BaseInputSubmit.vue";
 import BaseInput from "./components/BaseInput.vue";
 import BaseModalForm from "./components/BaseModalForm.vue";
 
-/* const { data: notif } = useFetch(
-  ""
-); */
+/* console.log(sessionStorage.getItem("user"));
+// ---------------------- Fetch data for all events -----------------------------
+// ---------------------- !!!!!!!!! CHANGER !!!!!!!!! -----------------------------
+const { data: notifications } = useFetch(
+  "http://127.0.0.1:8000/api/notifications/lucas.cuennet@heig-vd.ch" //+ sessionStorage.getItem("user")
+);
+console.log(notifications);
+
+const allNotifications = computed(() => {
+  const tabNotifications = [];
+  if (!notifications.value?.length) {
+    return [];
+  } else {
+    notifications.value.forEach((element) => {
+      tabNotifications.push(element);
+    });
+  }
+  return tabNotifications;
+}); */
+
+// ---------------------- Boolean for showing the modal form -----------------------------
 let showModalForm = ref(false);
 </script>
 
 <template>
-  <!--   <the-card-notif v-for="notif in notifs" :key="notif.id" :user="notif.user" :object="notif.object" :message="notif.message" :envoiHeureDate="notif.envoiHeureDate"></the-card-notif>
- -->
   <the-card-wrapper>
-    <card-notif
+    <!--     <card-notif
+      v-for="response in allNotifications"
       :user="'AGE'"
-      :object="'Soirée CultureG'"
-      :envoiHeure="'13:05'"
-      :message="'Venez nombreux !'"
+      :object="response.notification.Objet"
+      :envoiHeure="response.notification.EnvoiHeureDate"
+      :message="response.notification.Message"
     >
-    </card-notif>
+    </card-notif> -->
   </the-card-wrapper>
   <button
     class="button is-right js-modal-trigger"
@@ -45,17 +61,13 @@ let showModalForm = ref(false);
   >
     <!-- AJOUT NOTIFICATION  -->
     <BaseFormModal @submit.prevent="addNotification()">
-      <!--     <link
-      href="~bulma-calendar/dist/css/bulma-calendar.min.css"
-      rel="stylesheet"
-    /> -->
       <h1 class="title is-1">Nouvelle notification</h1>
 
       <BaseInput>
         <template v-slot:label>Titre</template>
         <template v-slot:input>
           <input
-            v-model="eventTitle"
+            v-model="Objet"
             class="input"
             type="text"
             placeholder="Entrez le nom de l'évènement"
@@ -64,10 +76,10 @@ let showModalForm = ref(false);
       </BaseInput>
 
       <BaseInput>
-        <template v-slot:label>Description</template>
+        <template v-slot:label>Message</template>
         <template v-slot:input>
           <input
-            v-model="eventDescription"
+            v-model="Message"
             class="input"
             type="text"
             placeholder="Entrez la description de l'évènement"
