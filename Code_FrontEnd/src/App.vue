@@ -29,7 +29,7 @@ const routes = {
     label: "Login",
     component: Login,
   },
-  "#detailMatiere/": {
+  "#detailMatiere": {
     label: "Detail matiere",
     component: DetailMatiere,
   },
@@ -54,6 +54,12 @@ const curHash = computed(() =>
   routes[hash.value] ? hash.value : Object.keys(routes)[0]
 );
 const curComponent = computed(() => routes[curHash.value].component);
+
+watchEffect(() => {
+  if (curComponent.value) {
+    //scroll top js
+  }
+});
 </script>
 
 <template>

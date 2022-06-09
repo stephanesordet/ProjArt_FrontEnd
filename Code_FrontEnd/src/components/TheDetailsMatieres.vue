@@ -4,27 +4,25 @@ import BaseFormModal from "./BaseFormModal.vue";
 import BaseInputSubmit from "./BaseInputSubmit.vue";
 import BaseInput from "./BaseInput.vue";
 import BaseModalForm from "./BaseModalForm.vue";
-// defineProps({
-//     titre: {
-//         type: String,
-//     },
-//     description: {
-//         type: String,
-//     },
-//     visibilite: {
-//         type: Boolean,
-//     },
-//     user: {
-//         type: String,
-//     },
-//     date: {
-//         type: Date,
-//     },
-//     matiere :{
-//         type: String,
-//     }
-// });
 import BaseModal from "./BaseModal.vue";
+
+defineProps({
+  //     titre: {
+  //         type: String,
+  //     },
+  //     description: {
+  //         type: String,
+  //     },
+  //     visibilite: {
+  //         type: Boolean,
+  //     },
+  prof: {
+    type: String,
+  },
+  matiere: {
+    type: String,
+  },
+});
 
 function envoieRetard() {
   console.log(4);
@@ -51,11 +49,13 @@ let showModalForm = ref(false);
       class="box content is-half is-offset-one-quarter has-background-light has-text-left column"
     >
       <h2>
-        LabVeilSoc
-        <!--{{matiere}}-->
+        {{ matiere }}
       </h2>
-      <p class="is-size-6"><em>Saskia Faulk</em></p>
-      <h3>Remarques</h3>
+      <p class="is-size-6">
+        <em>{{ prof }}</em>
+      </p>
+
+      <h4>Remarques</h4>
       <div
         class="column is-flex-direction-column is-align-content-space-evenly"
       >

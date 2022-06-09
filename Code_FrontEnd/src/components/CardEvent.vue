@@ -4,10 +4,10 @@ defineProps({
     type: String,
   },
   debut: {
-    type: String,
+    type: Date,
   },
   fin: {
-    type: String,
+    type: Date,
   },
   classe: {
     type: String,

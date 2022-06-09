@@ -1,17 +1,45 @@
 <script setup>
+import { ref, computed, watchEffect } from "vue";
 import TheDetailsMatieres from "./components/TheDetailsMatieres.vue";
-// import { useFetch } from '../composables/fetch.js';
+import { currentCoursId } from "../composables/store.js";
+import { useFetch } from "../composables/fetch.js";
+import CardEvent from "./components/CardEvent.vue";
+import TheCardWrapper from "./components/TheCardWrapper.vue";
 
-// const { data: remarques } = useFetch(
-//   ""
-// );
-// à mettre dans le composant détails matières
-// v-for="remarque in remarques" :titre="remarque.titre" :description="remarque.description" :visibilite="remarque.visibilite" :user="remarque.fk_user" :date="remarque.date" :matiere="remarque.fk_matiere"
-//
+// ---------------------- Fetch data for all events -----------------------------
+const cours = ref([]);
+
+watchEffect(() => {
+  fetch("http://127.0.0.1:8000/api/cours/info/" + currentCoursId.value)
+    .then((res) => res.json())
+    .then((coursResults) => (cours.value = coursResults));
+});
+/* const { data: cours } = useFetch(
+  "http://127.0.0.1:8000/api/cours/info/" + currentCoursId.value
+); */
+
+const allCours = computed(() => {
+  const tabCours = [];
+  if (!cours.value?.length) {
+    return [];
+  } else {
+    cours.value.forEach((element) => {
+      if (tabCours.length < 1) {
+        tabCours.push(element);
+      }
+    });
+  }
+  return tabCours;
+});
 </script>
 
 <template>
-  <TheDetails-matieres></TheDetails-matieres>
+  <TheDetails-matieres
+    v-for="cours in allCours"
+    :matiere="cours.matiere_id"
+    :prof="cours.FullName"
+  >
+  </TheDetails-matieres>
 </template>
 
 <style scoped>

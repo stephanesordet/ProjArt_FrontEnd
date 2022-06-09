@@ -1,4 +1,6 @@
 <script setup>
+import { currentCoursId } from "../../composables/store.js";
+
 defineProps({
   cours: {
     type: String,
@@ -30,13 +32,15 @@ function deleteCours() {
 
 function voirDetails(id) {
   console.log("details");
-  window.location.hash = "#detailMatiere/" + id;
-  console.log(id);
+  window.location.hash = "#detailMatiere";
+  currentCoursId.value = id;
+  console.log(id + " " + currentCoursId.value);
+  //window.location.reload();
 }
 </script>
 
 <template>
-  <article class='tile is-child notification is-light has-text-left-mobile'>
+  <article class="tile is-child notification is-light has-text-left-mobile">
     <link
       rel="stylesheet"
       href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
