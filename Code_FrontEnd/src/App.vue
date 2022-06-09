@@ -1,6 +1,6 @@
 import TheReturnButtonVue from "./components/TheReturnButton.vue";
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, watchEffect } from "vue";
 import TheNavbar from "./components/TheNavbar.vue";
 import AgendaClasse from "./AgendaClasse.vue";
 import Login from "./FormLogin.vue";
