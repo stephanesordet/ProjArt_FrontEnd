@@ -93,6 +93,24 @@ const CoursClasse = computed(() => {
         }
       });
     }
+
+    let duplicatesHistorique = [];
+    const tempArrayHistorique = tabCoursHistorique.sort();
+    for (let i = 0; i < tempArrayHistorique.length; i++) {
+      let j = i + 1;
+      if (j >= tempArrayHistorique.length) break;
+      if (tempArrayHistorique[j].id === tempArrayHistorique[i].id) {
+        duplicatesHistorique.push(tempArrayHistorique[i]);
+      }
+    }
+    for (let i = 0; i < tabCoursHistorique.length; i++) {
+      duplicatesHistorique.forEach((element) => {
+        if (tabCoursHistorique[i].id === element.id) {
+          tabCoursHistorique.splice(i, 1);
+          tabCoursHistorique[i].salle_id += " " + element.salle_id;
+        }
+      });
+    }
   }
   console.log(tabCours);
   console.log(tabCoursHistorique);
@@ -357,7 +375,7 @@ function setClass(day){
           <div v-if="(CoursClasse.uniqueCoursByDate == undefined)">
             <h2>Cours en chargement</h2>
           </div>
-          <div v-else="(CoursClasse.uniqueCoursByDate.size == 0) && (!historique)">
+          <div v-else-if="(CoursClasse.uniqueCoursByDate.size == 0) && (!historique)">
             <h2>Plus de cours actuellement</h2>
           </div>
         </div>
