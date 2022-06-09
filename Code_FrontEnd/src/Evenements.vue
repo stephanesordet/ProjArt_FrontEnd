@@ -67,12 +67,9 @@ function addEvent() {
 
 function displayUpdateModal(id, titre, description, lieu, debut, fin, email) {
   showUpdateModalForm.value = !showUpdateModalForm.value;
-  console.log(userSession.value);
-  console.log(email)
   if (email == userSession.value) {
     currentEventId.value = id;
     auteur.value = true
-    currentEventId.value = id;
     Titre.value = titre;
     Description.value = description;
     Lieu.value = lieu;
@@ -108,8 +105,14 @@ function updateEvent(user) {
     });
 }
 
-function displayDeleteModal(id) {
+function displayDeleteModal(id, email) {
   showDeleteModalForm.value = !showDeleteModalForm.value;
+  if (email == userSession.value) {
+    currentEventId.value = id;
+    auteur.value = true
+  } else {
+    auteur.value = false
+  }
 }
 
 function deleteEvent() {
@@ -140,7 +143,8 @@ function deleteEvent() {
     <the-card-wrapper>
       <card-event v-for="events in allEvents" :id="events.id" :debut="events.Debut" :fin="events.Fin"
         :titre="events.Titre" :lieu="events.Lieu" :description="events.Description">
-        <button class="button is-pulled-right is-white has-background-light" @click="displayDeleteModal(events.id)">
+        <button class="button is-pulled-right is-white has-background-light"
+          @click="displayDeleteModal(events.id, events.user_Email)">
           <span class="icon is-small">
             <i class="fa fa-trash"></i>
           </span>
@@ -319,12 +323,18 @@ function deleteEvent() {
 
   <!-- MODAL FORM DELETE -->
   <BaseModalForm :class="{ 'is-active': showDeleteModalForm }" @close="showDeleteModalForm = false">
-    <!-- AJOUT EVENT  -->
-    <BaseFormModal>
+    <!-- DELETE EVENT  -->
+    <BaseFormModal v-if="auteur">
       <h1 class="title is-2 ">Voulez-vous vraiment supprimer l'évènement ?</h1>
       <BaseInputSubmit>
         <input type="submit" class="button is-danger is-rounded" value="Supprimer l'événement" @click="deleteEvent()" />
       </BaseInputSubmit>
+      <BaseInputSubmit>
+        <input type="submit" class="button is-primary is-rounded" value="Retour" @click="showDeleteModalForm = false" />
+      </BaseInputSubmit>
+    </BaseFormModal>
+    <BaseFormModal v-else>
+      <h1 class="title is-2 ">Vous ne pouvez pas supprimer l'évènement</h1>
       <BaseInputSubmit>
         <input type="submit" class="button is-primary is-rounded" value="Retour" @click="showDeleteModalForm = false" />
       </BaseInputSubmit>
