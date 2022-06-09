@@ -1,5 +1,10 @@
 <script setup>
+import { currentEventId } from "../../composables/store";
+
 defineProps({
+  id: {
+    type: Number,
+  },
   titre: {
     type: String,
   },
@@ -20,15 +25,10 @@ defineProps({
   },
 });
 
-function modifCours() {
-  console.log(4);
-}
 </script>
 
 <template>
-  <article
-    class="tile is-child notification is-warning-light has-text-left-mobile"
-  >
+  <article class="tile is-child notification is-warning-light has-text-left-mobile">
     <p class="is-size-4 has-text-weight-bold">{{ titre }}</p>
     <p class="is-size-6">{{ debut }} - {{ fin }}</p>
     <p class="is-size-5">
@@ -38,14 +38,7 @@ function modifCours() {
       {{ lieu }}
     </p>
     <p class="is-size-5">{{ description }}</p>
-    <button
-      class="button is-pulled-right is-white has-background-light"
-      @click="modifCours()"
-    >
-      <span class="icon is-small">
-        <i class="fa fa-pencil"></i>
-      </span>
-    </button>
+    <slot></slot>
   </article>
 </template>
 
