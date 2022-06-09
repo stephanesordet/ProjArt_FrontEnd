@@ -20,6 +20,7 @@ const historique = ref(false);
 
 const classeCours = ref([]);
 
+
 watchEffect(() => {
   fetch("http://127.0.0.1:8000/api/cours/classe/" + selectedClasses.value)
     .then((res) => res.json())
@@ -353,7 +354,10 @@ function setClass(day){
           <card-cours v-for="cours in day.Cours" :key="cours.id" :data-id="cours.id" :class="cours.matiere_id" class="cours" :debut="cours.HeureDebut" :fin="cours.HeureFin" :cours="cours.matiere_id" :salle="cours.salle_id">
           </card-cours>
           </template>
-          <div v-if="(CoursClasse.uniqueCoursByDate == 0) && (!historique)">
+          <div v-if="(CoursClasse.uniqueCoursByDate == undefined)">
+            <h2>Cours en chargement</h2>
+          </div>
+          <div v-else="(CoursClasse.uniqueCoursByDate.size == 0) && (!historique)">
             <h2>Plus de cours actuellement</h2>
           </div>
         </div>
