@@ -8,6 +8,7 @@ import BaseFormModal from "./components/BaseFormModal.vue";
 import BaseInputSubmit from "./components/BaseInputSubmit.vue";
 import BaseInput from "./components/BaseInput.vue";
 import BaseModalForm from "./components/BaseModalForm.vue";
+import Switch from "./components/Switch.vue";
 
 const { data: cours } = useFetch("http://localhost:8000/api/cours");
 
@@ -15,9 +16,15 @@ const { data: classes } = useFetch("http://localhost:8000/api/classes");
 
 const selectedClasses = ref("M49-1");
 
-const { data: coursClasse } = useFetch(
-  "http://127.0.0.1:8000/api/cours/classe/" + selectedClasses.value
-);
+const historique = ref(false);
+
+const classeCours = ref([]);
+
+watchEffect(() => {
+  fetch("http://127.0.0.1:8000/api/cours/classe/" + selectedClasses.value)
+    .then((res) => res.json())
+    .then((coursClasse) => (classeCours.value = coursClasse));
+});
 
 const role = ref(sessionStorage.getItem("role"));
 
@@ -31,12 +38,41 @@ const dateStr =
 
 const CoursClasse = computed(() => {
   const tabCours = [];
-  if (!coursClasse.value?.length) {
+  const tabCoursHistorique = [];
+  if (!classeCours.value?.length) {
     return [];
   } else {
-    coursClasse.value.forEach((element) => {
+    classeCours.value.forEach((element) => {
       if (element.Debut > dateStr) {
+        const month = ["Janvier","Fevrier","Mars","Avril","Mai","Juin","Juillet","Aout","Septembre","Octobre","Novembre","Decembre"];
+        const days = ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"];
+        const d = new Date(element.Debut);
+        const f = new Date(element.Fin);
+        let monthDate = month[d.getMonth()];
+        let day = days[d.getDay()];
+        let date = d.getDate() + " " + monthDate + " " + d.getFullYear();
+        let heureDebut = d.getHours() + ":" + String(d.getMinutes()).padStart(2, "0");
+        let heureFin = f.getHours() + ":" + String(f.getMinutes()).padStart(2, "0");
+        element.Jour = day;
+        element.Date = date;
+        element.HeureDebut = heureDebut;
+        element.HeureFin = heureFin;
         tabCours.push(element);
+      }else{
+        const month = ["Janvier","Fevrier","Mars","Avril","Mai","Juin","Juillet","Aout","Septembre","Octobre","Novembre","Decembre"];
+        const days = ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"];
+        const d = new Date(element.Debut);
+        const f = new Date(element.Fin);
+        let monthDate = month[d.getMonth()];
+        let day = days[d.getDay()];
+        let date = d.getDate() + " " + monthDate + " " + d.getFullYear();
+        let heureDebut = d.getHours() + ":" + String(d.getMinutes()).padStart(2, "0");
+        let heureFin = f.getHours() + ":" + String(f.getMinutes()).padStart(2, "0");
+        element.Jour = day;
+        element.Date = date;
+        element.HeureDebut = heureDebut;
+        element.HeureFin = heureFin;
+        tabCoursHistorique.push(element);
       }
     });
     let duplicates = [];
@@ -57,8 +93,56 @@ const CoursClasse = computed(() => {
       });
     }
   }
-  //alert("fetch");
-  return tabCours;
+  console.log(tabCours);
+  console.log(tabCoursHistorique);
+
+  let coursObj;
+  const tabCoursByDate = [];
+  tabCours.forEach((element) => {
+    if(coursObj === undefined){
+      coursObj = new Object();
+      coursObj.Date = element.Date;
+      coursObj.Jour = element.Jour;
+      coursObj.Cours = [];
+      coursObj.Cours.push(element);
+    }else if(coursObj.Date !== element.Date){
+      coursObj = new Object();
+      coursObj.Date = element.Date;
+      coursObj.Jour = element.Jour;
+      coursObj.Cours = [];
+      coursObj.Cours.push(element);
+    }else{
+      coursObj.Cours.push(element);
+    }
+    tabCoursByDate.push(coursObj);
+  });
+
+  let coursObjHistorique;
+  const tabCoursHistoriqueByDate = [];
+  tabCoursHistorique.forEach((element) => {
+    if(coursObjHistorique === undefined){
+      coursObjHistorique = new Object();
+      coursObjHistorique.Date = element.Date;
+      coursObjHistorique.Jour = element.Jour;
+      coursObjHistorique.Cours = [];
+      coursObjHistorique.Cours.push(element);
+    }else if(coursObjHistorique.Date !== element.Date){
+      coursObjHistorique = new Object();
+      coursObjHistorique.Date = element.Date;
+      coursObjHistorique.Jour = element.Jour;
+      coursObjHistorique.Cours = [];
+      coursObjHistorique.Cours.push(element);
+    }else{
+      coursObjHistorique.Cours.push(element);
+    }
+    tabCoursHistoriqueByDate.push(coursObjHistorique);
+  });
+  console.log("-------------------ICI-------------------");
+  const uniqueCoursByDate = new Set(tabCoursByDate);
+  const uniqueCoursHistoriqueByDate = new Set(tabCoursHistoriqueByDate);
+  console.log(uniqueCoursByDate);
+  console.log(uniqueCoursHistoriqueByDate);
+  return { uniqueCoursByDate, uniqueCoursHistoriqueByDate };
 });
 
 const Classes = computed(() => {
@@ -75,16 +159,23 @@ const Classes = computed(() => {
 
 const Matiere = computed(() => {
   const tabMatiere = [];
-  if (!coursClasse.value?.length) {
+  const tabMatiereHistorique = [];
+  if (!classeCours.value?.length) {
     return [];
   } else {
-    coursClasse.value.forEach((element) => {
+    classeCours.value.forEach((element) => {
+       if (element.Debut > dateStr) {
       tabMatiere.push(element.matiere_id);
+       }else{
+        tabMatiereHistorique.push(element.matiere_id);
+       }
     });
   }
   const uniqueMatiere = new Set(tabMatiere);
+  const uniqueMatiereHistorique = new Set(tabMatiereHistorique);
   console.log(uniqueMatiere);
-  return uniqueMatiere;
+  console.log(uniqueMatiereHistorique);
+  return {uniqueMatiere, uniqueMatiereHistorique};
 });
 
 function afficheForm() {
@@ -174,6 +265,17 @@ function valueHasClicked(event) {
   const classe = event.target.innerHTML;
 
   selectedClasses.value = classe;
+
+   console.log(selectedClasses.value);
+}
+
+function toggleHistorique() {
+    if (historique.value) {
+        historique.value = false;
+    } else {
+     historique.value = true;
+    }
+  console.log(historique.value);
 }
 </script>
 
@@ -185,8 +287,7 @@ function valueHasClicked(event) {
           v-for="classe in Classes"
           :key="classe"
           @click="valueHasClicked($event)"
-          class="column button has-background-light has-text-black is-medium is-one-fifth-mobile is-danger"
-        >
+          class="column button has-background-light has-text-black is-medium is-one-fifth-mobile is-danger">
           {{ classe.id }}
         </button>
       </div>
@@ -194,26 +295,40 @@ function valueHasClicked(event) {
     <div class="select is-danger">
       <select @change="valueHasChanged($event)">
         <option>Tous les cours</option>
-        <option v-for="matiere in Matiere" :key="matiere">
+        <template v-if="!historique">
+        <option v-for="matiere in Matiere.uniqueMatiere" :key="matiere">
           {{ matiere }}
         </option>
+        </template>
+        <template v-if="historique">
+        <option v-for="matiere in Matiere.uniqueMatiereHistorique" :key="matiere">
+          {{ matiere }}
+        </option>
+        </template>
       </select>
     </div>
+    <div style="display: flex; justify-content: center; margin-top: 15px;">
+      <Switch v-model:checked="shouldReceiveNewsletter" label="Historique" @change="toggleHistorique()" />
+    </div>
+    <Toggle v-model="value" />
     <div class="columns is-centered tile is-ancestor">
       <div class="column is-three-quarters">
         <div class="tile is-parent is-vertical">
-          <card-cours
-            v-for="cours in CoursClasse"
-            :id="cours.id"
-            :class="cours.matiere_id"
-            class="cours"
-            :key="cours.id"
-            :debut="cours.Debut"
-            :fin="cours.Fin"
-            :cours="cours.matiere_id"
-            :salle="cours.salle_id"
-          >
+          <template v-if="historique">
+          <template v-for="day in CoursClasse.uniqueCoursHistoriqueByDate" :key="day.Jour">
+          <span style="text-align:left;">{{day.Date}}</span>
+          <card-cours v-for="cours in day.Cours" :key="cours.id" :data-id="cours.id" :class="cours.matiere_id" class="cours" :debut="cours.HeureDebut" :fin="cours.HeureFin" :cours="cours.matiere_id" :salle="cours.salle_id">
           </card-cours>
+          </template>
+          </template>
+          <template v-for="day in CoursClasse.uniqueCoursByDate" :key="day.Jour">
+          <span style="text-align:left;">{{day.Date}}</span>
+          <card-cours v-for="cours in day.Cours" :key="cours.id" :data-id="cours.id" :class="cours.matiere_id" class="cours" :debut="cours.HeureDebut" :fin="cours.HeureFin" :cours="cours.matiere_id" :salle="cours.salle_id">
+          </card-cours>
+          </template>
+          <div v-if="(CoursClasse.uniqueCoursByDate.size == 0) && (!historique)">
+            <h2>Plus de cours actuellement</h2>
+          </div>
         </div>
       </div>
     </div>
