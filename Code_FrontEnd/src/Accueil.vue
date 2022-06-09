@@ -44,7 +44,7 @@ const CoursClasse = computed(() => {
   } else {
     classeCours.value.forEach((element) => {
       if (element.Debut > dateStr) {
-        const month = ["Janvier","Fevrier","Mars","Avril","Mai","Juin","Juillet","Aout","Septembre","Octobre","Novembre","Decembre"];
+        const month = ["Janvier", "Fevrier", "Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Decembre"];
         const days = ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"];
         const d = new Date(element.Debut);
         const f = new Date(element.Fin);
@@ -58,8 +58,8 @@ const CoursClasse = computed(() => {
         element.HeureDebut = heureDebut;
         element.HeureFin = heureFin;
         tabCours.push(element);
-      }else{
-        const month = ["Janvier","Fevrier","Mars","Avril","Mai","Juin","Juillet","Aout","Septembre","Octobre","Novembre","Decembre"];
+      } else {
+        const month = ["Janvier", "Fevrier", "Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Decembre"];
         const days = ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"];
         const d = new Date(element.Debut);
         const f = new Date(element.Fin);
@@ -99,19 +99,19 @@ const CoursClasse = computed(() => {
   let coursObj;
   const tabCoursByDate = [];
   tabCours.forEach((element) => {
-    if(coursObj === undefined){
+    if (coursObj === undefined) {
       coursObj = new Object();
       coursObj.Date = element.Date;
       coursObj.Jour = element.Jour;
       coursObj.Cours = [];
       coursObj.Cours.push(element);
-    }else if(coursObj.Date !== element.Date){
+    } else if (coursObj.Date !== element.Date) {
       coursObj = new Object();
       coursObj.Date = element.Date;
       coursObj.Jour = element.Jour;
       coursObj.Cours = [];
       coursObj.Cours.push(element);
-    }else{
+    } else {
       coursObj.Cours.push(element);
     }
     tabCoursByDate.push(coursObj);
@@ -120,19 +120,19 @@ const CoursClasse = computed(() => {
   let coursObjHistorique;
   const tabCoursHistoriqueByDate = [];
   tabCoursHistorique.forEach((element) => {
-    if(coursObjHistorique === undefined){
+    if (coursObjHistorique === undefined) {
       coursObjHistorique = new Object();
       coursObjHistorique.Date = element.Date;
       coursObjHistorique.Jour = element.Jour;
       coursObjHistorique.Cours = [];
       coursObjHistorique.Cours.push(element);
-    }else if(coursObjHistorique.Date !== element.Date){
+    } else if (coursObjHistorique.Date !== element.Date) {
       coursObjHistorique = new Object();
       coursObjHistorique.Date = element.Date;
       coursObjHistorique.Jour = element.Jour;
       coursObjHistorique.Cours = [];
       coursObjHistorique.Cours.push(element);
-    }else{
+    } else {
       coursObjHistorique.Cours.push(element);
     }
     tabCoursHistoriqueByDate.push(coursObjHistorique);
@@ -164,18 +164,18 @@ const Matiere = computed(() => {
     return [];
   } else {
     classeCours.value.forEach((element) => {
-       if (element.Debut > dateStr) {
-      tabMatiere.push(element.matiere_id);
-       }else{
+      if (element.Debut > dateStr) {
+        tabMatiere.push(element.matiere_id);
+      } else {
         tabMatiereHistorique.push(element.matiere_id);
-       }
+      }
     });
   }
   const uniqueMatiere = new Set(tabMatiere);
   const uniqueMatiereHistorique = new Set(tabMatiereHistorique);
   console.log(uniqueMatiere);
   console.log(uniqueMatiereHistorique);
-  return {uniqueMatiere, uniqueMatiereHistorique};
+  return { uniqueMatiere, uniqueMatiereHistorique };
 });
 
 function afficheForm() {
@@ -275,7 +275,7 @@ function valueHasClicked(event) {
 
   selectedClasses.value = classe;
 
-   console.log(selectedClasses.value);
+  console.log(selectedClasses.value);
 }
 
 function toggleHistorique() {
@@ -313,10 +313,7 @@ function setClass(day){
   <div class="main mx-4 my-1">
     <div>
       <div class="buttons is-mobile columns is-centered mx-1 my-1">
-        <button
-          v-for="classe in Classes"
-          :key="classe"
-          @click="valueHasClicked($event)"
+        <button v-for="classe in Classes" :key="classe" @click="valueHasClicked($event)"
           class="column button has-background-light has-text-black is-medium is-one-fifth-mobile is-danger">
           {{ classe.id }}
         </button>
@@ -326,14 +323,14 @@ function setClass(day){
       <select @change="valueHasChanged($event)">
         <option>Tous les cours</option>
         <template v-if="!historique">
-        <option v-for="matiere in Matiere.uniqueMatiere" :key="matiere">
-          {{ matiere }}
-        </option>
+          <option v-for="matiere in Matiere.uniqueMatiere" :key="matiere">
+            {{ matiere }}
+          </option>
         </template>
         <template v-if="historique">
-        <option v-for="matiere in Matiere.uniqueMatiereHistorique" :key="matiere">
-          {{ matiere }}
-        </option>
+          <option v-for="matiere in Matiere.uniqueMatiereHistorique" :key="matiere">
+            {{ matiere }}
+          </option>
         </template>
       </select>
     </div>
@@ -363,13 +360,8 @@ function setClass(day){
       </div>
     </div>
     <div>
-      <button
-        v-show="role == 'Administration'"
-        class="button is-right js-modal-trigger"
-        data-target="modal-js-example"
-        id="fixedbutton"
-        @click="showModalForm = !showModalForm"
-      >
+      <button v-show="role == 'Administration'" class="button is-right js-modal-trigger" data-target="modal-js-example"
+        id="fixedbutton" @click="showModalForm = !showModalForm">
         <span class="icon is-large has-text-danger">
           <i class="fa fa-4x fa-plus-square"></i>
         </span>
@@ -377,10 +369,7 @@ function setClass(day){
     </div>
   </div>
   <!-- MODAL FORM  -->
-  <BaseModalForm
-    :class="{ 'is-active': showModalForm }"
-    @close="showModalForm = false"
-  >
+  <BaseModalForm :class="{ 'is-active': showModalForm }" @close="showModalForm = false">
     <!-- AJOUT COURS  -->
     <BaseFormModal @submit.prevent="addCours()">
       <h1 class="title is-1">Nouveau cours</h1>
@@ -388,12 +377,7 @@ function setClass(day){
       <BaseInput>
         <template v-slot:label>Date</template>
         <template v-slot:input>
-          <input
-            v-model="date"
-            class="input"
-            type="date"
-            placeholder="Entrez une date"
-          />
+          <input v-model="date" class="input" type="date" placeholder="Entrez une date" />
         </template>
       </BaseInput>
 
@@ -402,10 +386,7 @@ function setClass(day){
         <template v-slot:input>
           <div class="select">
             <select v-model="selectedclasseModal">
-              <option
-                v-for="classe in Classes"
-                @click="selectedclasseModal = classe.id"
-              >
+              <option v-for="classe in Classes" @click="selectedclasseModal = classe.id">
                 {{ classe.id }}
               </option>
             </select>
@@ -427,45 +408,26 @@ function setClass(day){
       <BaseInput>
         <template v-slot:label>Heure de début</template>
         <template v-slot:input>
-          <input
-            v-model="heureDebut"
-            class="input"
-            type="time"
-            placeholder="Entrez une heure de début"
-          />
+          <input v-model="heureDebut" class="input" type="time" placeholder="Entrez une heure de début" />
         </template>
       </BaseInput>
 
       <BaseInput>
         <template v-slot:label>Heure de fin</template>
         <template v-slot:input>
-          <input
-            v-model="heureFin"
-            class="input"
-            type="time"
-            placeholder="Entrez une heure de fin"
-          />
+          <input v-model="heureFin" class="input" type="time" placeholder="Entrez une heure de fin" />
         </template>
       </BaseInput>
 
       <BaseInput>
         <template v-slot:label>Lieu</template>
         <template v-slot:input>
-          <input
-            v-model="lieu"
-            class="input"
-            type="text"
-            placeholder="Entrez le lieu d'une classe"
-          />
+          <input v-model="lieu" class="input" type="text" placeholder="Entrez le lieu d'une classe" />
         </template>
       </BaseInput>
 
       <BaseInputSubmit>
-        <input
-          type="submit"
-          class="button is-danger is-rounded"
-          value="Ajouter le cours"
-        />
+        <input type="submit" class="button is-danger is-rounded" value="Ajouter le cours" />
       </BaseInputSubmit>
     </BaseFormModal>
   </BaseModalForm>

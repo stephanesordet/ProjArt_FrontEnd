@@ -7,51 +7,66 @@ let email = ref("");
 let password = ref("");
 let session = ref(false);
 
+function compareMail(email) {
+  const refMail = 'heig-vd.ch'
+  const userMail = email.substring(email.indexOf('@') + 1)
+  console.log(userMail)
+  if (refMail === userMail) {
+    return true
+  } else {
+    return false
+  }
+}
+
 function useFetchLogin(password, email) {
-  axios
-    .post(
-      "http://localhost:8000/api/login?Email=" +
-      email +
-      "&Password=" +
-      password,
-      {}
-    )
-    .then((res) => {
-      if (res.data.includes("connected") || res.data.includes("DB")) {
-        console.log("Connected");
+  if (compareMail(email)) {
+    axios
+      .post(
+        "http://localhost:8000/api/login?Email=" +
+        email +
+        "&Password=" +
+        password,
+        {}
+      )
+      .then((res) => {
+        if (res.data.includes("connected") || res.data.includes("DB")) {
+          alert("Connected");
 
-        sessionStorage.setItem("user", email);
-        session.value = true;
-        if (res.data.includes("Professeur")) {
-          sessionStorage.setItem("role", "Professeur");
-        } else if (res.data.includes("Etudiant")) {
-          sessionStorage.setItem("role", "Etudiant");
-        } else if (res.data.includes("Administration")) {
-          sessionStorage.setItem("role", "Administration");
+          sessionStorage.setItem("user", email);
+          session.value = true;
+          if (res.data.includes("Professeur")) {
+            sessionStorage.setItem("role", "Professeur");
+          } else if (res.data.includes("Etudiant")) {
+            sessionStorage.setItem("role", "Etudiant");
+          } else if (res.data.includes("Administration")) {
+            sessionStorage.setItem("role", "Administration");
+          } else {
+            sessionStorage.setItem("role", "AGE");
+          }
+
+          window.location.hash = '#accueil'
+          window.location.reload()
+
+        } else if (
+          res.data.includes("user found : error in password or username")
+        ) {
+          alert("mdp ou user");
+          session.value = false;
         } else {
-          sessionStorage.setItem("role", "AGE");
+          alert("pas de compte");
+          session.value = false;
         }
-
-        window.location.hash = '#accueil'
-        window.location.reload()
-
-      } else if (
-        res.data.includes("user found : error in password or username")
-      ) {
-        console.log("mdp ou user");
-        session.value = false;
-      } else {
-        console.log("pas de compte");
-        session.value = false;
-      }
-    })
-    .catch((error) => {
-      // error.response.status Check status code
-      console.log(error);
-    })
-    .finally(() => {
-      //Perform action in always
-    });
+      })
+      .catch((error) => {
+        // error.response.status Check status code
+        console.log(error);
+      })
+      .finally(() => {
+        //Perform action in always
+      });
+  } else {
+    alert("Vous n'êtes pas autorisé à vous connecter")
+  }
 }
 </script>
 
