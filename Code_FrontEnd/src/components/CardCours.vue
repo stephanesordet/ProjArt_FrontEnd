@@ -6,10 +6,10 @@ defineProps({
     type: String,
   },
   debut: {
-    type: String,
+    type: Date,
   },
   fin: {
-    type: String,
+    type: Date,
   },
   classe: {
     type: String,
@@ -30,13 +30,12 @@ function deleteCours() {
   console.log("deleteCours");
 }
 
-function voirDetails(id) {
+/* function voirDetails(id) {
   console.log("details");
   window.location.hash = "#detailMatiere";
   currentCoursId.value = id;
   console.log(id + " " + currentCoursId.value);
-  //window.location.reload();
-}
+} */
 </script>
 
 <template>
@@ -53,7 +52,8 @@ function voirDetails(id) {
       </span>
       {{ salle }}
     </p>
-    <button
+    <slot></slot>
+    <!--     <button
       class="button is-pulled-right is-white has-background-light"
       @click="deleteCours()"
     >
@@ -69,7 +69,7 @@ function voirDetails(id) {
       <span class="icon is-small">
         <i class="fa fa-pencil"></i>
       </span>
-    </button>
+    </button> 
 
     <button
       class="button is-pulled-right is-white has-background-light"
@@ -78,7 +78,7 @@ function voirDetails(id) {
       <span class="icon is-small">
         <i class="fa fa-info"></i>
       </span>
-    </button>
+    </button>-->
   </article>
 </template>
 

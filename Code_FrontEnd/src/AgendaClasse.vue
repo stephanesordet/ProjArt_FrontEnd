@@ -3,6 +3,7 @@ import { ref, computed, watchEffect } from "vue";
 import { useFetch } from "../composables/fetch";
 import CardCours from "./components/CardCours.vue";
 import TheCardWrapper from "./components/TheCardWrapper.vue";
+import { currentCoursId, currentMatiereId } from "../composables/store.js";
 
 const user = ref(null);
 const session = ref(false);
@@ -44,6 +45,14 @@ const userCours = computed(() => {
   }
   return tabCours;
 });
+
+function voirDetails(id, matiere_id) {
+  console.log("details");
+  window.location.hash = "#detailMatiere";
+  currentCoursId.value = id;
+  currentMatiereId.value = matiere_id;
+  console.log(id + " " + currentCoursId.value + " " + matiere_id);
+}
 </script>
 
 <template>
@@ -62,6 +71,14 @@ const userCours = computed(() => {
             :cours="cours.matiere_id"
             :salle="cours.salle_id"
           >
+            <button
+              class="button is-pulled-right is-white has-background-light"
+              @click="voirDetails(cours.id, cours.matiere_id)"
+            >
+              <span class="icon is-small">
+                <i class="fa fa-info"></i>
+              </span>
+            </button>
           </card-cours>
         </the-card-wrapper>
       </div>
