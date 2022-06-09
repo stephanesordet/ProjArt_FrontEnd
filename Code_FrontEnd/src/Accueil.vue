@@ -241,8 +241,13 @@ async function addCours() {
 
 function valueHasChanged(event) {
   const cours = document.querySelectorAll(".cours");
+  const spanCours = document.querySelectorAll(".spanCours");
 
   cours.forEach((coursSolo) => {
+    coursSolo.style.display = "none";
+  });
+
+  spanCours.forEach((coursSolo) => {
     coursSolo.style.display = "none";
   });
 
@@ -250,6 +255,10 @@ function valueHasChanged(event) {
 
   if (val === "Tous les cours") {
     cours.forEach((coursSolo) => {
+      coursSolo.style.display = "block";
+    });
+
+    spanCours.forEach((coursSolo) => {
       coursSolo.style.display = "block";
     });
   } else {
@@ -275,7 +284,28 @@ function toggleHistorique() {
     } else {
      historique.value = true;
     }
+  const cours = document.querySelectorAll(".cours");
+  const spanCours = document.querySelectorAll(".spanCours");
+
+  cours.forEach((coursSolo) => {
+    coursSolo.style.display = "block";
+  });
+
+  spanCours.forEach((coursSolo) => {
+    coursSolo.style.display = "block";
+  });
   console.log(historique.value);
+}
+
+function setClass(day){
+  const uniqueClass = new Set();
+  console.log("Class");
+  day.Cours.forEach((element) => {
+    uniqueClass.add(element.matiere_id);
+  });
+  const str1 = Array.from(uniqueClass).join(' ');
+  console.log(str1);
+  return str1;
 }
 </script>
 
@@ -316,17 +346,17 @@ function toggleHistorique() {
         <div class="tile is-parent is-vertical">
           <template v-if="historique">
           <template v-for="day in CoursClasse.uniqueCoursHistoriqueByDate" :key="day.Jour">
-          <span style="text-align:left;">{{day.Date}}</span>
+          <span style="text-align:left;" :class="setClass(day)" class="spanCours">{{day.Date}}</span>
           <card-cours v-for="cours in day.Cours" :key="cours.id" :data-id="cours.id" :class="cours.matiere_id" class="cours" :debut="cours.HeureDebut" :fin="cours.HeureFin" :cours="cours.matiere_id" :salle="cours.salle_id">
           </card-cours>
           </template>
           </template>
           <template v-for="day in CoursClasse.uniqueCoursByDate" :key="day.Jour">
-          <span style="text-align:left;">{{day.Date}}</span>
+          <span style="text-align:left;" :class="setClass(day)" class="spanCours">{{day.Date}}</span>
           <card-cours v-for="cours in day.Cours" :key="cours.id" :data-id="cours.id" :class="cours.matiere_id" class="cours" :debut="cours.HeureDebut" :fin="cours.HeureFin" :cours="cours.matiere_id" :salle="cours.salle_id">
           </card-cours>
           </template>
-          <div v-if="(CoursClasse.uniqueCoursByDate.size == 0) && (!historique)">
+          <div v-if="(CoursClasse.uniqueCoursByDate == 0) && (!historique)">
             <h2>Plus de cours actuellement</h2>
           </div>
         </div>
