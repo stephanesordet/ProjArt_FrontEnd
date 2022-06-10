@@ -3,7 +3,7 @@ import { ref, computed, watchEffect } from "vue";
 import { useFetch } from "../composables/fetch";
 import CardCours from "./components/CardCours.vue";
 import TheCardWrapper from "./components/TheCardWrapper.vue";
-import { currentCoursId, currentMatiereId } from "../composables/store.js";
+/* import { currentCoursId, currentMatiereId } from "../composables/store.js"; */
 
 const user = ref(null);
 const session = ref(false);
@@ -49,9 +49,10 @@ const userCours = computed(() => {
 function voirDetails(id, matiere_id) {
   console.log("details");
   window.location.hash = "#detailMatiere";
-  currentCoursId.value = id;
-  currentMatiereId.value = matiere_id;
-  console.log(id + " " + currentCoursId.value + " " + matiere_id);
+  window.location.reload();
+
+  sessionStorage.setItem("idDetailsMatiere", id);
+  sessionStorage.setItem("matiere_idDetailsMatiere", matiere_id);
 }
 </script>
 
