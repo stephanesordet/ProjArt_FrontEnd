@@ -9,6 +9,7 @@ import BaseInputSubmit from "./components/BaseInputSubmit.vue";
 import BaseInput from "./components/BaseInput.vue";
 import BaseModalForm from "./components/BaseModalForm.vue";
 import Switch from "./components/Switch.vue";
+import { currentCoursId } from "../composables/store";
 
 const { data: cours } = useFetch("http://localhost:8000/api/cours");
 
@@ -191,24 +192,26 @@ const Matiere = computed(() => {
 });
 
 let showModalForm = ref(false);
+let showDeleteModalForm = ref(false);
+let showUpdateModalForm = ref(false);
 
 //Traitement du form after submit
-const dateCours = ref("");
-const selectedclasseModal = ref("");
-const heureDebut = ref("");
-const heureFin = ref("");
-const matiere = ref("");
-const lieu = ref("");
+const dateCoursForm = ref("");
+const selectedclasseForm = ref("");
+const heureDebutForm = ref("");
+const heureFinForm = ref("");
+const matiereForm = ref("");
+const lieuForm = ref("");
 
-const selectedClasseModal = ref("");
+
 
 async function addCours() {
   try {
     const cours = await axios
       .post("http://localhost:8000/api/cours/create", {
-        Debut: dateCours.value + " " + heureDebut.value,
-        Fin: dateCours.value + " " + heureFin.value,
-        matiere_id: matiere.value,
+        Debut: dateCoursForm.value + " " + heureDebutForm.value,
+        Fin: dateCoursForm.value + " " + heureFinForm.value,
+        matiere_id: matiereForm.value,
       })
       .then(() => {
         window.location.reload();
@@ -250,12 +253,6 @@ function valueHasChanged(event) {
   }
 }
 
-function valueHasClicked(event) {
-  const classe = event.target.innerHTML;
-
-  selectedClasses.value = classe;
-}
-
 function toggleHistorique() {
   if (historique.value) {
     historique.value = false;
@@ -282,13 +279,51 @@ function setClass(day) {
   const str1 = Array.from(uniqueClass).join(' ');
   return str1;
 }
+
+function displayDeleteModal(id) {
+  showDeleteModalForm.value = !showDeleteModalForm.value;
+  currentCoursId.value = id;
+  console.log(id)
+
+}
+
+function displayUpdateModal(id, start, end, salle) {
+  showUpdateModalForm.value = !showUpdateModalForm.value;
+  selectedclasseForm.value = selectedClasses.value;
+  heureDebutForm.value = start;
+  console.log(heureDebutForm.value)
+
+  lieuForm.value = salle
+}
+
+function deleteCours() {
+  axios
+    .post("http://localhost:8000/api/cours/delete/" + currentCoursId.value)
+    .then((res) => {
+      //Perform Success Action
+      console.log(res);
+    })
+    .catch((error) => {
+      // error.response.status Check status code
+      console.log(error);
+    })
+    .finally(() => {
+      //window.location.reload();
+    });
+}
+
+/* watchEffect(() => {
+  console.log(heureDebutForm.value)
+  console.log(heureFinForm.value)
+  console.log(lieuForm.value)
+}) */
 </script>
 
 <template>
   <div class="main mx-4 my-1">
     <div>
       <div class="buttons is-mobile columns is-centered mx-1 my-1">
-        <button v-for="classe in Classes" :key="classe" @click="valueHasClicked($event)"
+        <button v-for="classe in Classes" :key="classe" @click="selectedClasses = classe.id"
           class="column button has-background-light has-text-black is-medium is-one-fifth-mobile is-danger">
           {{ classe.id }}
         </button>
@@ -322,13 +357,21 @@ function setClass(day) {
               <card-cours v-for="cours in day.Cours" :key="cours.id" :data-id="cours.id" :class="cours.matiere_id"
                 class="cours" :debut="cours.HeureDebut" :fin="cours.HeureFin" :cours="cours.matiere_id"
                 :salle="cours.salle_id">
-                <button class="button is-pulled-right is-white has-background-light" @click="deleteCours()">
+                <button class="button is-pulled-right is-white has-background-light"
+                  @click="displayDeleteModal(cours.id)">
                   <span class="icon is-small">
                     <i class="fa fa-trash"></i>
                   </span>
                 </button>
 
-                <button class="button is-pulled-right is-white has-background-light" @click="modifCours()">
+                <button class="button is-pulled-right is-white has-background-light" @click="
+                  displayUpdateModal(
+                    cours.id,
+                    cours.HeureDebut,
+                    cours.HeureFin,
+                    cours.salle_id
+                  )
+                ">
                   <span class="icon is-small">
                     <i class="fa fa-pencil"></i>
                   </span>
@@ -341,13 +384,22 @@ function setClass(day) {
             <card-cours v-for="cours in day.Cours" :key="cours.id" :data-id="cours.id" :class="cours.matiere_id"
               class="cours" :debut="cours.HeureDebut" :fin="cours.HeureFin" :cours="cours.matiere_id"
               :salle="cours.salle_id">
-              <button class="button is-pulled-right is-white has-background-light" @click="deleteCours()">
+              <button v-show="role == 'Administration'" class="button is-pulled-right is-white has-background-light"
+                @click="displayDeleteModal(cours.id)">
                 <span class="icon is-small">
                   <i class="fa fa-trash"></i>
                 </span>
               </button>
 
-              <button class="button is-pulled-right is-white has-background-light" @click="modifCours()">
+              <button v-show="role == 'Administration'" class="button is-pulled-right is-white has-background-light"
+                @click="
+                  displayUpdateModal(
+                    cours.id,
+                    cours.HeureDebut,
+                    cours.HeureFin,
+                    cours.salle_id
+                  )
+                ">
                 <span class="icon is-small">
                   <i class="fa fa-pencil"></i>
                 </span>
@@ -382,57 +434,87 @@ function setClass(day) {
       <BaseInput>
         <template v-slot:label>Date</template>
         <template v-slot:input>
-          <input v-model="date" class="input" type="date" placeholder="Entrez une date" />
-        </template>
-      </BaseInput>
-
-      <BaseInput>
-        <template v-slot:label>Classe</template>
-        <template v-slot:input>
-          <div class="select">
-            <select v-model="selectedclasseModal">
-              <option v-for="classe in Classes" @click="selectedclasseModal = classe.id">
-                {{ classe.id }}
-              </option>
-            </select>
-          </div>
-        </template>
-      </BaseInput>
-
-      <BaseInput>
-        <template v-slot:label>Matière</template>
-        <template v-slot:input>
-          <div class="select">
-            <select v-model="matiere">
-              <option>Droit2</option>
-            </select>
-          </div>
+          <input v-model="dateCoursForm" class="input" type="date" placeholder="Entrez une date" />
         </template>
       </BaseInput>
 
       <BaseInput>
         <template v-slot:label>Heure de début</template>
         <template v-slot:input>
-          <input v-model="heureDebut" class="input" type="time" placeholder="Entrez une heure de début" />
+          <input v-model="heureDebutForm" class="input" type="time" placeholder="Entrez une heure de début" />
         </template>
       </BaseInput>
 
       <BaseInput>
         <template v-slot:label>Heure de fin</template>
         <template v-slot:input>
-          <input v-model="heureFin" class="input" type="time" placeholder="Entrez une heure de fin" />
+          <input v-model="heureFinForm" class="input" type="time" placeholder="Entrez une heure de fin" />
         </template>
       </BaseInput>
 
       <BaseInput>
         <template v-slot:label>Lieu</template>
         <template v-slot:input>
-          <input v-model="lieu" class="input" type="text" placeholder="Entrez le lieu d'une classe" />
+          <input v-model="lieuForm" class="input" type="text" placeholder="Entrez le lieu d'une classe" />
         </template>
       </BaseInput>
 
       <BaseInputSubmit>
         <input type="submit" class="button is-danger is-rounded" value="Ajouter le cours" />
+      </BaseInputSubmit>
+    </BaseFormModal>
+  </BaseModalForm>
+
+  <!-- MODAL FORM UPDATE  -->
+  <BaseModalForm :class="{ 'is-active': showUpdateModalForm }" @close="showUpdateModalForm = false">
+    <!-- UPDATE COURS  -->
+    <BaseFormModal @submit.prevent="updateCours()">
+      <h1 class="title is-1">Modification cours</h1>
+
+      <BaseInput>
+        <template v-slot:label>Date</template>
+        <template v-slot:input>
+          <input v-model="dateCoursForm" class="input" type="date" placeholder="Entrez une date" />
+        </template>
+      </BaseInput>
+
+      <BaseInput>
+        <template v-slot:label>Heure de début</template>
+        <template v-slot:input>
+          <input v-model="heureDebutForm" class="input" type="time" placeholder="Entrez une heure de début" />
+        </template>
+      </BaseInput>
+
+      <BaseInput>
+        <template v-slot:label>Heure de fin</template>
+        <template v-slot:input>
+          <input v-model="heureFinForm" class="input" type="time" placeholder="Entrez une heure de fin" />
+        </template>
+      </BaseInput>
+
+      <BaseInput>
+        <template v-slot:label>Lieu</template>
+        <template v-slot:input>
+          <input v-model="lieuForm" class="input" type="text" placeholder="Entrez le lieu d'une classe" />
+        </template>
+      </BaseInput>
+
+      <BaseInputSubmit>
+        <input type="submit" class="button is-danger is-rounded" value="Modifier le cours" />
+      </BaseInputSubmit>
+    </BaseFormModal>
+  </BaseModalForm>
+
+  <!-- MODAL FORM DELETE  -->
+  <BaseModalForm :class="{ 'is-active': showDeleteModalForm }" @close="showDeleteModalForm = false">
+    <!-- DELETE EVENT  -->
+    <BaseFormModal>
+      <h1 class="title is-2">Voulez-vous vraiment supprimer le cours ?</h1>
+      <BaseInputSubmit>
+        <input type="submit" class="button is-danger is-rounded" value="Supprimer le cours ?" @click="deleteCours()" />
+      </BaseInputSubmit>
+      <BaseInputSubmit>
+        <input type="submit" class="button is-primary is-rounded" value="Retour" @click="showDeleteModalForm = false" />
       </BaseInputSubmit>
     </BaseFormModal>
   </BaseModalForm>

@@ -22,28 +22,11 @@ defineProps({
   },
 });
 
-function modifCours() {
-  console.log("modifCours");
-}
-
-function deleteCours() {
-  console.log("deleteCours");
-}
-
-/* function voirDetails(id) {
-  console.log("details");
-  window.location.hash = "#detailMatiere";
-  currentCoursId.value = id;
-  console.log(id + " " + currentCoursId.value);
-} */
 </script>
 
 <template>
   <article class="tile is-child notification is-light has-text-left-mobile">
-    <link
-      rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-    />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
     <p class="is-size-4 has-text-weight-bold">{{ cours }}</p>
     <p class="is-size-6">{{ debut }} - {{ fin }}</p>
     <p class="is-size-5">
@@ -53,32 +36,7 @@ function deleteCours() {
       {{ salle }}
     </p>
     <slot></slot>
-    <!--     <button
-      class="button is-pulled-right is-white has-background-light"
-      @click="deleteCours()"
-    >
-      <span class="icon is-small">
-        <i class="fa fa-trash"></i>
-      </span>
-    </button>
 
-    <button
-      class="button is-pulled-right is-white has-background-light"
-      @click="modifCours()"
-    >
-      <span class="icon is-small">
-        <i class="fa fa-pencil"></i>
-      </span>
-    </button> 
-
-    <button
-      class="button is-pulled-right is-white has-background-light"
-      @click="voirDetails(id)"
-    >
-      <span class="icon is-small">
-        <i class="fa fa-info"></i>
-      </span>
-    </button>-->
   </article>
 </template>
 
