@@ -79,12 +79,7 @@ function afficheNotif() {
 </script>
 
 <template>
-  <nav
-    v-show="session"
-    class="navbar"
-    role="navigation"
-    aria-label="main navigation"
-  >
+  <nav v-show="session" class="navbar" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
       <a class="navbar-item" href="#accueil">
         <img id="logoNavbar" src="../assets/logoProjArt.png" />
@@ -94,13 +89,7 @@ function afficheNotif() {
           <i class="fa fa-regular fa-bell"></i>
         </span>
       </button>
-      <a
-        role="button"
-        class="navbar-burger mt-6"
-        data-target="navMenu"
-        aria-label="menu"
-        aria-expanded="false"
-      >
+      <a role="button" class="navbar-burger mt-6" data-target="navMenu" aria-label="menu" aria-expanded="false">
         <span aria-hidden="true"></span>
         <span aria-hidden="true"></span>
         <span aria-hidden="true"></span>
@@ -110,11 +99,7 @@ function afficheNotif() {
     <div class="navbar-menu">
       <div class="navbar-start">
         <a class="navbar-item" href="#accueil"> Accueil </a>
-        <a
-          v-show="role != 'Administration' && role != 'AGE'"
-          class="navbar-item"
-          href="#agendaClasse"
-        >
+        <a v-show="role != 'Administration' && role != 'AGE'" class="navbar-item" href="#agendaClasse">
           Agenda personnel
         </a>
         <a class="navbar-item" href="#evenements"> Evenements </a>
@@ -123,7 +108,7 @@ function afficheNotif() {
       <div class="navbar-end">
         <div class="navbar-item">
           <div class="buttons">
-            <a @click="reload()" class="button is-primary" href="#accueil">
+            <a @click="reload()" class="button is-danger" href="#accueil">
               <strong>Logout</strong>
             </a>
           </div>
@@ -132,23 +117,12 @@ function afficheNotif() {
     </div>
   </nav>
 
-  <nav
-    v-show="!session"
-    class="navbar"
-    role="navigation"
-    aria-label="main navigation"
-  >
+  <nav v-show="!session" class="navbar" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
       <a class="navbar-item" href="#accueil">
         <img id="logoNavbar" src="../assets/logoProjArt.png" />
       </a>
-      <a
-        role="button"
-        class="navbar-burger mt-6"
-        data-target="navMenu"
-        aria-label="menu"
-        aria-expanded="false"
-      >
+      <a role="button" class="navbar-burger mt-6" data-target="navMenu" aria-label="menu" aria-expanded="false">
         <span aria-hidden="true"></span>
         <span aria-hidden="true"></span>
         <span aria-hidden="true"></span>
@@ -162,7 +136,7 @@ function afficheNotif() {
       <div class="navbar-end">
         <div class="navbar-item">
           <div class="buttons">
-            <a class="button is-primary" href="#login">
+            <a class="button is-danger" href="#login">
               <strong>Se connecter</strong>
             </a>
           </div>

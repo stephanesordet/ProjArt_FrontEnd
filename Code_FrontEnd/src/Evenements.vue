@@ -12,10 +12,9 @@ import { useFetch } from "../composables/fetch.js";
 
 // ---------------------- Fetch data for all events -----------------------------
 const { data: events } = useFetch("http://127.0.0.1:8000/api/events/");
-console.log(events);
 const userSession = ref(sessionStorage.getItem("user"));
 const role = ref(sessionStorage.getItem("role"));
-const auteur = ref(false)
+const auteur = ref(false);
 
 const allEvents = computed(() => {
   const tabEvents = [];
@@ -69,16 +68,15 @@ function displayUpdateModal(id, titre, description, lieu, debut, fin, email) {
   showUpdateModalForm.value = !showUpdateModalForm.value;
   if (email == userSession.value) {
     currentEventId.value = id;
-    auteur.value = true
+    auteur.value = true;
     Titre.value = titre;
     Description.value = description;
     Lieu.value = lieu;
     Debut.value = debut;
     Fin.value = fin;
   } else {
-    auteur.value = false
+    auteur.value = false;
   }
-
 }
 
 function updateEvent(user) {
@@ -109,9 +107,9 @@ function displayDeleteModal(id, email) {
   showDeleteModalForm.value = !showDeleteModalForm.value;
   if (email == userSession.value) {
     currentEventId.value = id;
-    auteur.value = true
+    auteur.value = true;
   } else {
-    auteur.value = false
+    auteur.value = false;
   }
 }
 
@@ -325,7 +323,7 @@ function deleteEvent() {
   <BaseModalForm :class="{ 'is-active': showDeleteModalForm }" @close="showDeleteModalForm = false">
     <!-- DELETE EVENT  -->
     <BaseFormModal v-if="auteur">
-      <h1 class="title is-2 ">Voulez-vous vraiment supprimer l'évènement ?</h1>
+      <h1 class="title is-2">Voulez-vous vraiment supprimer l'évènement ?</h1>
       <BaseInputSubmit>
         <input type="submit" class="button is-danger is-rounded" value="Supprimer l'événement" @click="deleteEvent()" />
       </BaseInputSubmit>
@@ -334,7 +332,7 @@ function deleteEvent() {
       </BaseInputSubmit>
     </BaseFormModal>
     <BaseFormModal v-else>
-      <h1 class="title is-2 ">Vous ne pouvez pas supprimer l'évènement</h1>
+      <h1 class="title is-2">Vous ne pouvez pas supprimer l'évènement</h1>
       <BaseInputSubmit>
         <input type="submit" class="button is-primary is-rounded" value="Retour" @click="showDeleteModalForm = false" />
       </BaseInputSubmit>

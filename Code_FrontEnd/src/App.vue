@@ -108,7 +108,7 @@ const curComponent = computed(() => routes[curHash.value].component);
 
 watchEffect(() => {
   if (curComponent.value) {
-    //scroll top js
+    window.scrollTo(0, 0);
   }
 });
 </script>

@@ -8,13 +8,13 @@ let password = ref("");
 let session = ref(false);
 
 function compareMail(email) {
-  const refMail = 'heig-vd.ch'
-  const userMail = email.substring(email.indexOf('@') + 1)
-  console.log(userMail)
+  const refMail = "heig-vd.ch";
+  const userMail = email.substring(email.indexOf("@") + 1);
+  console.log(userMail);
   if (refMail === userMail) {
-    return true
+    return true;
   } else {
-    return false
+    return false;
   }
 }
 
@@ -30,7 +30,7 @@ function useFetchLogin(password, email) {
       )
       .then((res) => {
         if (res.data.includes("connected") || res.data.includes("DB")) {
-          alert("Connected");
+          alert("Vous êtes connecté");
 
           sessionStorage.setItem("user", email);
           session.value = true;
@@ -44,16 +44,15 @@ function useFetchLogin(password, email) {
             sessionStorage.setItem("role", "AGE");
           }
 
-          window.location.hash = '#accueil'
-          window.location.reload()
-
+          window.location.hash = "#accueil";
+          window.location.reload();
         } else if (
           res.data.includes("user found : error in password or username")
         ) {
-          alert("mdp ou user");
+          alert("Erreur dans le nom d'utilisateur ou le mot de passe");
           session.value = false;
         } else {
-          alert("pas de compte");
+          alert("Erreur dans le nom d'utilisateur ou le mot de passe");
           session.value = false;
         }
       })
@@ -65,13 +64,13 @@ function useFetchLogin(password, email) {
         //Perform action in always
       });
   } else {
-    alert("Vous n'êtes pas autorisé à vous connecter")
+    alert("Vous devez utiliser une adresse '@heig-vd.ch'");
   }
 }
 </script>
 
 <template>
-  <section class="hero is-primary is-fullheight">
+  <section class="hero">
     <!-- To accept bulma's icons -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
     <div class="hero-body">
@@ -98,7 +97,7 @@ function useFetchLogin(password, email) {
                 </div>
               </div>
               <div class="field">
-                <button class="button is-success">Connexion</button>
+                <button class="button is-danger">Connexion</button>
               </div>
             </form>
           </div>
