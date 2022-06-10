@@ -62,7 +62,7 @@ defineProps({
  -->
 
   <article class="tile is-child notification is-light has-text-left-mobile ">
-    <span class="icon ">
+    <span class="icon">
       <i class="fa fa-solid fa-circle fa-lg "></i>
     </span>
     <p class="is-size-4 has-text-weight-bold">{{ user }}- {{ object }}</p>

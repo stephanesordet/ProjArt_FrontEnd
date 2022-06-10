@@ -7,6 +7,7 @@ export function useFetch(url) {
 
   async function loadJson() {
     const res = await fetch(url);
+    console.log(url);
     const json = await res.json();
     data.value = json;
     return { data };

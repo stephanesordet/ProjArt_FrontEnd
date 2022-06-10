@@ -1,7 +1,7 @@
 <script setup>
 import { def } from "@vue/shared";
 import axios from "axios";
-import { computed, ref, watch, watchEffect } from "vue";
+import { computed, ref, watchEffect } from "vue";
 import { useFetch } from "../composables/fetch";
 import CardCours from "./components/CardCours.vue";
 import BaseFormModal from "./components/BaseFormModal.vue";
@@ -10,14 +10,15 @@ import BaseInput from "./components/BaseInput.vue";
 import BaseModalForm from "./components/BaseModalForm.vue";
 import Switch from "./components/Switch.vue";
 import randomColor from 'randomcolor';
+import { BASE_URL } from "../composables/store";
 import { currentCoursId } from "../composables/store";
 
-const { data: classes } = useFetch("http://localhost:8000/api/classes");
+const { data: classes } = useFetch(BASE_URL + "classes");
 const selectedClasses = ref("M49-1");
 const historique = ref(false);
 const classeCours = ref([]);
 watchEffect(() => {
-  fetch("http://127.0.0.1:8000/api/cours/classe/" + selectedClasses.value)
+  fetch(BASE_URL + "cours/classe/" + selectedClasses.value)
     .then((res) => res.json())
     .then((coursClasse) => (classeCours.value = coursClasse));
 });
@@ -216,7 +217,7 @@ const lieuForm = ref("");
 async function addCours() {
   try {
     const cours = await axios
-      .post("http://localhost:8000/api/cours/create", {
+      .post("cours/create", {
         Debut: dateCoursForm.value + " " + heureDebutForm.value,
         Fin: dateCoursForm.value + " " + heureFinForm.value,
         matiere_id: matiereForm.value,
@@ -311,7 +312,7 @@ function displayUpdateModal(id, start, end, salle) {
 
 function deleteCours() {
   axios
-    .post("http://localhost:8000/api/cours/delete/" + currentCoursId.value)
+    .post("cours/delete/" + currentCoursId.value)
     .then((res) => {
       //Perform Success Action
       console.log(res);
@@ -325,7 +326,7 @@ function deleteCours() {
     });
 }
 
-fetch("http://127.0.0.1:8000/api/matiere")
+fetch(BASE_URL + "matiere")
   .then((res) => res.json())
   .then((AllMatiere) => {
     var couleurMatiereOb;

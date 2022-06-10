@@ -9,6 +9,7 @@ import BaseFormModal from "./components/BaseFormModal.vue";
 import BaseInputSubmit from "./components/BaseInputSubmit.vue";
 import BaseInput from "./components/BaseInput.vue";
 import BaseModalForm from "./components/BaseModalForm.vue";
+import { BASE_URL } from "../composables/store";
 import axios from "axios";
 
 let userSession = ref(sessionStorage.getItem("user"));
@@ -22,12 +23,12 @@ const cours = ref([]);
 const remarques = ref([]);
 
 watchEffect(() => {
-  fetch("http://127.0.0.1:8000/api/cours/info/" + idDetailsMatiere.value)
+  fetch(BASE_URL + "cours/info/" + idDetailsMatiere.value)
     .then((res) => res.json())
     .then((coursResults) => (cours.value = coursResults));
 
   fetch(
-    "http://127.0.0.1:8000/api/remarque/user/" +
+    BASE_URL + "remarque/user/" +
     userSession.value +
     "/" +
     matiere_idDetailsMatiere.value
@@ -77,7 +78,7 @@ const DateRemarque = ref("");
 
 function addRemarqueCours() {
   axios
-    .post("http://localhost:8000/api/remarque/create", {
+    .post("remarque/create", {
       Titre: Titre.value,
       Description: Description.value,
       Date: DateRemarque.value,

@@ -9,9 +9,10 @@ import BaseModalForm from "./components/BaseModalForm.vue";
 import { currentEventId } from "../composables/store";
 import axios from "axios";
 import { useFetch } from "../composables/fetch.js";
+import { BASE_URL } from "../composables/store";
 
 // ---------------------- Fetch data for all events -----------------------------
-const { data: events } = useFetch("http://127.0.0.1:8000/api/events/");
+const { data: events } = useFetch(BASE_URL + "events/");
 const userSession = ref(sessionStorage.getItem("user"));
 const role = ref(sessionStorage.getItem("role"));
 const auteur = ref(false);
@@ -42,7 +43,7 @@ const Fin = ref("");
 
 function addEvent() {
   axios
-    .post("http://localhost:8000/api/event/create", {
+    .post("event/create", {
       Titre: Titre.value,
       Description: Description.value,
       Lieu: Lieu.value,
@@ -81,7 +82,7 @@ function displayUpdateModal(id, titre, description, lieu, debut, fin, email) {
 
 function updateEvent(user) {
   axios
-    .post("http://localhost:8000/api/event/modif/" + currentEventId.value, {
+    .post("event/modif/" + currentEventId.value, {
       Titre: Titre.value,
       Description: Description.value,
       Lieu: Lieu.value,
@@ -115,7 +116,7 @@ function displayDeleteModal(id, email) {
 
 function deleteEvent() {
   axios
-    .post("http://localhost:8000/api/event/delete/" + currentEventId.value)
+    .post("event/delete/" + currentEventId.value)
     .then((res) => {
       //Perform Success Action
       console.log(res);

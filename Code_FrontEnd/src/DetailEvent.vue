@@ -3,6 +3,7 @@ import TheDetailsEvent from './components/TheDetailsEvent.vue';
 import BaseBoutonRetour from './components/TheReturnButton.vue';
 import TheBreadcrums from './components/TheBreadcrums.vue';
 import TheDetailsRemarques from './components/TheDetailsRemarques.vue';
+import { BASE_URL } from '../composables/store.js';
 // import { useFetch } from '../composables/fetch.js';
 
 // const { data: remarques } = useFetch(

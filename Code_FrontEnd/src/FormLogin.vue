@@ -2,6 +2,7 @@
 import { watchPostEffect } from "@vue/runtime-core";
 import { ref, computed, watch, watchEffect } from "vue";
 import axios from "axios";
+import { BASE_URL } from "../composables/store";
 
 let email = ref("");
 let password = ref("");
@@ -22,7 +23,7 @@ function useFetchLogin(password, email) {
   if (compareMail(email)) {
     axios
       .post(
-        "http://localhost:8000/api/login?Email=" +
+        BASE_URL + "login?Email=" +
         email +
         "&Password=" +
         password,

@@ -10,6 +10,7 @@ import BaseInput from "./components/BaseInput.vue";
 import BaseModalForm from "./components/BaseModalForm.vue";
 import Switch from "./components/Switch.vue";
 import TheCardWrapper from "./components/TheCardWrapper.vue";
+import { BASE_URL } from "../composables/store";
 
 
 const userSession = ref(sessionStorage.getItem("user"))
@@ -27,10 +28,10 @@ window.addEventListener('hashchange', () => {
 
 
 watchEffect(() => {
-  fetch("http://127.0.0.1:8000/api/cours/user/" + userSession.value)
+  fetch(BASE_URL + "cours/user/" + userSession.value)
     .then((res) => res.json())
     .then((CoursUser) => (classeCours.value = CoursUser));
-  console.log("http://127.0.0.1:8000/api/cours/user/" + userSession.value)
+  console.log("cours/user/" + userSession.value)
 });
 
 const date = new Date();
