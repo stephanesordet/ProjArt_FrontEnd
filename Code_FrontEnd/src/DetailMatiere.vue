@@ -28,12 +28,15 @@ watchEffect(() => {
 
   fetch(
     "http://127.0.0.1:8000/api/remarque/user/" +
-      userSession +
+      userSession.value +
       "/" +
       matiere_idDetailsMatiere.value
   )
     .then((res) => res.json())
     .then((remarqueMatiere) => (remarques.value = remarqueMatiere));
+  /* .then(() => {
+      console.log(remarques.value);
+    }) */
 });
 
 const allCours = computed(() => {
@@ -59,6 +62,7 @@ const allRemarques = computed(() => {
       tabRemarques.push(element);
     });
   }
+  //console.log(tabRemarques);
   return tabRemarques;
 });
 
@@ -107,6 +111,7 @@ function addRemarqueCours() {
       :DateRemarque="remarque.Date"
       :Description="remarque.Description"
       :Titre="remarque.Titre"
+      :Visibilite="remarque.Visibilite"
     >
     </TheDetailsMatieresRemarques>
     <div class="column buttons">

@@ -14,6 +14,9 @@ defineProps({
   DateRemarque: {
     type: Date,
   },
+  Visibilite: {
+    type: String,
+  },
 });
 </script>
 
@@ -28,12 +31,23 @@ defineProps({
         <i class="fa fa-circle fa-solid has-text-info"></i>
       </span>
       <span class="has-text-info">{{ user_Email }} </span>
-      <span class="icon is-small">
-        <i class="fa fa-eye"></i>
+
+      <span v-if="Visibilite == 'public'">
+        <span id="eye" class="icon is-medium">
+          <i class="fa fa-eye"></i>
+        </span>
+        <span>Publique</span>
+      </span>
+
+      <span v-else>
+        <span id="eye" class="icon is-medium">
+          <i class="fa fa-eye-slash"></i>
+        </span>
+        <span>Privée</span>
       </span>
     </div>
     <p>
-      <span>{{ DateRemarque }} </span>
+      <span>Pour la date du : {{ DateRemarque }} </span>
     </p>
     <p>
       <strong>{{ Titre }} : </strong><span>{{ Description }}</span>
@@ -54,5 +68,9 @@ div .column {
 div .column > p {
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
+}
+
+#eye {
+  margin-left: 1rem;
 }
 </style>
