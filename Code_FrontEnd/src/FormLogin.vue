@@ -23,14 +23,14 @@ function useFetchLogin(password, email) {
     axios
       .post(
         "http://localhost:8000/api/login?Email=" +
-          email +
-          "&Password=" +
-          password,
+        email +
+        "&Password=" +
+        password,
         {}
       )
       .then((res) => {
         if (res.data.includes("connected") || res.data.includes("DB")) {
-          alert("Connected");
+          alert("Vous êtes connecté");
 
           sessionStorage.setItem("user", email);
           session.value = true;
@@ -49,10 +49,10 @@ function useFetchLogin(password, email) {
         } else if (
           res.data.includes("user found : error in password or username")
         ) {
-          alert("mdp ou user");
+          alert("Erreur dans le nom d'utilisateur ou le mot de passe");
           session.value = false;
         } else {
-          alert("pas de compte");
+          alert("Erreur dans le nom d'utilisateur ou le mot de passe");
           session.value = false;
         }
       })
@@ -64,18 +64,15 @@ function useFetchLogin(password, email) {
         //Perform action in always
       });
   } else {
-    alert("Vous n'êtes pas autorisé à vous connecter");
+    alert("Vous devez utiliser une adresse '@heig-vd.ch'");
   }
 }
 </script>
 
 <template>
-  <section class="hero is-primary is-fullheight">
+  <section class="hero">
     <!-- To accept bulma's icons -->
-    <link
-      rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-    />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
     <div class="hero-body">
       <div class="container">
         <div class="columns is-centered">
@@ -84,13 +81,7 @@ function useFetchLogin(password, email) {
               <div class="field">
                 <label for="" class="label">Adresse mail</label>
                 <div class="control has-icons-left">
-                  <input
-                    v-model="email"
-                    type="email"
-                    placeholder="example@gmail.com"
-                    class="input"
-                    required
-                  />
+                  <input v-model="email" type="email" placeholder="example@gmail.com" class="input" required />
                   <span class="icon is-small is-left">
                     <i class="fa fa-envelope"></i>
                   </span>
@@ -99,20 +90,14 @@ function useFetchLogin(password, email) {
               <div class="field">
                 <label for="" class="label">Mot de passe</label>
                 <div class="control has-icons-left">
-                  <input
-                    v-model="password"
-                    type="password"
-                    placeholder="*******"
-                    class="input"
-                    required
-                  />
+                  <input v-model="password" type="password" placeholder="*******" class="input" required />
                   <span class="icon is-small is-left">
                     <i class="fa fa-lock"></i>
                   </span>
                 </div>
               </div>
               <div class="field">
-                <button class="button is-success">Connexion</button>
+                <button class="button is-danger">Connexion</button>
               </div>
             </form>
           </div>
@@ -122,4 +107,5 @@ function useFetchLogin(password, email) {
   </section>
 </template>
 
-<style scoped></style>
+<style scoped>
+</style>

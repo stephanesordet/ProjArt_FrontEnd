@@ -16,9 +16,9 @@ defineProps({
 </script> 
 
 <template>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
-<!-- <div class="columns">
+  <!-- <div class="columns">
   <div class="is-half is-offset-one-quarter has-text-left column">
 <div class="box">
         <p>
@@ -30,8 +30,8 @@ defineProps({
     </div>
     </div> -->
 
-  
-<!-- <div class="columns ">
+
+  <!-- <div class="columns ">
   <div class="is-half is-offset-one-quarter has-text-left column">
 
 <div class="box is-child notification is-primary has-text-left-mobile has-icons-right">
@@ -61,19 +61,19 @@ defineProps({
     </div>
  -->
 
- <article class="tile is-child notification is-light has-text-left-mobile ">
-   <span class="icon ">
-                <i class="fa fa-solid fa-circle fa-lg "></i>
-            </span>
-        <p class="is-size-4 has-text-weight-bold">{{ user }}- {{object}}</p>
-        <p class="is-size-6">{{envoiHeure}}</p>
-        <p class="is-size-5">
-            
-            {{ message }}
-        </p>
-    </article>
+  <article class="tile is-child notification is-light has-text-left-mobile ">
+    <span class="icon ">
+      <i class="fa fa-solid fa-circle fa-lg "></i>
+    </span>
+    <p class="is-size-4 has-text-weight-bold">{{ user }}- {{ object }}</p>
+    <p class="is-size-6">{{ envoiHeure }}</p>
+    <p class="is-size-5">
 
-  
+      {{ message }}
+    </p>
+  </article>
+
+
 </template>
 
 
@@ -84,7 +84,7 @@ defineProps({
   right: 10px;
   top: 10px;
 
-  
+
 
 }
 
@@ -95,7 +95,7 @@ article {
   border-right-width: 0px;
   border-top-width: 0px;
   border-bottom-width: 0px;
- 
+
 
 
 }

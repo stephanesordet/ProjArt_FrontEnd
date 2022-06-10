@@ -112,8 +112,6 @@ const CoursClasse = computed(() => {
       });
     }
   }
-  console.log(tabCours);
-  console.log(tabCoursHistorique);
 
   let coursObj;
   const tabCoursByDate = [];
@@ -156,11 +154,8 @@ const CoursClasse = computed(() => {
     }
     tabCoursHistoriqueByDate.push(coursObjHistorique);
   });
-  console.log("-------------------ICI-------------------");
   const uniqueCoursByDate = new Set(tabCoursByDate);
   const uniqueCoursHistoriqueByDate = new Set(tabCoursHistoriqueByDate);
-  console.log(uniqueCoursByDate);
-  console.log(uniqueCoursHistoriqueByDate);
   return { uniqueCoursByDate, uniqueCoursHistoriqueByDate };
 });
 
@@ -192,14 +187,8 @@ const Matiere = computed(() => {
   }
   const uniqueMatiere = new Set(tabMatiere);
   const uniqueMatiereHistorique = new Set(tabMatiereHistorique);
-  console.log(uniqueMatiere);
-  console.log(uniqueMatiereHistorique);
   return { uniqueMatiere, uniqueMatiereHistorique };
 });
-
-function afficheForm() {
-  console.log(4);
-}
 
 let showModalForm = ref(false);
 
@@ -212,34 +201,6 @@ const matiere = ref("");
 const lieu = ref("");
 
 const selectedClasseModal = ref("");
-
-watchEffect(() => {
-  console.log(dateCours.value);
-  console.log(selectedclasseModal.value);
-  console.log(heureDebut.value);
-  console.log(heureFin.value);
-  console.log(matiere.value);
-  console.log(lieu.value);
-});
-/* function addCours() {
-  axios
-    .post("http://localhost:8000/api/cours/create", {
-      Debut: date.value + ' ' + heureDebut.value,
-      Fin: date.value + ' ' + heureFin.value,
-      matiere_id: matiere.value,
-    })
-    .then((res) => {
-      //Perform Success Action
-      console.log(res);
-    })
-    .catch((error) => {
-      // error.response.status Check status code
-      console.log(error);
-    })
-    .finally(() => {
-      window.location.reload();
-    })
-} */
 
 async function addCours() {
   try {
@@ -293,16 +254,14 @@ function valueHasClicked(event) {
   const classe = event.target.innerHTML;
 
   selectedClasses.value = classe;
-
-  console.log(selectedClasses.value);
 }
 
 function toggleHistorique() {
-    if (historique.value) {
-        historique.value = false;
-    } else {
-     historique.value = true;
-    }
+  if (historique.value) {
+    historique.value = false;
+  } else {
+    historique.value = true;
+  }
   const cours = document.querySelectorAll(".cours");
   const spanCours = document.querySelectorAll(".spanCours");
 
@@ -313,17 +272,14 @@ function toggleHistorique() {
   spanCours.forEach((coursSolo) => {
     coursSolo.style.display = "block";
   });
-  console.log(historique.value);
 }
 
-function setClass(day){
+function setClass(day) {
   const uniqueClass = new Set();
-  console.log("Class");
   day.Cours.forEach((element) => {
     uniqueClass.add(element.matiere_id);
   });
   const str1 = Array.from(uniqueClass).join(' ');
-  console.log(str1);
   return str1;
 }
 </script>
@@ -361,16 +317,43 @@ function setClass(day){
       <div class="column is-three-quarters">
         <div class="tile is-parent is-vertical">
           <template v-if="historique">
-          <template v-for="day in CoursClasse.uniqueCoursHistoriqueByDate" :key="day.Jour">
-          <span style="text-align:left;" :class="setClass(day)" class="spanCours">{{day.Date}}</span>
-          <card-cours v-for="cours in day.Cours" :key="cours.id" :data-id="cours.id" :class="cours.matiere_id" class="cours" :debut="cours.HeureDebut" :fin="cours.HeureFin" :cours="cours.matiere_id" :salle="cours.salle_id">
-          </card-cours>
-          </template>
+            <template v-for="day in CoursClasse.uniqueCoursHistoriqueByDate" :key="day.Jour">
+              <span style="text-align:left;" :class="setClass(day)" class="spanCours">{{ day.Date }}</span>
+              <card-cours v-for="cours in day.Cours" :key="cours.id" :data-id="cours.id" :class="cours.matiere_id"
+                class="cours" :debut="cours.HeureDebut" :fin="cours.HeureFin" :cours="cours.matiere_id"
+                :salle="cours.salle_id">
+                <button class="button is-pulled-right is-white has-background-light" @click="deleteCours()">
+                  <span class="icon is-small">
+                    <i class="fa fa-trash"></i>
+                  </span>
+                </button>
+
+                <button class="button is-pulled-right is-white has-background-light" @click="modifCours()">
+                  <span class="icon is-small">
+                    <i class="fa fa-pencil"></i>
+                  </span>
+                </button>
+              </card-cours>
+            </template>
           </template>
           <template v-for="day in CoursClasse.uniqueCoursByDate" :key="day.Jour">
-          <span style="text-align:left;" :class="setClass(day)" class="spanCours">{{day.Date}}</span>
-          <card-cours v-for="cours in day.Cours" :key="cours.id" :data-id="cours.id" :class="cours.matiere_id" class="cours" :debut="cours.HeureDebut" :fin="cours.HeureFin" :cours="cours.matiere_id" :salle="cours.salle_id">
-          </card-cours>
+            <span style="text-align:left;" :class="setClass(day)" class="spanCours">{{ day.Date }}</span>
+            <card-cours v-for="cours in day.Cours" :key="cours.id" :data-id="cours.id" :class="cours.matiere_id"
+              class="cours" :debut="cours.HeureDebut" :fin="cours.HeureFin" :cours="cours.matiere_id"
+              :salle="cours.salle_id">
+              <button class="button is-pulled-right is-white has-background-light" @click="deleteCours()">
+                <span class="icon is-small">
+                  <i class="fa fa-trash"></i>
+                </span>
+              </button>
+
+              <button class="button is-pulled-right is-white has-background-light" @click="modifCours()">
+                <span class="icon is-small">
+                  <i class="fa fa-pencil"></i>
+                </span>
+              </button>
+
+            </card-cours>
           </template>
           <div v-if="(CoursClasse.uniqueCoursByDate == undefined)">
             <h2>Cours en chargement</h2>
