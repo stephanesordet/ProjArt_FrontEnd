@@ -1,9 +1,7 @@
 <script setup></script>
 
 <template>
-  <form
-    class="box content is-half is-offset-one-quarter has-background-light has-text-left column"
-  >
+  <form class="box content is-half is-offset-one-quarter has-background-light has-text-centered column">
     <slot></slot>
   </form>
 </template>

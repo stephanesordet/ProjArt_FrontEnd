@@ -1,7 +1,7 @@
 <script setup></script>
 
 <template>
-  <form class="content has-text-left column">
+  <form class="content has-text-centerd column">
     <slot></slot>
   </form>
 </template>

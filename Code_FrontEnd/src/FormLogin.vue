@@ -1,17 +1,22 @@
 <script setup>
 import { watchPostEffect } from "@vue/runtime-core";
-import { ref, computed, watch, watchEffect } from "vue";
+import { ref, computed, watchEffect } from "vue";
+import BaseFormModal from "./components/BaseFormModal.vue";
+import BaseModalForm from "./components/BaseModalForm.vue";
 import axios from "axios";
 import { BASE_URL } from "../composables/store";
 
 let email = ref("");
 let password = ref("");
-let session = ref(false);
+let hash = ref(window.location.hash);
+let userSession = ref(false);
+let showWelcomeModalForm = ref(false);
+let showMailErrorModalForm = ref(false);
+let showUserPswErrorModalForm = ref(false);
 
 function compareMail(email) {
   const refMail = "heig-vd.ch";
   const userMail = email.substring(email.indexOf("@") + 1);
-  console.log(userMail);
   if (refMail === userMail) {
     return true;
   } else {
@@ -31,10 +36,9 @@ function useFetchLogin(password, email) {
       )
       .then((res) => {
         if (res.data.includes("connected") || res.data.includes("DB")) {
-          alert("Vous êtes connecté");
 
           sessionStorage.setItem("user", email);
-          session.value = true;
+          userSession.value = sessionStorage.getItem("user");
           if (res.data.includes("Professeur")) {
             sessionStorage.setItem("role", "Professeur");
           } else if (res.data.includes("Etudiant")) {
@@ -45,16 +49,16 @@ function useFetchLogin(password, email) {
             sessionStorage.setItem("role", "AGE");
           }
 
-          window.location.hash = "#accueil";
-          window.location.reload();
+          showWelcomeModalForm.value = !showWelcomeModalForm.value;
+
         } else if (
           res.data.includes("user found : error in password or username")
         ) {
-          alert("Erreur dans le nom d'utilisateur ou le mot de passe");
-          session.value = false;
+          showUserPswErrorModalForm.value = !showUserPswErrorModalForm.value;
+          userSession.value = null;
         } else {
-          alert("Erreur dans le nom d'utilisateur ou le mot de passe");
-          session.value = false;
+          showUserPswErrorModalForm.value = !showUserPswErrorModalForm.value;
+          userSession.value = null;
         }
       })
       .catch((error) => {
@@ -65,8 +69,11 @@ function useFetchLogin(password, email) {
         //Perform action in always
       });
   } else {
-    alert("Vous devez utiliser une adresse '@heig-vd.ch'");
+    showMailErrorModalForm.value = !showMailErrorModalForm.value;
   }
+}
+function changeHash() {
+  window.location.hash = "#accueil";
 }
 </script>
 
@@ -82,7 +89,7 @@ function useFetchLogin(password, email) {
               <div class="field">
                 <label for="" class="label">Adresse mail</label>
                 <div class="control has-icons-left">
-                  <input v-model="email" type="email" placeholder="example@gmail.com" class="input" required />
+                  <input v-model="email" type="email" placeholder="prenom.nom@heig-vd.ch" class="input" required />
                   <span class="icon is-small is-left">
                     <i class="fa fa-envelope"></i>
                   </span>
@@ -106,6 +113,41 @@ function useFetchLogin(password, email) {
       </div>
     </div>
   </section>
+
+  <!-- MODAL FORM WELCOME -->
+  <BaseModalForm :class="{ 'is-active': showWelcomeModalForm }" @close="showWelcomeModalForm = false, changeHash()">
+
+    <BaseFormModal>
+      <h2 class="title is-4">Bienvenue dans <b>Kairos</b> </h2>
+    </BaseFormModal>
+    <BaseInputSubmit>
+      <input type="submit" class="button is-primary is-rounded" value="J'entre"
+        @click="showWelcomeModalForm = false, changeHash()" />
+    </BaseInputSubmit>
+  </BaseModalForm>
+
+  <!-- MODAL FORM @MAIL ERROR -->
+  <BaseModalForm :class="{ 'is-active': showMailErrorModalForm }" @close="showMailErrorModalForm = false">
+    <BaseFormModal>
+      <h2 class="title is-4">Utilisez votre mail <b>@heig-vd.ch</b> pour vous connecter</h2>
+    </BaseFormModal>
+    <BaseInputSubmit>
+      <input type="submit" class="button is-primary is-rounded" value="Compris"
+        @click="showMailErrorModalForm = false" />
+    </BaseInputSubmit>
+  </BaseModalForm>
+
+  <!-- MODAL FORM USER OR PASSWORD ERROR -->
+  <BaseModalForm :class="{ 'is-active': showUserPswErrorModalForm }" @close="showUserPswErrorModalForm = false">
+    <BaseFormModal>
+      <h2 class="title is-4"> Erreur dans le <b>nom d'utilisateur</b> ou le <b>mot de passe</b></h2>
+    </BaseFormModal>
+    <BaseInputSubmit>
+      <input type="submit" class="button is-primary is-rounded" value="Retour"
+        @click="showUserPswErrorModalForm = false" />
+    </BaseInputSubmit>
+  </BaseModalForm>
+
 </template>
 
 <style scoped>

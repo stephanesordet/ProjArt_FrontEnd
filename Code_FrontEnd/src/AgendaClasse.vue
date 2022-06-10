@@ -31,7 +31,6 @@ watchEffect(() => {
   fetch(BASE_URL + "cours/user/" + userSession.value)
     .then((res) => res.json())
     .then((CoursUser) => (classeCours.value = CoursUser));
-  console.log("cours/user/" + userSession.value)
 });
 
 const date = new Date();

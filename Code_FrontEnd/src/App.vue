@@ -15,85 +15,85 @@ import TheBreadcrums from "./components/TheBreadcrums.vue";
 import TheReturnButton from "./components/TheReturnButton.vue";
 var routes = {};
 isMobileDevice();
-function isMobileDevice() { 
- if( navigator.userAgent.match(/iPhone/i)
- || navigator.userAgent.match(/webOS/i)
- || navigator.userAgent.match(/Android/i)
- || navigator.userAgent.match(/iPad/i)
- || navigator.userAgent.match(/iPod/i)
- || navigator.userAgent.match(/BlackBerry/i)
- || navigator.userAgent.match(/Windows Phone/i)
- ){
+function isMobileDevice() {
+  if (navigator.userAgent.match(/iPhone/i)
+    || navigator.userAgent.match(/webOS/i)
+    || navigator.userAgent.match(/Android/i)
+    || navigator.userAgent.match(/iPad/i)
+    || navigator.userAgent.match(/iPod/i)
+    || navigator.userAgent.match(/BlackBerry/i)
+    || navigator.userAgent.match(/Windows Phone/i)
+  ) {
     routes = {
-  "#accueil": {
-    label: "Accueil",
-    component: AccueilMobile,
-  },
-  "#evenements": {
-    label: "Evenements",
-    component: Evenements,
-  },
-  "#agendaClasse": {
-    label: "Agenda Classe",
-    component: AgendaClasse,
-  },
-  "#login": {
-    label: "Login",
-    component: Login,
-  },
-  "#detailMatiere": {
-    label: "Detail matiere",
-    component: DetailMatiere,
-  },
-  "#notifications": {
-    label: "Notifications",
-    component: Notifications,
-  },
-  "#ajoutCours": {
-    label: "Ajouter un cours",
-    component: AjoutCours,
-  },
-  "#DetailEvent": {
-    label: "Detail event",
-    component: DetailEvent,
-  },
-};
+      "#accueil": {
+        label: "Accueil",
+        component: AccueilMobile,
+      },
+      "#evenements": {
+        label: "Evenements",
+        component: Evenements,
+      },
+      "#agendaClasse": {
+        label: "Agenda Classe",
+        component: AgendaClasse,
+      },
+      "#login": {
+        label: "Login",
+        component: Login,
+      },
+      "#detailMatiere": {
+        label: "Detail matiere",
+        component: DetailMatiere,
+      },
+      "#notifications": {
+        label: "Notifications",
+        component: Notifications,
+      },
+      "#ajoutCours": {
+        label: "Ajouter un cours",
+        component: AjoutCours,
+      },
+      "#DetailEvent": {
+        label: "Detail event",
+        component: DetailEvent,
+      },
+    };
   }
- else {
-   routes = {
-  "#accueil": {
-    label: "Accueil",
-    component: Accueil,
-  },
-  "#evenements": {
-    label: "Evenements",
-    component: Evenements,
-  },
-  "#agendaClasse": {
-    label: "Agenda Classe",
-    component: AgendaClasse,
-  },
-  "#login": {
-    label: "Login",
-    component: Login,
-  },
-  "#detailMatiere": {
-    label: "Detail matiere",
-    component: DetailMatiere,
-  },
-  "#notifications": {
-    label: "Notifications",
-    component: Notifications,
-  },
-  "#ajoutCours": {
-    label: "Ajouter un cours",
-    component: AjoutCours,
-  },
-  "#DetailEvent": {
-    label: "Detail event",
-    component: DetailEvent,
-  },
-};
+  else {
+    routes = {
+      "#accueil": {
+        label: "Accueil",
+        component: Accueil,
+      },
+      "#evenements": {
+        label: "Evenements",
+        component: Evenements,
+      },
+      "#agendaClasse": {
+        label: "Agenda Classe",
+        component: AgendaClasse,
+      },
+      "#login": {
+        label: "Login",
+        component: Login,
+      },
+      "#detailMatiere": {
+        label: "Detail matiere",
+        component: DetailMatiere,
+      },
+      "#notifications": {
+        label: "Notifications",
+        component: Notifications,
+      },
+      "#ajoutCours": {
+        label: "Ajouter un cours",
+        component: AjoutCours,
+      },
+      "#DetailEvent": {
+        label: "Detail event",
+        component: DetailEvent,
+      },
+    };
   }
 }
 
@@ -115,7 +115,6 @@ watchEffect(() => {
 
 <template>
   <TheNavbar :routes="routes" :curHash="curHash"></TheNavbar>
-  <the-breadcrums></the-breadcrums>
   <the-return-button></the-return-button>
   <main>
     <template v-for="(route, hash) of routes">

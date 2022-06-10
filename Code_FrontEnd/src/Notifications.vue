@@ -10,21 +10,26 @@ import BaseInput from "./components/BaseInput.vue";
 import BaseModalForm from "./components/BaseModalForm.vue";
 import { BASE_URL } from "../composables/store";
 
-const user = ref(sessionStorage.getItem("user"));
+const userSession = ref(sessionStorage.getItem("user"));
 const role = ref(sessionStorage.getItem("role"));
 const notifications = ref([]);
 
+window.addEventListener('hashchange', () => {
+  userSession.value = sessionStorage.getItem("user");
+  role.value = sessionStorage.getItem("role");
+});
+
 watchEffect(() => {
-  fetch(BASE_URL + "notifications/" + user.value)
+  fetch(BASE_URL + "notifications/" + userSession.value)
     .then((res) => res.json())
     .then((notifResults) => (notifications.value = notifResults));
 })
 
-setInterval(function () {
-  fetch(BASE_URL + "notifications/" + user.value)
+/* setInterval(function () {
+  fetch(BASE_URL + "notifications/" + userSession.value)
     .then((res) => res.json())
     .then((notifResults) => (notifications.value = notifResults));
-}, 2000000);
+}, 2000000); */
 
 const notifCount = 5
 

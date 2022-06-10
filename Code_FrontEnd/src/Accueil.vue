@@ -315,7 +315,6 @@ function deleteCours() {
     .post("cours/delete/" + currentCoursId.value)
     .then((res) => {
       //Perform Success Action
-      console.log(res);
     })
     .catch((error) => {
       // error.response.status Check status code
