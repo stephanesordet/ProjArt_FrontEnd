@@ -31,7 +31,7 @@ const dateStr =
   "-" +
   ("00" + date.getDate()).slice(-2);
 
-  function padTo2Digits(num) {
+function padTo2Digits(num) {
   return num.toString().padStart(2, '0');
 }
 
@@ -44,10 +44,10 @@ function formatDate(date) {
 }
 
 function formatDateView(date) {
-    const month = ["Janvier", "Fevrier", "Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Decembre"];
-    let monthDate = month[date.getMonth()];
-    let dates = date.getDate() + " " + monthDate + " " + date.getFullYear();
-    return dates;
+  const month = ["Janvier", "Fevrier", "Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Decembre"];
+  let monthDate = month[date.getMonth()];
+  let dates = date.getDate() + " " + monthDate + " " + date.getFullYear();
+  return dates;
 }
 const CoursClasse = computed(() => {
   const tabCours = [];
@@ -186,7 +186,7 @@ const Matiere = computed(() => {
     return [];
   } else {
     classeCours.value.forEach((element) => {
-        uniqueMatiereColor.add(element.matiere_id);
+      uniqueMatiereColor.add(element.matiere_id);
       if (element.Debut > dateStr) {
         tabMatiere.push(element.matiere_id);
       } else {
@@ -279,10 +279,10 @@ function setClass(day) {
   day.Cours.forEach((element) => {
     uniqueClass.add(element.matiere_id);
   });
-    const str1 = Array.from(uniqueClass).join(' ');
-    var e = document.querySelector("select");
-    e.value = "Tous les cours";
-    const cours = document.querySelectorAll(".cours");
+  const str1 = Array.from(uniqueClass).join(' ');
+  var e = document.querySelector("select");
+  e.value = "Tous les cours";
+  const cours = document.querySelectorAll(".cours");
   const spanCours = document.querySelectorAll(".spanCours");
   cours.forEach((coursSolo) => {
     coursSolo.style.display = "block";
@@ -290,7 +290,7 @@ function setClass(day) {
   spanCours.forEach((coursSolo) => {
     coursSolo.style.display = "block";
   });
-   return str1;
+  return str1;
 }
 
 function displayDeleteModal(id) {
@@ -325,30 +325,24 @@ function deleteCours() {
     });
 }
 
-/* watchEffect(() => {
-  console.log(heureDebutForm.value)
-  console.log(heureFinForm.value)
-  console.log(lieuForm.value)
-}) */
-
 fetch("http://127.0.0.1:8000/api/matiere")
-    .then((res) => res.json())
-    .then((AllMatiere) => {
+  .then((res) => res.json())
+  .then((AllMatiere) => {
     var couleurMatiereOb;
     const matiereColor = [];
     var i = 0;
-        AllMatiere.forEach((matiere) => {
-             couleurMatiereOb = Object();
-            couleurMatiereOb.id = matiere.id;
-            couleurMatiereOb.color = randomColor({seed: i});;
-            matiereColor.push(couleurMatiereOb);
-            i++;
-        });
-        console.log(matiereColor);
+    AllMatiere.forEach((matiere) => {
+      couleurMatiereOb = Object();
+      couleurMatiereOb.id = matiere.id;
+      couleurMatiereOb.color = randomColor({ seed: i });;
+      matiereColor.push(couleurMatiereOb);
+      i++;
+    });
+    console.log(matiereColor);
     matiereColor.forEach((element) => {
-       document.head.insertAdjacentHTML("beforeend", '<style>.'+element.id+'{border-color:'+element.color+' !important}</style>');
+      document.head.insertAdjacentHTML("beforeend", '<style>.' + element.id + '{border-color:' + element.color + ' !important}</style>');
     });
-    });
+  });
 </script>
 <template>
   <div class="main mx-4 my-1">
@@ -388,21 +382,22 @@ fetch("http://127.0.0.1:8000/api/matiere")
               <card-cours v-for="cours in day.Cours" :key="cours.id" :data-id="cours.id" :class="cours.matiere_id"
                 class="cours" :debut="cours.HeureDebut" :fin="cours.HeureFin" :cours="cours.matiere_id"
                 :salle="cours.salle_id">
-                <button class="button is-pulled-right is-white has-background-light"
+                <button v-show="role == 'Administration'" class="button is-pulled-right is-white has-background-light"
                   @click="displayDeleteModal(cours.id)">
                   <span class="icon is-small">
                     <i class="fa fa-trash"></i>
                   </span>
                 </button>
 
-                <button class="button is-pulled-right is-white has-background-light" @click="
-                  displayUpdateModal(
-                    cours.id,
-                    cours.HeureDebut,
-                    cours.HeureFin,
-                    cours.salle_id
-                  )
-                ">
+                <button v-show="role == 'Administration'" class="button is-pulled-right is-white has-background-light"
+                  @click="
+                    displayUpdateModal(
+                      cours.id,
+                      cours.HeureDebut,
+                      cours.HeureFin,
+                      cours.salle_id
+                    )
+                  ">
                   <span class="icon is-small">
                     <i class="fa fa-pencil"></i>
                   </span>
@@ -412,7 +407,9 @@ fetch("http://127.0.0.1:8000/api/matiere")
           </template>
           <template v-for="day in CoursClasse.uniqueCoursByDate" :key="day.Jour">
             <span style="text-align:left;" :class="setClass(day)" class="spanCours">{{ day.Date }}</span>
-            <HR v-if="(dateStrTest == day.Date) && historique" :class="setClass(day)" class="spanCours" style="background-color: blue; height:5px;"></HR>
+            <HR v-if="(dateStrTest == day.Date) && historique" :class="setClass(day)" class="spanCours"
+              style="background-color: blue; height:5px;">
+            </HR>
             <card-cours v-for="cours in day.Cours" :key="cours.id" :data-id="cours.id" :class="cours.matiere_id"
               class="cours" :debut="cours.HeureDebut" :fin="cours.HeureFin" :cours="cours.matiere_id"
               :salle="cours.salle_id">
