@@ -24,7 +24,7 @@ defineProps({
         {{ matiere }}
       </h2>
       <p class="is-size-6">
-        <em>{{ prof }}</em>
+        <span>Responsable du cours : {{ prof }}</span>
       </p>
       <h4>Remarques pour les cours de {{ matiere }} :</h4>
 
@@ -37,5 +37,14 @@ defineProps({
 .icon-text {
   display: block;
   text-align: left;
+}
+
+.content h2 {
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+}
+.content h4 {
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
 }
 </style>

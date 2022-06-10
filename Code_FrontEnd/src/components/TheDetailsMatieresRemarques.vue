@@ -5,6 +5,9 @@ defineProps({
   user_Email: {
     type: String,
   },
+  Titre: {
+    type: String,
+  },
   Description: {
     type: String,
   },
@@ -24,16 +27,16 @@ defineProps({
       <span class="icon is-small">
         <i class="fa fa-circle fa-solid has-text-info"></i>
       </span>
-      <span class="has-text-info is-size-5">{{ user_Email }} </span>
+      <span class="has-text-info">{{ user_Email }} </span>
       <span class="icon is-small">
         <i class="fa fa-eye"></i>
       </span>
     </div>
     <p>
-      <em>{{ DateRemarque }} </em>
+      <span>{{ DateRemarque }} </span>
     </p>
     <p>
-      <strong>{{ Description }} </strong>
+      <strong>{{ Titre }} : </strong><span>{{ Description }}</span>
     </p>
   </div>
 </template>
@@ -42,5 +45,14 @@ defineProps({
 .icon-text {
   display: block;
   text-align: left;
+}
+
+div .column {
+  margin-bottom: 1rem;
+}
+
+div .column > p {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 </style>

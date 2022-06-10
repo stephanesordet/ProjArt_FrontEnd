@@ -9,6 +9,7 @@ import BaseInputSubmit from "./components/BaseInputSubmit.vue";
 import BaseInput from "./components/BaseInput.vue";
 import BaseModalForm from "./components/BaseModalForm.vue";
 import Switch from "./components/Switch.vue";
+import TheCardWrapper from "./components/TheCardWrapper.vue";
 
 
 const userSession = ref(sessionStorage.getItem("user"))

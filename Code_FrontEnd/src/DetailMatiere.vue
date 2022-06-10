@@ -2,7 +2,7 @@
 import { ref, computed, watchEffect } from "vue";
 import TheDetailsMatieres from "./components/TheDetailsMatieres.vue";
 import TheDetailsMatieresRemarques from "./components/TheDetailsMatieresRemarques.vue";
-import { currentCoursId, currentMatiereId } from "../composables/store.js";
+/* import { currentCoursId, currentMatiereId } from "../composables/store.js"; */
 import CardEvent from "./components/CardEvent.vue";
 import TheCardWrapper from "./components/TheCardWrapper.vue";
 import BaseFormModal from "./components/BaseFormModal.vue";
@@ -12,13 +12,17 @@ import BaseModalForm from "./components/BaseModalForm.vue";
 import axios from "axios";
 
 let userSession = ref(sessionStorage.getItem("user"));
+let idDetailsMatiere = ref(sessionStorage.getItem("idDetailsMatiere"));
+let matiere_idDetailsMatiere = ref(
+  sessionStorage.getItem("matiere_idDetailsMatiere")
+);
 
 // ---------------------- Fetch data for this cours -----------------------------
 const cours = ref([]);
 const remarques = ref([]);
 
 watchEffect(() => {
-  fetch("http://127.0.0.1:8000/api/cours/info/" + currentCoursId.value)
+  fetch("http://127.0.0.1:8000/api/cours/info/" + idDetailsMatiere.value)
     .then((res) => res.json())
     .then((coursResults) => (cours.value = coursResults));
 
@@ -26,7 +30,7 @@ watchEffect(() => {
     "http://127.0.0.1:8000/api/remarque/user/" +
       userSession +
       "/" +
-      currentMatiereId.value
+      matiere_idDetailsMatiere.value
   )
     .then((res) => res.json())
     .then((remarqueMatiere) => (remarques.value = remarqueMatiere));
@@ -73,10 +77,8 @@ function addRemarqueCours() {
       Titre: Titre.value,
       Description: Description.value,
       Date: DateRemarque.value,
-      cours_id: currentCoursId.value,
+      cours_id: idDetailsMatiere.value,
       user_Email: userSession.value,
-      // ---------------------- !!!!!!!!! CHANGER !!!!!!!!! -----------------------------
-
       Visibilite: Visibilite.value,
     })
     .then((res) => {
@@ -88,7 +90,7 @@ function addRemarqueCours() {
       console.log(error);
     })
     .finally(() => {
-      //window.location.reload();
+      window.location.reload();
     });
 }
 </script>
@@ -104,6 +106,7 @@ function addRemarqueCours() {
       :user_Email="remarque.user_Email"
       :DateRemarque="remarque.Date"
       :Description="remarque.Description"
+      :Titre="remarque.Titre"
     >
     </TheDetailsMatieresRemarques>
     <div class="column buttons">
@@ -121,7 +124,7 @@ function addRemarqueCours() {
     @close="showModalForm = false"
   >
     <!-- AJOUT REMARQUE COURS -->
-    <BaseFormModal @submit.prevent="addRemarqueCours()">
+    <BaseFormModal @submit="addRemarqueCours()">
       <h1 class="title is-1">Nouvelle remarque</h1>
 
       <div class="field" style="width: 300px">
@@ -129,9 +132,12 @@ function addRemarqueCours() {
 
         <div class="control">
           <select v-model="Visibilite">
-            <option disabled value="">Please select one</option>
+            <option disabled value="">
+              Choisissez la visibilité de votre remarque
+            </option>
             <option value="public">Publique</option>
-            <option value="private">Privée</option>
+            <!-- CHANGER D'APRES BACK -->
+            <option value="prive">Privée</option>
           </select>
         </div>
       </div>
