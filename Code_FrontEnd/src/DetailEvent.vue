@@ -3,7 +3,7 @@ import { ref, computed, watchEffect } from "vue";
 import TheDetailsEvent from "./components/TheDetailsEvent.vue";
 import BaseBoutonRetour from "./components/TheReturnButton.vue";
 import { BASE_URL } from "../composables/store.js";
-import { changeFormatDate } from "../composables/function.js";
+import TheReturnButton from "./components/TheReturnButton.vue";
 // import { useFetch } from '../composables/fetch.js';
 
 // const { data: remarques } = useFetch(
@@ -45,15 +45,9 @@ const allEvents = computed(() => {
 </script>
 
 <template>
-  <the-details-event
-    v-for="events in allEvents"
-    :Debut="changeFormatDate(events.Debut)"
-    :Fin="changeFormatDate(events.Fin)"
-    :Lieu="events.Lieu"
-    :user_Email="events.user_Email"
-    :Description="events.Description"
-    :Titre="events.Titre"
-  ></the-details-event>
+  <the-details-event v-for="events in allEvents" :Debut="changeFormatDate(events.Debut)"
+    :Fin="changeFormatDate(events.Fin)" :Lieu="events.Lieu" :user_Email="events.user_Email"
+    :Description="events.Description" :Titre="events.Titre"></the-details-event>
 </template>
 
 <style scoped>

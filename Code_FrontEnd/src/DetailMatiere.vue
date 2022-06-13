@@ -8,6 +8,7 @@ import BaseFormModal from "./components/BaseFormModal.vue";
 import BaseInputSubmit from "./components/BaseInputSubmit.vue";
 import BaseInput from "./components/BaseInput.vue";
 import BaseModalForm from "./components/BaseModalForm.vue";
+import TheReturnButton from "./components/TheReturnButton.vue";
 import { BASE_URL } from "../composables/store";
 import axios from "axios";
 import { changeFormatDateWithoutHoursMinutes } from "../composables/function.js";
@@ -29,10 +30,10 @@ watchEffect(() => {
 
   fetch(
     BASE_URL +
-      "remarque/user/" +
-      userSession.value +
-      "/" +
-      matiere_idDetailsMatiere.value
+    "remarque/user/" +
+    userSession.value +
+    "/" +
+    matiere_idDetailsMatiere.value
   )
     .then((res) => res.json())
     .then((remarqueMatiere) => (remarques.value = remarqueMatiere));
@@ -103,35 +104,22 @@ function addRemarqueCours() {
 </script>
 
 <template>
-  <TheDetailsMatieres
-    v-for="cours in allCours"
-    :matiere="cours.matiere_id"
-    :prof="cours.FullName"
-  >
-    <TheDetailsMatieresRemarques
-      v-for="remarque in allRemarques"
-      :user_Email="remarque.user_Email"
-      :DateRemarque="changeFormatDateWithoutHoursMinutes(remarque.Date)"
-      :Description="remarque.Description"
-      :Titre="remarque.Titre"
-      :Visibilite="remarque.Visibilite"
-    >
+  <TheDetailsMatieres v-for="cours in allCours" :matiere="cours.matiere_id" :prof="cours.FullName">
+    <TheDetailsMatieresRemarques v-for="remarque in allRemarques" :user_Email="remarque.user_Email"
+      :DateRemarque="changeFormatDateWithoutHoursMinutes(remarque.Date)" :Description="remarque.Description"
+      :Titre="remarque.Titre" :Visibilite="remarque.Visibilite">
     </TheDetailsMatieresRemarques>
     <div class="column buttons">
       <button class="button is-danger" @click="showModalForm = !showModalForm">
         <span class="icon is-medium has-text-danger-dark">
           <i class="fa fa-solid fa-plus"></i>
         </span>
-        <span>Ajouter une remarque</span></button
-      ><br />
+        <span>Ajouter une remarque</span></button><br />
     </div>
   </TheDetailsMatieres>
 
   <!-- MODAL FORM  -->
-  <BaseModalForm
-    :class="{ 'is-active': showModalForm }"
-    @close="showModalForm = false"
-  >
+  <BaseModalForm :class="{ 'is-active': showModalForm }" @close="showModalForm = false">
     <!-- AJOUT REMARQUE COURS -->
     <BaseFormModal @submit.prevent="addRemarqueCours()">
       <h1 class="title is-1">Nouvelle remarque</h1>
@@ -153,45 +141,26 @@ function addRemarqueCours() {
       <BaseInput>
         <template v-slot:label>Date</template>
         <template v-slot:input>
-          <input
-            v-model="DateRemarque"
-            class="input"
-            type="date"
-            placeholder="Entrez une date de début"
-          />
+          <input v-model="DateRemarque" class="input" type="date" placeholder="Entrez une date de début" />
         </template>
       </BaseInput>
 
       <BaseInput>
         <template v-slot:label>Titre</template>
         <template v-slot:input>
-          <input
-            v-model="Titre"
-            class="input"
-            type="text"
-            placeholder="Entrez le nom de l'évènement"
-          />
+          <input v-model="Titre" class="input" type="text" placeholder="Entrez le nom de l'évènement" />
         </template>
       </BaseInput>
 
       <BaseInput>
         <template v-slot:label>Description</template>
         <template v-slot:input>
-          <input
-            v-model="Description"
-            class="input"
-            type="text"
-            placeholder="Entrez la description de l'évènement"
-          />
+          <input v-model="Description" class="input" type="text" placeholder="Entrez la description de l'évènement" />
         </template>
       </BaseInput>
 
       <BaseInputSubmit>
-        <input
-          type="submit"
-          class="button is-danger is-rounded"
-          value="Ajouter le cours"
-        />
+        <input type="submit" class="button is-danger is-rounded" value="Ajouter le cours" />
       </BaseInputSubmit>
     </BaseFormModal>
   </BaseModalForm>

@@ -50,6 +50,10 @@ function useFetchLogin(password, email) {
           }
 
           showWelcomeModalForm.value = !showWelcomeModalForm.value;
+          setTimeout(() => {
+            window.location.hash = "#accueil";
+            window.location.reload()
+          }, 1000);
 
         } else if (
           res.data.includes("user found : error in password or username")
@@ -73,8 +77,7 @@ function useFetchLogin(password, email) {
   }
 }
 function changeHash() {
-  window.location.hash = "#accueil";
-  window.location.reload()
+
 
 }
 </script>
@@ -118,7 +121,7 @@ function changeHash() {
   </section>
 
   <!-- MODAL FORM WELCOME -->
-  <BaseModalForm :class="{ 'is-active': showWelcomeModalForm }" @close="showWelcomeModalForm = false, changeHash()">
+  <BaseModalForm :class="{ 'is-active': showWelcomeModalForm }" @close="showWelcomeModalForm = false">
 
     <BaseFormModal>
       <h2 class="title is-4">Bienvenue dans <b>Kairos</b> </h2>
