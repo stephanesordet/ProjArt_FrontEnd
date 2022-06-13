@@ -16,13 +16,14 @@ import TheReturnButton from "./components/TheReturnButton.vue";
 var routes = {};
 isMobileDevice();
 function isMobileDevice() {
-  if (navigator.userAgent.match(/iPhone/i)
-    || navigator.userAgent.match(/webOS/i)
-    || navigator.userAgent.match(/Android/i)
-    || navigator.userAgent.match(/iPad/i)
-    || navigator.userAgent.match(/iPod/i)
-    || navigator.userAgent.match(/BlackBerry/i)
-    || navigator.userAgent.match(/Windows Phone/i)
+  if (
+    navigator.userAgent.match(/iPhone/i) ||
+    navigator.userAgent.match(/webOS/i) ||
+    navigator.userAgent.match(/Android/i) ||
+    navigator.userAgent.match(/iPad/i) ||
+    navigator.userAgent.match(/iPod/i) ||
+    navigator.userAgent.match(/BlackBerry/i) ||
+    navigator.userAgent.match(/Windows Phone/i)
   ) {
     routes = {
       "#accueil": {
@@ -53,13 +54,12 @@ function isMobileDevice() {
         label: "Ajouter un cours",
         component: AjoutCours,
       },
-      "#DetailEvent": {
+      "#detailEvent": {
         label: "Detail event",
         component: DetailEvent,
       },
     };
-  }
-  else {
+  } else {
     routes = {
       "#accueil": {
         label: "Accueil",
@@ -89,7 +89,7 @@ function isMobileDevice() {
         label: "Ajouter un cours",
         component: AjoutCours,
       },
-      "#DetailEvent": {
+      "#detailEvent": {
         label: "Detail event",
         component: DetailEvent,
       },
