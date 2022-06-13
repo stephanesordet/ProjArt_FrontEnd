@@ -1,6 +1,5 @@
 <script setup>
 import { def } from "@vue/shared";
-import axios from "axios";
 import { computed, ref, watch, watchEffect } from "vue";
 import { useFetch } from "../composables/fetch";
 import CardCours from "./components/CardCours.vue";

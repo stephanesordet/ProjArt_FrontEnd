@@ -90,13 +90,14 @@ function addRemarqueCours() {
     .then((res) => {
       //Perform Success Action
       console.log(res);
+      window.location.reload();
     })
     .catch((error) => {
       // error.response.status Check status code
       console.log(error);
     })
     .finally(() => {
-      window.location.reload();
+      //window.location.reload();
     });
 }
 </script>
@@ -132,7 +133,7 @@ function addRemarqueCours() {
     @close="showModalForm = false"
   >
     <!-- AJOUT REMARQUE COURS -->
-    <BaseFormModal @submit="addRemarqueCours()">
+    <BaseFormModal @submit.prevent="addRemarqueCours()">
       <h1 class="title is-1">Nouvelle remarque</h1>
 
       <div class="field" style="width: 300px">

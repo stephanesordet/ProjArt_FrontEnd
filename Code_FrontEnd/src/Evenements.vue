@@ -56,13 +56,14 @@ function addEvent() {
     .then((res) => {
       //Perform Success Action
       console.log(res);
+      window.location.reload();
     })
     .catch((error) => {
       // error.response.status Check status code
       console.log(error);
     })
     .finally(() => {
-      window.location.reload();
+      //window.location.reload();
     });
 }
 
@@ -83,7 +84,7 @@ function displayUpdateModal(id, titre, description, lieu, debut, fin, email) {
 
 function updateEvent(user) {
   axios
-    .post("event/modif/" + currentEventId.value, {
+    .post(BASE_URL + "event/modif/" + currentEventId.value, {
       Titre: Titre.value,
       Description: Description.value,
       Lieu: Lieu.value,
@@ -217,7 +218,7 @@ function voirDetails(id) {
     @close="showModalForm = false"
   >
     <!-- AJOUT EVENT  -->
-    <BaseFormModal @submit="addEvent()">
+    <BaseFormModal @submit.prevent="addEvent()">
       <h1 class="title is-1">Nouveau évènement</h1>
 
       <BaseInput>
