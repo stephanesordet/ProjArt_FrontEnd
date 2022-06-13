@@ -11,7 +11,7 @@ import Switch from "./components/Switch.vue";
 import TheCardWrapper from "./components/TheCardWrapper.vue";
 import { BASE_URL } from "../composables/store";
 import TheLoader from "./components/TheLoader.vue";
-import randomColor from 'randomcolor';
+import randomColor from "randomcolor";
 import CardRemarque from "./components/CardRemarque.vue";
 
 const userSession = ref(sessionStorage.getItem("user"));
@@ -453,7 +453,6 @@ function voirDetails(id, matiere_id) {
   console.log("details");
   window.location.hash = "#detailMatiere";
   window.location.reload();
-
   sessionStorage.setItem("idDetailsMatiere", id);
   sessionStorage.setItem("matiere_idDetailsMatiere", matiere_id);
 }
@@ -476,10 +475,10 @@ fetch(BASE_URL + "matiere")
       document.head.insertAdjacentHTML(
         "beforeend",
         "<style>." +
-        element.id +
-        "{border-color:" +
-        element.color +
-        " !important}</style>"
+          element.id +
+          "{border-color:" +
+          element.color +
+          " !important}</style>"
       );
     });
   });
@@ -498,7 +497,7 @@ function showPage() {
     <h1>
       Vous êtes connectés en tant que : <b>{{ userSession }}</b>
     </h1>
-     <div class="select is-danger">
+    <div class="select is-danger">
       <select @change="valueHasChanged($event)">
         <option>Tous les cours</option>
         <template v-if="!historique">
@@ -507,125 +506,205 @@ function showPage() {
           </option>
         </template>
         <template v-if="historique">
-          <option v-for="matiere in Matiere.uniqueMatiereHistorique" :key="matiere">
+          <option
+            v-for="matiere in Matiere.uniqueMatiereHistorique"
+            :key="matiere"
+          >
             {{ matiere }}
           </option>
         </template>
       </select>
     </div>
     <div style="display: flex; justify-content: center; margin-top: 15px">
-      <Switch v-model:checked="shouldReceiveNewsletter" label="Historique" @change="toggleHistorique()" />
+      <Switch
+        v-model:checked="shouldReceiveNewsletter"
+        label="Historique"
+        @change="toggleHistorique()"
+      />
     </div>
     <Toggle v-model="value" />
     <div class="charger">Loading...</div>
-        <div class="columns is-centered tile is-ancestor">
+    <div class="columns is-centered tile is-ancestor">
       <div class="column is-three-quarters">
         <div class="tile is-parent is-vertical">
           <template v-if="historique">
-            <template v-for="day in CoursClasse.uniqueCoursHistoriqueByDate" :key="day.Jour">
-              <span style="text-align: left" :class="setClass(day)" class="spanCours">{{ day.Date }}</span>
+            <template
+              v-for="day in CoursClasse.uniqueCoursHistoriqueByDate"
+              :key="day.Jour"
+            >
+              <span
+                style="text-align: left"
+                :class="setClass(day)"
+                class="spanCours"
+                >{{ day.Date }}</span
+              >
               <template v-for="cours in day.Cours" :key="cours.id">
-              <card-cours v-if="cours.Name == 'Cours'" :key="cours.id" :data-id="cours.id" :class="cours.matiere_id"
-                class="cours" :debut="cours.HeureDebut" :fin="cours.HeureFin" :cours="cours.matiere_id"
-                :salle="cours.salle_id">
-                <button v-show="role == 'Administration'" class="button is-pulled-right is-white has-background-light"
-                  @click="displayDeleteModal(cours.id)">
+                <card-cours
+                  v-if="cours.Name == 'Cours'"
+                  :key="cours.id"
+                  :data-id="cours.id"
+                  :class="cours.matiere_id"
+                  class="cours"
+                  :debut="cours.HeureDebut"
+                  :fin="cours.HeureFin"
+                  :cours="cours.matiere_id"
+                  :salle="cours.salle_id"
+                >
+                  <button
+                    v-show="role == 'Administration'"
+                    class="button is-pulled-right is-white has-background-light"
+                    @click="displayDeleteModal(cours.id)"
+                  >
+                    <span class="icon is-small">
+                      <i class="fa fa-trash"></i>
+                    </span>
+                  </button>
+
+                  <button
+                    v-show="role == 'Administration'"
+                    class="button is-pulled-right is-white has-background-light"
+                    @click="displayUpdateModal(cours.id, cours.salle_id)"
+                  >
+                    <span class="icon is-small">
+                      <i class="fa fa-pencil"></i>
+                    </span>
+                  </button>
+                  <button
+                    class="button is-pulled-right is-white has-background-light"
+                    @click="voirDetails(cours.id, cours.matiere_id)"
+                  >
+                    <span class="icon is-small">
+                      <i class="fa fa-info"></i>
+                    </span>
+                  </button>
+                </card-cours>
+                <card-remarque
+                  v-else-if="cours.Name == 'Remarque'"
+                  :data-id="cours.id"
+                  :class="cours.matiere_id"
+                  class="cours remarque"
+                  :titre="cours.Titre"
+                  :description="cours.Description"
+                  :matiere_id="cours.matiere_id"
+                  :Visibilite="cours.Visibilite"
+                >
+                  <button
+                    v-show="role == 'Administration'"
+                    class="button is-pulled-right is-white has-background-light"
+                    @click="displayDeleteModal(cours.id)"
+                  >
+                    <span class="icon is-small">
+                      <i class="fa fa-trash"></i>
+                    </span>
+                  </button>
+
+                  <button
+                    v-show="role == 'Administration'"
+                    class="button is-pulled-right is-white has-background-light"
+                    @click="displayUpdateModal(cours.id, cours.salle_id)"
+                  >
+                    <span class="icon is-small">
+                      <i class="fa fa-pencil"></i>
+                    </span>
+                  </button>
+                </card-remarque>
+              </template>
+            </template>
+          </template>
+          <template
+            v-for="day in CoursClasse.uniqueCoursByDate"
+            :key="day.Jour"
+          >
+            <span
+              style="text-align: left"
+              :class="setClass(day)"
+              class="spanCours"
+              >{{ day.Date }}</span
+            >
+            <HR
+              v-if="dateStrTest == day.Date && historique"
+              :class="setClass(day)"
+              class="spanCours"
+              style="background-color: blue; height: 5px"
+            >
+            </HR>
+            <template v-for="cours in day.Cours" :key="cours.id">
+              <card-cours
+                v-if="cours.Name == 'Cours'"
+                :data-id="cours.id"
+                :class="cours.matiere_id"
+                class="cours"
+                :debut="cours.HeureDebut"
+                :fin="cours.HeureFin"
+                :cours="cours.matiere_id"
+                :salle="cours.salle_id"
+              >
+                <button
+                  v-show="role == 'Administration'"
+                  class="button is-pulled-right is-white has-background-light"
+                  @click="displayDeleteModal(cours.id)"
+                >
                   <span class="icon is-small">
                     <i class="fa fa-trash"></i>
                   </span>
                 </button>
 
-                <button v-show="role == 'Administration'" class="button is-pulled-right is-white has-background-light"
-                  @click="
-                    displayUpdateModal(
-                      cours.id,
-                      cours.salle_id,
-                    )
-                  ">
+                <button
+                  v-show="role == 'Administration'"
+                  class="button is-pulled-right is-white has-background-light"
+                  @click="displayUpdateModal(cours.id, cours.salle_id)"
+                >
                   <span class="icon is-small">
                     <i class="fa fa-pencil"></i>
                   </span>
                 </button>
+                <button
+                  class="button is-pulled-right is-white has-background-light"
+                  @click="voirDetails(cours.id, cours.matiere_id)"
+                >
+                  <span class="icon is-small">
+                    <i class="fa fa-info"></i>
+                  </span>
+                </button>
               </card-cours>
-              <card-remarque v-else-if="cours.Name == 'Remarque'" :data-id="cours.id" :class="cours.matiere_id"
-              class="cours remarque" :titre="cours.Titre" :description="cours.Description" :matiere_id="cours.matiere_id">
-              <button v-show="role == 'Administration'" class="button is-pulled-right is-white has-background-light"
-                @click="displayDeleteModal(cours.id)">
-                <span class="icon is-small">
-                  <i class="fa fa-trash"></i>
-                </span>
-              </button>
+              <card-remarque
+                v-else-if="cours.Name == 'Remarque'"
+                :data-id="cours.id"
+                :class="cours.matiere_id"
+                class="cours remarque"
+                :titre="cours.Titre"
+                :description="cours.Description"
+                :matiere_id="cours.matiere_id"
+                :Visibilite="cours.Visibilite"
+              >
+                <button
+                  v-show="role == 'Administration'"
+                  class="button is-pulled-right is-white has-background-light"
+                  @click="displayDeleteModal(cours.id)"
+                >
+                  <span class="icon is-small">
+                    <i class="fa fa-trash"></i>
+                  </span>
+                </button>
 
-              <button v-show="role == 'Administration'" class="button is-pulled-right is-white has-background-light"
-                @click="
-                  displayUpdateModal(
-                    cours.id,
-                    cours.salle_id,
-                  )
-                ">
-                <span class="icon is-small">
-                  <i class="fa fa-pencil"></i>
-                </span>
-              </button>
-            </card-remarque>
-            </template>
-            </template>
-          </template>
-          <template v-for="day in CoursClasse.uniqueCoursByDate" :key="day.Jour">
-            <span style="text-align: left" :class="setClass(day)" class="spanCours">{{ day.Date }}</span>
-            <HR v-if="dateStrTest == day.Date && historique" :class="setClass(day)" class="spanCours"
-              style="background-color: blue; height: 5px">
-            </HR>
-            <template v-for="cours in day.Cours" :key="cours.id">
-            <card-cours v-if="cours.Name == 'Cours'" :data-id="cours.id" :class="cours.matiere_id"
-              class="cours" :debut="cours.HeureDebut" :fin="cours.HeureFin" :cours="cours.matiere_id"
-              :salle="cours.salle_id">
-              <button v-show="role == 'Administration'" class="button is-pulled-right is-white has-background-light"
-                @click="displayDeleteModal(cours.id)">
-                <span class="icon is-small">
-                  <i class="fa fa-trash"></i>
-                </span>
-              </button>
-
-              <button v-show="role == 'Administration'" class="button is-pulled-right is-white has-background-light"
-                @click="
-                  displayUpdateModal(
-                    cours.id,
-                    cours.salle_id,
-                  )
-                ">
-                <span class="icon is-small">
-                  <i class="fa fa-pencil"></i>
-                </span>
-              </button>
-            </card-cours>
-            <card-remarque v-else-if="cours.Name == 'Remarque'" :data-id="cours.id" :class="cours.matiere_id"
-              class="cours remarque" :titre="cours.Titre" :description="cours.Description" :matiere_id="cours.matiere_id">
-              <button v-show="role == 'Administration'" class="button is-pulled-right is-white has-background-light"
-                @click="displayDeleteModal(cours.id)">
-                <span class="icon is-small">
-                  <i class="fa fa-trash"></i>
-                </span>
-              </button>
-
-              <button v-show="role == 'Administration'" class="button is-pulled-right is-white has-background-light"
-                @click="
-                  displayUpdateModal(
-                    cours.id,
-                    cours.salle_id,
-                  )
-                ">
-                <span class="icon is-small">
-                  <i class="fa fa-pencil"></i>
-                </span>
-              </button>
-            </card-remarque>
+                <button
+                  v-show="role == 'Administration'"
+                  class="button is-pulled-right is-white has-background-light"
+                  @click="displayUpdateModal(cours.id, cours.salle_id)"
+                >
+                  <span class="icon is-small">
+                    <i class="fa fa-pencil"></i>
+                  </span>
+                </button>
+              </card-remarque>
             </template>
           </template>
           <div v-if="CoursClasse.uniqueCoursByDate == undefined">
             <h2>Cours en chargement</h2>
           </div>
-          <div v-else-if="CoursClasse.uniqueCoursByDate.size == 0 && !historique">
+          <div
+            v-else-if="CoursClasse.uniqueCoursByDate.size == 0 && !historique"
+          >
             <h2>Plus de cours actuellement</h2>
           </div>
         </div>
@@ -690,7 +769,6 @@ function showPage() {
 }
 
 @-webkit-keyframes load1 {
-
   0%,
   80%,
   100% {
@@ -705,7 +783,6 @@ function showPage() {
 }
 
 @keyframes load1 {
-
   0%,
   80%,
   100% {
