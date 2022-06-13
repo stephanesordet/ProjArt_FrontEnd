@@ -12,6 +12,7 @@ import Switch from "../components/Switch.vue";
 import ArrowPrev from "../components/ArrowPrev.vue";
 import ArrowNext from "../components/ArrowNext.vue";
 import randomColor from 'randomcolor';
+import TheLoader from "../components/TheLoader.vue";
 
 const { data: classes } = useFetch("http://localhost:8000/api/classes");
 
@@ -247,10 +248,36 @@ async function addCours() {
 }
 
 function valueHasClicked(event) {
-  const classe = event.target.innerHTML;
-
+  const btnClasses = document.querySelectorAll(".btnClasse");
+  btnClasses.forEach((btnClasse) => {
+    btnClasse.classList.remove("isActive");
+  });
+  event.target.classList.add('isActive');
+  const cours = document.querySelectorAll(".cours");
+  const spanCours = document.querySelectorAll(".spanCours");
+  cours.forEach((coursSolo) => {
+    coursSolo.style.display = "none";
+  });
+  spanCours.forEach((coursSolo) => {
+    coursSolo.style.display = "none";
+  });
+  document.querySelector(".charger").style.display = "block";
+  const classe = event.target.innerHTML;  
   selectedClasses.value = classe;
+  console.log(selectedClasses.value);
+  setTimeout(hideLoader, 1000);
+}
 
+function hideLoader(){
+  document.querySelector(".charger").style.display = "none";
+  const cours = document.querySelectorAll(".cours");
+  const spanCours = document.querySelectorAll(".spanCours");
+  cours.forEach((coursSolo) => {
+    coursSolo.style.display = "block";
+  });
+  spanCours.forEach((coursSolo) => {
+    coursSolo.style.display = "block";
+  });
 }
 
 function setClass(day){
@@ -295,13 +322,22 @@ fetch("http://127.0.0.1:8000/api/matiere")
        document.head.insertAdjacentHTML("beforeend", '<style>.'+element.id+'{border-color:'+element.color+' !important}</style>');
     });
     });
+
+    window.onload = function loader() {
+    document.querySelector(".loading-box").style.display = "flex";
+    setTimeout(showPage, 1000);
+  }
+  function showPage() {
+  document.querySelector(".loading-box").style.display = "none";
+}
 </script>
 <template>
+<TheLoader></TheLoader>
   <div class="main mx-4 my-1">
     <div>
       <div class="buttons is-mobile columns is-centered mx-1 my-1">
         <button v-for="classe in Classes" :key="classe" @click="valueHasClicked($event)"
-          class="column button has-background-light has-text-black is-medium is-one-fifth-mobile is-danger">
+          class="column button has-background-light has-text-black is-medium is-one-fifth-mobile is-danger btnClasse">
           {{ classe.id }}
         </button>
       </div>
@@ -310,6 +346,7 @@ fetch("http://127.0.0.1:8000/api/matiere")
     <ArrowPrev :span="viewLundiSemaine" @click="changeSemaine('previous')" />
     <span> au </span>
     <ArrowNext :span="viewVendrediSemaine" @click="changeSemaine('next')" />
+    <div class="charger">Loading...</div>
     <div class="columns is-centered tile is-ancestor">
       <div class="column is-three-quarters">
         <div class="tile is-parent is-vertical">
@@ -405,5 +442,69 @@ fetch("http://127.0.0.1:8000/api/matiere")
   position: fixed;
   bottom: 20px;
   right: 40px;
+}
+.charger,
+.charger:before,
+.charger:after {
+  background: #ffffff;
+  -webkit-animation: load1 1s infinite ease-in-out;
+  animation: load1 1s infinite ease-in-out;
+  width: 1em;
+  height: 4em;
+}
+.charger {
+  color: #333;
+  text-indent: -9999em;
+  margin: 88px auto;
+  position: relative;
+  font-size: 11px;
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s;
+  display: none;
+}
+.charger:before,
+.charger:after {
+  position: absolute;
+  top: 0;
+  content: '';
+}
+.charger:before {
+  left: -1.5em;
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
+}
+.charger:after {
+  left: 1.5em;
+}
+@-webkit-keyframes load1 {
+  0%,
+  80%,
+  100% {
+    box-shadow: 0 0;
+    height: 4em;
+  }
+  40% {
+    box-shadow: 0 -2em;
+    height: 5em;
+  }
+}
+@keyframes load1 {
+  0%,
+  80%,
+  100% {
+    box-shadow: 0 0;
+    height: 4em;
+  }
+  40% {
+    box-shadow: 0 -2em;
+    height: 5em;
+  }
+}
+button.isActive{
+  background-color: #f14668 !important;
+  color: #ffffff !important;
 }
 </style>

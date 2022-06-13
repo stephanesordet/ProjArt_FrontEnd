@@ -1,26 +1,24 @@
 <script setup>
-// defineProps({
-//     titre: {
-//         type: String,
-//     },
-//     description: {
-//         type: String,
-//     },
-//
-//     user: {
-//         type: String,
-//     },
-//     date_début: {
-//         type: Date,
-//     },
-//     date_fin: {
-//         type: Date,
-//     },
-// lieu:{
-//     type: String,
-//}
-//
-// });
+defineProps({
+  Titre: {
+    type: String,
+  },
+  Description: {
+    type: String,
+  },
+  Lieu: {
+    type: String,
+  },
+  Debut: {
+    type: Date,
+  },
+  Fin: {
+    type: Date,
+  },
+  user_Email: {
+    type: String,
+  },
+});
 </script>
 
 <template>
@@ -30,79 +28,62 @@
   />
   <div class="columns is-family-sans-serif is-responsive">
     <div
-      class="
-        box
-        content
-        is-half is-offset-one-quarter
-        has-background-light has-text-left
-        column
-        is-responsive
-      "
+      class="box content is-half is-offset-one-quarter has-background-light has-text-left column"
     >
-      <h2>
-        Soirée cultureG
-        <!--{{titre}}-->
+      <h2 class="is-size-1">
+        {{ Titre }}
       </h2>
-      <p class="is-size-6">
-        AGE
-        <!-- {{user}} -->
-      </p>
-      <h3>Description</h3>
+      <p class="is-size-6">Créateur de l'évènement : {{ user_Email }}</p>
+      <h3>Description de l'événement</h3>
 
       <p class="is-size-6">
-        Soirée culture géréale, organisé par l’AGE à l’occasion de la fin des
-        examens. Venez nombreux !
-        <!-- {{description}} -->
+        {{ Description }}
       </p>
 
       <h3>Lieu</h3>
 
       <p class="is-size-6">
-        Bar de la gare - Yverdon-les-Bains
-        <!-- {{ lieu }} -->
+        {{ Lieu }}
       </p>
 
       <h3>Date de début</h3>
       <p class="is-size-6">
-        30 mars 2022 - 19:00
-        <!-- {{ date_début }} -->
+        {{ Debut }}
       </p>
 
       <h3>Date de fin</h3>
       <p class="is-size-6">
-        30 mars 2022 - 20:00
-        <!-- {{ date_fin }} -->
+        {{ Fin }}
       </p>
 
-      <br />
-      <br />
-      <br />
-      <div class="column buttons is-pulled-right  ">
-        <button class="button is-danger is-rounded ">
+      <!--       <div class="column buttons is-pulled-right">
+        <button class="button is-danger is-rounded">
           <span>Supprimer</span>
         </button>
         <button class="button is-danger is-rounded">
           <span>Modifer</span>
         </button>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
 
 <style scoped>
-
-div {
-  background-color: #ebeeef;
-  display: flex;
-  flex-direction: column;
-  align-items: left;
-  padding: 20px;
+.icon-text {
+  display: block;
+  text-align: left;
 }
 
-div .buttons{
-background-color:transparent;
-  display:block;
-  text-align: right;
+.content h2 {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+.content h4 {
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
 }
 
+.box.content.is-half.is-offset-one-quarter.has-background-light.has-text-left.column {
+  padding-bottom: 30px;
+}
 </style>

@@ -13,10 +13,13 @@ defineProps({
     type: String,
   },
 });
-</script> 
+</script>
 
 <template>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link
+    rel="stylesheet"
+    href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+  />
 
   <!-- <div class="columns">
   <div class="is-half is-offset-one-quarter has-text-left column">
@@ -29,7 +32,6 @@ defineProps({
         </div>
     </div>
     </div> -->
-
 
   <!-- <div class="columns ">
   <div class="is-half is-offset-one-quarter has-text-left column">
@@ -61,21 +63,17 @@ defineProps({
     </div>
  -->
 
-  <article class="tile is-child notification is-light has-text-left-mobile ">
+  <article class="tile is-child notification is-light has-text-left-mobile">
     <span class="icon">
-      <i class="fa fa-solid fa-circle fa-lg "></i>
+      <i class="fa fa-solid fa-circle fa-lg"></i>
     </span>
-    <p class="is-size-4 has-text-weight-bold">{{ user }}- {{ object }}</p>
+    <p class="is-size-4 has-text-weight-bold">{{ user }} - {{ object }}</p>
     <p class="is-size-6">{{ envoiHeure }}</p>
     <p class="is-size-5">
-
       {{ message }}
     </p>
   </article>
-
-
 </template>
-
 
 <style scoped>
 .icon {
@@ -83,9 +81,6 @@ defineProps({
   position: absolute;
   right: 10px;
   top: 10px;
-
-
-
 }
 
 article {
@@ -95,8 +90,5 @@ article {
   border-right-width: 0px;
   border-top-width: 0px;
   border-bottom-width: 0px;
-
-
-
 }
 </style>

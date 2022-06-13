@@ -9,12 +9,13 @@ import BaseInputSubmit from "./components/BaseInputSubmit.vue";
 import BaseInput from "./components/BaseInput.vue";
 import BaseModalForm from "./components/BaseModalForm.vue";
 import { BASE_URL } from "../composables/store";
+import { changeFormatDate } from "../composables/function.js";
 
 const userSession = ref(sessionStorage.getItem("user"));
 const role = ref(sessionStorage.getItem("role"));
 const notifications = ref([]);
 
-window.addEventListener('hashchange', () => {
+window.addEventListener("hashchange", () => {
   userSession.value = sessionStorage.getItem("user");
   role.value = sessionStorage.getItem("role");
 });
@@ -23,7 +24,7 @@ watchEffect(() => {
   fetch(BASE_URL + "notifications/" + userSession.value)
     .then((res) => res.json())
     .then((notifResults) => (notifications.value = notifResults));
-})
+});
 
 /* setInterval(function () {
   fetch(BASE_URL + "notifications/" + userSession.value)
@@ -31,7 +32,7 @@ watchEffect(() => {
     .then((notifResults) => (notifications.value = notifResults));
 }, 2000000); */
 
-const notifCount = 5
+const notifCount = 5;
 
 const allNotifications = computed(() => {
   const tabNotifications = [];
@@ -43,15 +44,13 @@ const allNotifications = computed(() => {
       tabNotifications.push(element);
     });
     if (tabNotifications.length != notifCount) {
-
-      console.log(tabNotifications.length)
+      console.log(tabNotifications.length);
     } else {
-      console.log('no new notif')
+      console.log("no new notif");
     }
   }
   return tabNotifications;
 });
-
 
 // ---------------------- Boolean for showing the modal form -----------------------------
 let showModalForm = ref(false);
@@ -59,11 +58,15 @@ let showModalForm = ref(false);
 
 <template>
   <the-card-wrapper>
-    <card-notif v-for="response in allNotifications" :user="role" :object="response.notification.Objet"
-      :envoiHeure="response.notification.EnvoiHeureDate" :message="response.notification.Message">
+    <card-notif
+      v-for="response in allNotifications"
+      :user="role"
+      :object="response.notification.Objet"
+      :envoiHeure="changeFormatDate(response.notification.EnvoiHeureDate)"
+      :message="response.notification.Message"
+    >
     </card-notif>
   </the-card-wrapper>
-
 </template>
 
 <style scoped>

@@ -10,6 +10,7 @@ import { currentEventId } from "../composables/store";
 import axios from "axios";
 import { useFetch } from "../composables/fetch.js";
 import { BASE_URL } from "../composables/store";
+import { changeFormatDateWithoutHoursMinutes } from "../composables/function.js";
 
 // ---------------------- Fetch data for all events -----------------------------
 const { data: events } = useFetch(BASE_URL + "events/");
@@ -55,13 +56,14 @@ function addEvent() {
     .then((res) => {
       //Perform Success Action
       console.log(res);
+      window.location.reload();
     })
     .catch((error) => {
       // error.response.status Check status code
       console.log(error);
     })
     .finally(() => {
-      window.location.reload();
+      //window.location.reload();
     });
 }
 
@@ -129,6 +131,16 @@ function deleteEvent() {
       window.location.reload();
     });
 }
+
+function voirDetails(id) {
+  console.log("detailEvents " + id);
+  window.location.hash = "#detailEvent";
+  window.location.reload();
+
+  sessionStorage.setItem("idDetailsEvent", id);
+  //console.log(sessionStorage.getItem("idDetailsEvent"));
+  //sessionStorage.setItem("matiere_idDetailsMatiere", matiere_id);
+}
 </script>
 
 <template>
@@ -143,13 +155,22 @@ function deleteEvent() {
       <card-event
         v-for="events in allEvents"
         :id="events.id"
-        :debut="events.Debut"
-        :fin="events.Fin"
+        :debut="changeFormatDateWithoutHoursMinutes(events.Debut)"
+        :fin="changeFormatDateWithoutHoursMinutes(events.Fin)"
         :titre="events.Titre"
         :lieu="events.Lieu"
         :description="events.Description"
       >
         <button
+          class="button is-pulled-right is-white has-background-light"
+          @click="voirDetails(events.id)"
+        >
+          <span class="icon is-small">
+            <i class="fa fa-info"></i>
+          </span>
+        </button>
+        <button
+          v-show="role == 'Administration' || role == 'AGE'"
           class="button is-pulled-right is-white has-background-light"
           @click="displayDeleteModal(events.id, events.user_Email)"
         >
@@ -445,6 +466,7 @@ function deleteEvent() {
           type="submit"
           class="button is-danger is-rounded"
           value="Supprimer l'événement"
+          @click="deleteEvent()"
         />
       </BaseInputSubmit>
       <BaseInputSubmit>

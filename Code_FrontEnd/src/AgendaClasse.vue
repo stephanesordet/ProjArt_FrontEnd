@@ -1,6 +1,5 @@
 <script setup>
 import { def } from "@vue/shared";
-import axios from "axios";
 import { computed, ref, watch, watchEffect } from "vue";
 import { useFetch } from "../composables/fetch";
 import CardCours from "./components/CardCours.vue";
@@ -12,8 +11,7 @@ import Switch from "./components/Switch.vue";
 import TheCardWrapper from "./components/TheCardWrapper.vue";
 import { BASE_URL } from "../composables/store";
 
-
-const userSession = ref(sessionStorage.getItem("user"))
+const userSession = ref(sessionStorage.getItem("user"));
 
 const role = ref(sessionStorage.getItem("role"));
 
@@ -21,11 +19,10 @@ const historique = ref(false);
 
 const classeCours = ref([]);
 
-window.addEventListener('hashchange', () => {
+window.addEventListener("hashchange", () => {
   userSession.value = sessionStorage.getItem("user");
   role.value = sessionStorage.getItem("role");
 });
-
 
 watchEffect(() => {
   fetch(BASE_URL + "cours/user/" + userSession.value)
@@ -49,30 +46,76 @@ const CoursUser = computed(() => {
   } else {
     classeCours.value.forEach((element) => {
       if (element.Debut > dateStr) {
-        const month = ["Janvier", "Fevrier", "Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Decembre"];
-        const days = ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"];
+        const month = [
+          "Janvier",
+          "Fevrier",
+          "Mars",
+          "Avril",
+          "Mai",
+          "Juin",
+          "Juillet",
+          "Aout",
+          "Septembre",
+          "Octobre",
+          "Novembre",
+          "Decembre",
+        ];
+        const days = [
+          "Dimanche",
+          "Lundi",
+          "Mardi",
+          "Mercredi",
+          "Jeudi",
+          "Vendredi",
+          "Samedi",
+        ];
         const d = new Date(element.Debut);
         const f = new Date(element.Fin);
         let monthDate = month[d.getMonth()];
         let day = days[d.getDay()];
         let date = d.getDate() + " " + monthDate + " " + d.getFullYear();
-        let heureDebut = d.getHours() + ":" + String(d.getMinutes()).padStart(2, "0");
-        let heureFin = f.getHours() + ":" + String(f.getMinutes()).padStart(2, "0");
+        let heureDebut =
+          d.getHours() + ":" + String(d.getMinutes()).padStart(2, "0");
+        let heureFin =
+          f.getHours() + ":" + String(f.getMinutes()).padStart(2, "0");
         element.Jour = day;
         element.Date = date;
         element.HeureDebut = heureDebut;
         element.HeureFin = heureFin;
         tabCours.push(element);
       } else {
-        const month = ["Janvier", "Fevrier", "Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Decembre"];
-        const days = ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"];
+        const month = [
+          "Janvier",
+          "Fevrier",
+          "Mars",
+          "Avril",
+          "Mai",
+          "Juin",
+          "Juillet",
+          "Aout",
+          "Septembre",
+          "Octobre",
+          "Novembre",
+          "Decembre",
+        ];
+        const days = [
+          "Dimanche",
+          "Lundi",
+          "Mardi",
+          "Mercredi",
+          "Jeudi",
+          "Vendredi",
+          "Samedi",
+        ];
         const d = new Date(element.Debut);
         const f = new Date(element.Fin);
         let monthDate = month[d.getMonth()];
         let day = days[d.getDay()];
         let date = d.getDate() + " " + monthDate + " " + d.getFullYear();
-        let heureDebut = d.getHours() + ":" + String(d.getMinutes()).padStart(2, "0");
-        let heureFin = f.getHours() + ":" + String(f.getMinutes()).padStart(2, "0");
+        let heureDebut =
+          d.getHours() + ":" + String(d.getMinutes()).padStart(2, "0");
+        let heureFin =
+          f.getHours() + ":" + String(f.getMinutes()).padStart(2, "0");
         element.Jour = day;
         element.Date = date;
         element.HeureDebut = heureDebut;
@@ -165,7 +208,6 @@ const CoursUser = computed(() => {
   return { uniqueCoursByDate, uniqueCoursHistoriqueByDate };
 });
 
-
 const Matiere = computed(() => {
   const tabMatiere = [];
   const tabMatiereHistorique = [];
@@ -245,7 +287,7 @@ function setClass(day) {
   day.Cours.forEach((element) => {
     uniqueClass.add(element.matiere_id);
   });
-  const str1 = Array.from(uniqueClass).join(' ');
+  const str1 = Array.from(uniqueClass).join(" ");
   return str1;
 }
 
@@ -261,11 +303,17 @@ function voirDetails(id, matiere_id) {
 
 <template>
   <div class="main mx-4 my-1">
-    <h1>Vous êtes connectés en tant que : <b>{{ userSession }}</b></h1>
+    <h1>
+      Vous êtes connectés en tant que : <b>{{ userSession }}</b>
+    </h1>
     <div>
       <div class="buttons is-mobile columns is-centered mx-1 my-1">
-        <button v-for="classe in Classes" :key="classe" @click="valueHasClicked($event)"
-          class="column button has-background-light has-text-black is-medium is-one-fifth-mobile is-danger">
+        <button
+          v-for="classe in Classes"
+          :key="classe"
+          @click="valueHasClicked($event)"
+          class="column button has-background-light has-text-black is-medium is-one-fifth-mobile is-danger"
+        >
           {{ classe.id }}
         </button>
       </div>
@@ -279,27 +327,52 @@ function voirDetails(id, matiere_id) {
           </option>
         </template>
         <template v-if="historique">
-          <option v-for="matiere in Matiere.uniqueMatiereHistorique" :key="matiere">
+          <option
+            v-for="matiere in Matiere.uniqueMatiereHistorique"
+            :key="matiere"
+          >
             {{ matiere }}
           </option>
         </template>
       </select>
     </div>
-    <div style="display: flex; justify-content: center; margin-top: 15px;">
-      <Switch v-model:checked="shouldReceiveNewsletter" label="Historique" @change="toggleHistorique()" />
+    <div style="display: flex; justify-content: center; margin-top: 15px">
+      <Switch
+        v-model:checked="shouldReceiveNewsletter"
+        label="Historique"
+        @change="toggleHistorique()"
+      />
     </div>
     <Toggle v-model="value" />
     <div class="columns is-centered tile is-ancestor">
       <div class="column is-three-quarters">
         <div class="tile is-parent is-vertical">
           <template v-if="historique">
-            <template v-for="day in CoursUser.uniqueCoursHistoriqueByDate" :key="day.Jour">
-              <span style="text-align:left;" :class="setClass(day)" class="spanCours">{{ day.Date }}</span>
-              <card-cours v-for="cours in day.Cours" :key="cours.id" :data-id="cours.id" :class="cours.matiere_id"
-                class="cours" :debut="cours.HeureDebut" :fin="cours.HeureFin" :cours="cours.matiere_id"
-                :salle="cours.salle_id">
-                <button class="button is-pulled-right is-white has-background-light"
-                  @click="voirDetails(cours.id, cours.matiere_id)">
+            <template
+              v-for="day in CoursUser.uniqueCoursHistoriqueByDate"
+              :key="day.Jour"
+            >
+              <span
+                style="text-align: left"
+                :class="setClass(day)"
+                class="spanCours"
+                >{{ day.Date }}</span
+              >
+              <card-cours
+                v-for="cours in day.Cours"
+                :key="cours.id"
+                :data-id="cours.id"
+                :class="cours.matiere_id"
+                class="cours"
+                :debut="cours.HeureDebut"
+                :fin="cours.HeureFin"
+                :cours="cours.matiere_id"
+                :salle="cours.salle_id"
+              >
+                <button
+                  class="button is-pulled-right is-white has-background-light"
+                  @click="voirDetails(cours.id, cours.matiere_id)"
+                >
                   <span class="icon is-small">
                     <i class="fa fa-info"></i>
                   </span>
@@ -308,30 +381,50 @@ function voirDetails(id, matiere_id) {
             </template>
           </template>
           <template v-for="day in CoursUser.uniqueCoursByDate" :key="day.Jour">
-            <span style="text-align:left;" :class="setClass(day)" class="spanCours">{{ day.Date }}</span>
-            <card-cours v-for="cours in day.Cours" :key="cours.id" :data-id="cours.id" :class="cours.matiere_id"
-              class="cours" :debut="cours.HeureDebut" :fin="cours.HeureFin" :cours="cours.matiere_id"
-              :salle="cours.salle_id">
-              <button class="button is-pulled-right is-white has-background-light"
-                @click="voirDetails(cours.id, cours.matiere_id)">
+            <span
+              style="text-align: left"
+              :class="setClass(day)"
+              class="spanCours"
+              >{{ day.Date }}</span
+            >
+            <card-cours
+              v-for="cours in day.Cours"
+              :key="cours.id"
+              :data-id="cours.id"
+              :class="cours.matiere_id"
+              class="cours"
+              :debut="cours.HeureDebut"
+              :fin="cours.HeureFin"
+              :cours="cours.matiere_id"
+              :salle="cours.salle_id"
+            >
+              <button
+                class="button is-pulled-right is-white has-background-light"
+                @click="voirDetails(cours.id, cours.matiere_id)"
+              >
                 <span class="icon is-small">
                   <i class="fa fa-info"></i>
                 </span>
               </button>
             </card-cours>
           </template>
-          <div v-if="(CoursUser.uniqueCoursByDate == undefined)">
+          <div v-if="CoursUser.uniqueCoursByDate == undefined">
             <h2>Cours en chargement</h2>
           </div>
-          <div v-else-if="(CoursUser.uniqueCoursByDate.size == 0) && (!historique)">
+          <div v-else-if="CoursUser.uniqueCoursByDate.size == 0 && !historique">
             <h2>Plus de cours actuellement</h2>
           </div>
         </div>
       </div>
     </div>
     <div>
-      <button v-show="role == 'Administration'" class="button is-right js-modal-trigger" data-target="modal-js-example"
-        id="fixedbutton" @click="showModalForm = !showModalForm">
+      <button
+        v-show="role == 'Administration'"
+        class="button is-right js-modal-trigger"
+        data-target="modal-js-example"
+        id="fixedbutton"
+        @click="showModalForm = !showModalForm"
+      >
         <span class="icon is-large has-text-danger">
           <i class="fa fa-4x fa-plus-square"></i>
         </span>
@@ -340,5 +433,4 @@ function voirDetails(id, matiere_id) {
   </div>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>

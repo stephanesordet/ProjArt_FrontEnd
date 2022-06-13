@@ -74,6 +74,8 @@ function useFetchLogin(password, email) {
 }
 function changeHash() {
   window.location.hash = "#accueil";
+  window.location.reload()
+
 }
 </script>
 
@@ -105,7 +107,8 @@ function changeHash() {
                 </div>
               </div>
               <div class="field">
-                <button class="button is-danger">Connexion</button>
+                <button class="button is-danger">Connexion</button><br><br>
+                <a href="#PasswordReset" class="is-size-7">Mot de passe oublié ?</a>
               </div>
             </form>
           </div>
@@ -121,7 +124,7 @@ function changeHash() {
       <h2 class="title is-4">Bienvenue dans <b>Kairos</b> </h2>
     </BaseFormModal>
     <BaseInputSubmit>
-      <input type="submit" class="button is-primary is-rounded" value="J'entre"
+      <input type="submit" class="button is-primary is-rounded" value="Entrer"
         @click="showWelcomeModalForm = false, changeHash()" />
     </BaseInputSubmit>
   </BaseModalForm>
