@@ -558,6 +558,14 @@ function showPage() {
                     <i class="fa fa-pencil"></i>
                   </span>
                 </button>
+                <button
+                    class="button is-pulled-right is-white has-background-light"
+                    @click="voirDetails(cours.id, cours.matiere_id)"
+                  >
+                    <span class="icon is-small">
+                      <i class="fa fa-info"></i>
+                    </span>
+                  </button>
               </card-cours>
               <card-remarque v-else-if="cours.Name == 'Remarque'" :data-id="cours.id" :class="cours.matiere_id"
               class="cours remarque" :Visibilite="cours.Visibilite" :titre="cours.Titre" :description="cours.Description" :matiere_id="cours.matiere_id">
@@ -579,6 +587,14 @@ function showPage() {
                   <i class="fa fa-pencil"></i>
                 </span>
               </button>
+              <button
+                    class="button is-pulled-right is-white has-background-light"
+                    @click="voirDetails(cours.cours_id, cours.matiere_id)"
+                  >
+                    <span class="icon is-small">
+                      <i class="fa fa-info"></i>
+                    </span>
+                  </button>
             </card-remarque>
             </template>
             </template>
@@ -610,6 +626,14 @@ function showPage() {
                   <i class="fa fa-pencil"></i>
                 </span>
               </button>
+              <button
+                    class="button is-pulled-right is-white has-background-light"
+                    @click="voirDetails(cours.id, cours.matiere_id)"
+                  >
+                    <span class="icon is-small">
+                      <i class="fa fa-info"></i>
+                    </span>
+                  </button>
             </card-cours>
             <card-remarque v-else-if="cours.Name == 'Remarque'" :data-id="cours.id" :class="cours.matiere_id"
               class="cours remarque" :Visibilite="cours.Visibilite" :titre="cours.Titre" :description="cours.Description" :matiere_id="cours.matiere_id">
@@ -631,6 +655,14 @@ function showPage() {
                   <i class="fa fa-pencil"></i>
                 </span>
               </button>
+              <button
+                    class="button is-pulled-right is-white has-background-light"
+                    @click="voirDetails(cours.cours_id, cours.matiere_id)"
+                  >
+                    <span class="icon is-small">
+                      <i class="fa fa-info"></i>
+                    </span>
+                  </button>
             </card-remarque>
             </template>
           </template>
