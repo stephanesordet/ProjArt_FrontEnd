@@ -2,7 +2,6 @@
 import { ref, computed, watchEffect } from "vue";
 import TheDetailsMatieres from "./components/TheDetailsMatieres.vue";
 import TheDetailsMatieresRemarques from "./components/TheDetailsMatieresRemarques.vue";
-/* import { currentCoursId, currentMatiereId } from "../composables/store.js"; */
 import CardEvent from "./components/CardEvent.vue";
 import TheCardWrapper from "./components/TheCardWrapper.vue";
 import BaseFormModal from "./components/BaseFormModal.vue";
@@ -11,6 +10,7 @@ import BaseInput from "./components/BaseInput.vue";
 import BaseModalForm from "./components/BaseModalForm.vue";
 import { BASE_URL } from "../composables/store";
 import axios from "axios";
+import { changeFormatDateWithoutHoursMinutes } from "../composables/function.js";
 
 let userSession = ref(sessionStorage.getItem("user"));
 let idDetailsMatiere = ref(sessionStorage.getItem("idDetailsMatiere"));
@@ -110,7 +110,7 @@ function addRemarqueCours() {
     <TheDetailsMatieresRemarques
       v-for="remarque in allRemarques"
       :user_Email="remarque.user_Email"
-      :DateRemarque="remarque.Date"
+      :DateRemarque="changeFormatDateWithoutHoursMinutes(remarque.Date)"
       :Description="remarque.Description"
       :Titre="remarque.Titre"
       :Visibilite="remarque.Visibilite"
@@ -144,7 +144,6 @@ function addRemarqueCours() {
               Choisissez la visibilité de votre remarque
             </option>
             <option value="public">Publique</option>
-            <!-- CHANGER D'APRES BACK -->
             <option value="prive">Privée</option>
           </select>
         </div>

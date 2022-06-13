@@ -10,6 +10,7 @@ import { currentEventId } from "../composables/store";
 import axios from "axios";
 import { useFetch } from "../composables/fetch.js";
 import { BASE_URL } from "../composables/store";
+import { changeFormatDateWithoutHoursMinutes } from "../composables/function.js";
 
 // ---------------------- Fetch data for all events -----------------------------
 const { data: events } = useFetch(BASE_URL + "events/");
@@ -153,8 +154,8 @@ function voirDetails(id) {
       <card-event
         v-for="events in allEvents"
         :id="events.id"
-        :debut="events.Debut"
-        :fin="events.Fin"
+        :debut="changeFormatDateWithoutHoursMinutes(events.Debut)"
+        :fin="changeFormatDateWithoutHoursMinutes(events.Fin)"
         :titre="events.Titre"
         :lieu="events.Lieu"
         :description="events.Description"

@@ -3,6 +3,7 @@ import { ref, computed, watchEffect } from "vue";
 import TheDetailsEvent from "./components/TheDetailsEvent.vue";
 import BaseBoutonRetour from "./components/TheReturnButton.vue";
 import { BASE_URL } from "../composables/store.js";
+import { changeFormatDate } from "../composables/function.js";
 // import { useFetch } from '../composables/fetch.js';
 
 // const { data: remarques } = useFetch(
@@ -10,26 +11,6 @@ import { BASE_URL } from "../composables/store.js";
 // );
 // à mettre dans le composant
 // v-for="remarque in remarques" :titre="remarque.titre" :description="remarque.description" :visibilite="remarque.visibilite" :user="remarque.fk_user" :date="remarque.date" :matiere="remarque.fk_matiere"
-
-function changeFormatDate() {
-  let myDate = "2012-10-16 11:00:28";
-
-  myDate = myDate.replace(" ", "T");
-  const z = "Z";
-  myDate = myDate.concat(z);
-  // console.log(myDate);
-
-  const time = new Date(myDate).toLocaleTimeString("fr-FR", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-  console.log(time);
-}
-
-changeFormatDate();
 
 let idDetailsEvent = ref(sessionStorage.getItem("idDetailsEvent"));
 
@@ -66,8 +47,8 @@ const allEvents = computed(() => {
 <template>
   <the-details-event
     v-for="events in allEvents"
-    :Debut="events.Debut"
-    :Fin="events.Fin"
+    :Debut="changeFormatDate(events.Debut)"
+    :Fin="changeFormatDate(events.Fin)"
     :Lieu="events.Lieu"
     :user_Email="events.user_Email"
     :Description="events.Description"

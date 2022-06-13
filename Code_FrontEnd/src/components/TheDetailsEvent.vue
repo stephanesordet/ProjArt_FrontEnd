@@ -32,13 +32,9 @@ defineProps({
     >
       <h2 class="is-size-1">
         {{ Titre }}
-        <!--{{titre}}-->
       </h2>
-      <p class="is-size-6">
-        {{ user_Email }}
-        <!-- {{user}} -->
-      </p>
-      <h3>Description</h3>
+      <p class="is-size-6">Créateur de l'évènement : {{ user_Email }}</p>
+      <h3>Description de l'événement</h3>
 
       <p class="is-size-6">
         {{ Description }}
@@ -80,10 +76,14 @@ defineProps({
 
 .content h2 {
   margin-top: 1.5rem;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 }
 .content h4 {
   margin-top: 1.5rem;
   margin-bottom: 0.5rem;
+}
+
+.box.content.is-half.is-offset-one-quarter.has-background-light.has-text-left.column {
+  padding-bottom: 30px;
 }
 </style>
