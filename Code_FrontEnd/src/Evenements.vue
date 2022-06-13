@@ -116,7 +116,7 @@ function displayDeleteModal(id, email) {
 
 function deleteEvent() {
   axios
-    .post("event/delete/" + currentEventId.value)
+    .post(BASE_URL + "event/delete/" + currentEventId.value)
     .then((res) => {
       //Perform Success Action
       console.log(res);
