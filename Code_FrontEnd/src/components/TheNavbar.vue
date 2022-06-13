@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // Get the target from the "data-target" attribute
       const target = el.dataset.target;
       const $target = document.getElementById(target);
-      console.log(el)
+      console.log(el);
       // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
       el.classList.toggle("is-active");
       $target.classList.toggle("is-active");
@@ -65,17 +65,23 @@ const props = defineProps({
 </script>
 
 <template>
-  <nav v-show="session" class="navbar" role="navigation" aria-label="main navigation">
+  <nav
+    v-show="session"
+    class="navbar is-transparent"
+    role="navigation"
+    aria-label="main navigation"
+  >
     <div class="navbar-brand">
       <a class="navbar-item" href="#accueil">
         <img id="logoNavbar" src="../assets/logoProjArt.png" />
       </a>
-      <button class="button is-large is-white mt-6" @click="afficheNotif()">
-        <span class="icon">
-          <i class="fa fa-regular fa-bell"></i>
-        </span>
-      </button>
-      <a role="button" class="navbar-burger mt-6" data-target="navMenu" aria-label="menu" aria-expanded="false">
+      <a
+        role="button"
+        class="navbar-burger mt-6"
+        data-target="navMenu"
+        aria-label="menu"
+        aria-expanded="false"
+      >
         <span aria-hidden="true"></span>
         <span aria-hidden="true"></span>
         <span aria-hidden="true"></span>
@@ -85,18 +91,29 @@ const props = defineProps({
     <div id="navMenu" class="navbar-menu">
       <div class="navbar-start">
         <a class="navbar-item" href="#accueil"> Accueil </a>
-        <a v-show="role != 'Administration' && role != 'AGE'" class="navbar-item" href="#agendaClasse">
+        <a
+          v-show="role != 'Administration' && role != 'AGE'"
+          class="navbar-item"
+          href="#agendaClasse"
+        >
           Agenda personnel
         </a>
         <a class="navbar-item" href="#evenements"> Evenements </a>
-        <a v-show="role != 'Administration' && role != 'AGE'" class="navbar-item" href="#notifications"> Notifications
+        <a
+          v-show="role != 'Administration' && role != 'AGE'"
+          class="navbar-item"
+          href="#notifications"
+        >
+          <span class="icon">
+            <i class="fa fa-regular fa-bell"></i>
+          </span>
         </a>
       </div>
       <div class="navbar-end">
         <div class="navbar-item">
           <div class="buttons">
             <a @click="logout()" class="button is-danger" href="#accueil">
-              <strong>Logout</strong>
+              <strong>Se déconnecter</strong>
             </a>
           </div>
         </div>
@@ -110,11 +127,8 @@ const props = defineProps({
         <img id="logoNavbar" src="../assets/logoProjArt.png" />
       </a>
     </div>
-    <div class="column is-one-quarter">
-    </div>
-    <div class="column is-one-quarter">
-    </div>
-
+    <div class="column is-one-quarter"></div>
+    <div class="column is-one-quarter"></div>
 
     <div class="buttons column is-one-quarter">
       <a class="button is-danger" href="#login">
