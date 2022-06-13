@@ -1,9 +1,9 @@
 <script setup>
-import TheDetailsEvent from './components/TheDetailsEvent.vue';
-import BaseBoutonRetour from './components/TheReturnButton.vue';
-import TheBreadcrums from './components/TheBreadcrums.vue';
-import TheDetailsRemarques from './components/TheDetailsRemarques.vue';
-import { BASE_URL } from '../composables/store.js';
+import { ref, computed, watchEffect } from "vue";
+import TheDetailsEvent from "./components/TheDetailsEvent.vue";
+import BaseBoutonRetour from "./components/TheReturnButton.vue";
+import { BASE_URL } from "../composables/store.js";
+import { changeFormatDate } from "../composables/function.js";
 // import { useFetch } from '../composables/fetch.js';
 
 // const { data: remarques } = useFetch(
@@ -12,39 +12,48 @@ import { BASE_URL } from '../composables/store.js';
 // à mettre dans le composant
 // v-for="remarque in remarques" :titre="remarque.titre" :description="remarque.description" :visibilite="remarque.visibilite" :user="remarque.fk_user" :date="remarque.date" :matiere="remarque.fk_matiere"
 
-function changeFormatDate() {
-    let myDate = "2012-10-16 11:00:28";
+let idDetailsEvent = ref(sessionStorage.getItem("idDetailsEvent"));
 
-    myDate = myDate.replace(' ', 'T');
-    const z = 'Z';
-    myDate = myDate.concat(z);
-    // console.log(myDate);
+// ---------------------- Fetch data for this event -----------------------------
+const events = ref([]);
 
-    const time = new Date((myDate)).toLocaleTimeString('fr-FR', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
+watchEffect(() => {
+  fetch(BASE_URL + "events/id/" + idDetailsEvent.value)
+    .then((res) => res.json())
+    .then((eventsResults) => (events.value = eventsResults))
+    .then(() => {
+      console.log(events.value);
+      console.log(idDetailsEvent.value);
+    });
+});
 
-    })
-    console.log(time)
-}
-
-
-
-
-changeFormatDate();
-
-
-
+const allEvents = computed(() => {
+  const tabEvents = [];
+  if (!events.value?.length) {
+    return [];
+  } else {
+    events.value.forEach((element) => {
+      if (tabEvents.length < 1) {
+        tabEvents.push(element);
+      }
+    });
+  }
+  console.log("tabEvents");
+  console.log(tabEvents);
+  return tabEvents;
+});
 </script>
 
 <template>
-    <the-breadcrums></the-breadcrums>
-    <the-details-event></the-details-event>
-    <br>
-    <the-details-remarques></the-details-remarques>
+  <the-details-event
+    v-for="events in allEvents"
+    :Debut="changeFormatDate(events.Debut)"
+    :Fin="changeFormatDate(events.Fin)"
+    :Lieu="events.Lieu"
+    :user_Email="events.user_Email"
+    :Description="events.Description"
+    :Titre="events.Titre"
+  ></the-details-event>
 </template>
 
 <style scoped>
