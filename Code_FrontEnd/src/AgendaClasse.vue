@@ -22,6 +22,8 @@ const historique = ref(false);
 const classeCours = ref([]);
 const userRemarque = ref([]);
 
+var nbrMat = 0;
+
 window.addEventListener("hashchange", () => {
   userSession.value = sessionStorage.getItem("user");
   role.value = sessionStorage.getItem("role");
@@ -341,12 +343,20 @@ const Matiere = computed(() => {
   const tabMatiere = [];
   const tabMatiereHistorique = [];
   const uniqueMatiereColor = new Set();
-  if (!classeCours.value?.length) {
+  if (!classeCours.value?.length || !userRemarque.value?.length) {
     return [];
   } else {
     classeCours.value.forEach((element) => {
       uniqueMatiereColor.add(element.matiere_id);
-      if (element.Debut > dateStr) {
+      if (element.Debut >= dateStr) {
+        tabMatiere.push(element.matiere_id);
+      } else {
+        tabMatiereHistorique.push(element.matiere_id);
+      }
+    });
+    userRemarque.value.forEach((element) => {
+      uniqueMatiereColor.add(element.matiere_id);
+      if (element.Date >= dateStr) {
         tabMatiere.push(element.matiere_id);
       } else {
         tabMatiereHistorique.push(element.matiere_id);
@@ -355,6 +365,8 @@ const Matiere = computed(() => {
   }
   const uniqueMatiere = new Set(tabMatiere);
   const uniqueMatiereHistorique = new Set(tabMatiereHistorique);
+  console.log(uniqueMatiere);
+  console.log(uniqueMatiereHistorique);
   return { uniqueMatiere, uniqueMatiereHistorique };
 });
 
@@ -548,7 +560,7 @@ function showPage() {
                 </button>
               </card-cours>
               <card-remarque v-else-if="cours.Name == 'Remarque'" :data-id="cours.id" :class="cours.matiere_id"
-              class="cours remarque" :titre="cours.Titre" :description="cours.Description" :matiere_id="cours.matiere_id">
+              class="cours remarque" :Visibilite="cours.Visibilite" :titre="cours.Titre" :description="cours.Description" :matiere_id="cours.matiere_id">
               <button v-show="role == 'Administration'" class="button is-pulled-right is-white has-background-light"
                 @click="displayDeleteModal(cours.id)">
                 <span class="icon is-small">
@@ -600,7 +612,7 @@ function showPage() {
               </button>
             </card-cours>
             <card-remarque v-else-if="cours.Name == 'Remarque'" :data-id="cours.id" :class="cours.matiere_id"
-              class="cours remarque" :titre="cours.Titre" :description="cours.Description" :matiere_id="cours.matiere_id">
+              class="cours remarque" :Visibilite="cours.Visibilite" :titre="cours.Titre" :description="cours.Description" :matiere_id="cours.matiere_id">
               <button v-show="role == 'Administration'" class="button is-pulled-right is-white has-background-light"
                 @click="displayDeleteModal(cours.id)">
                 <span class="icon is-small">
