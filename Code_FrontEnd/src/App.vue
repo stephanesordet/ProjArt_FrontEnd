@@ -11,9 +11,10 @@ import DetailMatiere from "./DetailMatiere.vue";
 import Notifications from "./Notifications.vue";
 import AjoutCours from "./FormAjoutCours.vue";
 import DetailEvent from "./DetailEvent.vue";
-import TheBreadcrums from "./components/TheBreadcrums.vue";
+import PasswordReset from "./PasswordReset.vue";
 import TheReturnButton from "./components/TheReturnButton.vue";
 var routes = {};
+let userSession = ref(false);
 isMobileDevice();
 function isMobileDevice() {
   if (
@@ -58,6 +59,10 @@ function isMobileDevice() {
         label: "Detail event",
         component: DetailEvent,
       },
+      "#PasswordReset": {
+        label: "PasswordReset",
+        component: PasswordReset,
+      },
     };
   } else {
     routes = {
@@ -93,6 +98,10 @@ function isMobileDevice() {
         label: "Detail event",
         component: DetailEvent,
       },
+      "#PasswordReset": {
+        label: "PasswordReset",
+        component: PasswordReset,
+      },
     };
   }
 }
@@ -100,10 +109,17 @@ function isMobileDevice() {
 const hash = ref(window.location.hash);
 window.addEventListener("hashchange", () => {
   hash.value = window.location.hash;
+  userSession.value = sessionStorage.getItem("user");
 });
 const curHash = computed(() =>
   routes[hash.value] ? hash.value : Object.keys(routes)[0]
 );
+
+window.addEventListener("load", () => {
+  hash.value = window.location.hash;
+  userSession.value = sessionStorage.getItem("user");
+});
+
 const curComponent = computed(() => routes[curHash.value].component);
 
 watchEffect(() => {
@@ -115,7 +131,7 @@ watchEffect(() => {
 
 <template>
   <TheNavbar :routes="routes" :curHash="curHash"></TheNavbar>
-  <the-return-button></the-return-button>
+  <!--   <the-return-button v-if="userSession"></the-return-button> -->
   <main>
     <template v-for="(route, hash) of routes">
       <div v-show="hash == curHash">
