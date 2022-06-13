@@ -256,6 +256,11 @@ function valueHasChanged(event) {
   }
 }
 function valueHasClicked(event) {
+  const btnClasses = document.querySelectorAll(".btnClasse");
+  btnClasses.forEach((btnClasse) => {
+    btnClasse.classList.remove("isActive");
+  });
+  event.target.classList.add('isActive');
   const cours = document.querySelectorAll(".cours");
   const spanCours = document.querySelectorAll(".spanCours");
   cours.forEach((coursSolo) => {
@@ -381,7 +386,7 @@ fetch(BASE_URL + "matiere")
     <div>
       <div class="buttons is-mobile columns is-centered mx-1 my-1">
         <button v-for="classe in Classes" :key="classe" @click="valueHasClicked($event)"
-          class="column button has-background-light has-text-black is-medium is-one-fifth-mobile is-danger">
+          class="column button has-background-light has-text-black is-medium is-one-fifth-mobile is-danger btnClasse">
           {{ classe.id }}
         </button>
       </div>
@@ -639,6 +644,11 @@ fetch(BASE_URL + "matiere")
     box-shadow: 0 -2em;
     height: 5em;
   }
+}
+
+button.isActive{
+  background-color: #f14668 !important;
+  color: #ffffff !important;
 }
 
 </style>

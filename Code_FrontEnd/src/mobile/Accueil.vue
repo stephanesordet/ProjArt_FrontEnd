@@ -248,6 +248,11 @@ async function addCours() {
 }
 
 function valueHasClicked(event) {
+  const btnClasses = document.querySelectorAll(".btnClasse");
+  btnClasses.forEach((btnClasse) => {
+    btnClasse.classList.remove("isActive");
+  });
+  event.target.classList.add('isActive');
   const cours = document.querySelectorAll(".cours");
   const spanCours = document.querySelectorAll(".spanCours");
   cours.forEach((coursSolo) => {
@@ -332,7 +337,7 @@ fetch("http://127.0.0.1:8000/api/matiere")
     <div>
       <div class="buttons is-mobile columns is-centered mx-1 my-1">
         <button v-for="classe in Classes" :key="classe" @click="valueHasClicked($event)"
-          class="column button has-background-light has-text-black is-medium is-one-fifth-mobile is-danger">
+          class="column button has-background-light has-text-black is-medium is-one-fifth-mobile is-danger btnClasse">
           {{ classe.id }}
         </button>
       </div>
@@ -498,5 +503,8 @@ fetch("http://127.0.0.1:8000/api/matiere")
     height: 5em;
   }
 }
-
+button.isActive{
+  background-color: #f14668 !important;
+  color: #ffffff !important;
+}
 </style>
