@@ -77,6 +77,7 @@ const Titre = ref("");
 const Description = ref("");
 const Visibilite = ref("");
 const DateRemarque = ref("");
+const id = ref("");
 
 function addRemarqueCours() {
   axios
@@ -117,6 +118,7 @@ function addRemarqueCours() {
       :Description="remarque.Description"
       :Titre="remarque.Titre"
       :Visibilite="remarque.Visibilite"
+      :id="remarque.id"
     >
     </TheDetailsMatieresRemarques>
     <div class="column buttons">

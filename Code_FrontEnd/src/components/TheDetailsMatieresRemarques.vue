@@ -1,5 +1,10 @@
 <script setup>
 import { ref } from "vue";
+import axios from "axios";
+import { BASE_URL } from "../../composables/store";
+
+const user = ref(sessionStorage.getItem("user"));
+let userValue = user.value;
 
 defineProps({
   user_Email: {
@@ -17,7 +22,26 @@ defineProps({
   Visibilite: {
     type: String,
   },
+  id: {
+    type: Number,
+  },
 });
+
+function deleteRemarque(id) {
+  axios
+    .post(BASE_URL + "remarque/delete/" + id)
+    .then((res) => {
+      //Perform Success Action
+      console.log(res);
+    })
+    .catch((error) => {
+      // error.response.status Check status code
+      console.log(error);
+    })
+    .finally(() => {
+      window.location.reload();
+    });
+}
 </script>
 
 <template>
@@ -45,6 +69,16 @@ defineProps({
         </span>
         <span>Privée</span>
       </span>
+
+      <button
+        v-show="user_Email == userValue"
+        class="button is-pulled-right is-white has-background-light"
+        @click="deleteRemarque(id)"
+      >
+        <span class="icon is-small">
+          <i class="fa fa-trash"></i>
+        </span>
+      </button>
     </div>
     <p>
       <span>Pour la date du : {{ DateRemarque }} </span>
