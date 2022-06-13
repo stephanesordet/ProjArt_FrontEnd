@@ -10,14 +10,17 @@ import BaseModalForm from "./components/BaseModalForm.vue";
 import Switch from "./components/Switch.vue";
 import TheCardWrapper from "./components/TheCardWrapper.vue";
 import { BASE_URL } from "../composables/store";
+import TheLoader from "./components/TheLoader.vue";
+import randomColor from 'randomcolor';
+import CardRemarque from "./components/CardRemarque.vue";
 
 const userSession = ref(sessionStorage.getItem("user"));
 
 const role = ref(sessionStorage.getItem("role"));
 
 const historique = ref(false);
-
 const classeCours = ref([]);
+const userRemarque = ref([]);
 
 window.addEventListener("hashchange", () => {
   userSession.value = sessionStorage.getItem("user");
@@ -27,10 +30,17 @@ window.addEventListener("hashchange", () => {
 watchEffect(() => {
   fetch(BASE_URL + "cours/user/" + userSession.value)
     .then((res) => res.json())
-    .then((CoursUser) => (classeCours.value = CoursUser));
+    .then((coursClasse) => (classeCours.value = coursClasse));
+});
+
+watchEffect(() => {
+  fetch(BASE_URL + "remarque/user/" + userSession.value)
+    .then((res) => res.json())
+    .then((remarqueUser) => (userRemarque.value = remarqueUser));
 });
 
 const date = new Date();
+const dateStrTest = formatDateView(date);
 const dateStr =
   date.getFullYear() +
   "-" +
@@ -38,10 +48,41 @@ const dateStr =
   "-" +
   ("00" + date.getDate()).slice(-2);
 
-const CoursUser = computed(() => {
+function padTo2Digits(num) {
+  return num.toString().padStart(2, "0");
+}
+
+function formatDate(date) {
+  return [
+    padTo2Digits(date.getMonth() + 1),
+    padTo2Digits(date.getDate()),
+    date.getFullYear(),
+  ].join("/");
+}
+
+function formatDateView(date) {
+  const month = [
+    "Janvier",
+    "Fevrier",
+    "Mars",
+    "Avril",
+    "Mai",
+    "Juin",
+    "Juillet",
+    "Aout",
+    "Septembre",
+    "Octobre",
+    "Novembre",
+    "Decembre",
+  ];
+  let monthDate = month[date.getMonth()];
+  let dates = date.getDate() + " " + monthDate + " " + date.getFullYear();
+  return dates;
+}
+const CoursClasse = computed(() => {
   const tabCours = [];
   const tabCoursHistorique = [];
-  if (!classeCours.value?.length) {
+  if (!classeCours.value?.length || !userRemarque.value?.length) {
     return [];
   } else {
     classeCours.value.forEach((element) => {
@@ -82,6 +123,7 @@ const CoursUser = computed(() => {
         element.Date = date;
         element.HeureDebut = heureDebut;
         element.HeureFin = heureFin;
+        element.Name = "Cours";
         tabCours.push(element);
       } else {
         const month = [
@@ -120,6 +162,74 @@ const CoursUser = computed(() => {
         element.Date = date;
         element.HeureDebut = heureDebut;
         element.HeureFin = heureFin;
+        element.Name = "Cours";
+        tabCoursHistorique.push(element);
+      }
+    });
+    userRemarque.value.forEach((element) => {
+      if (element.Date >= dateStr) {
+        const month = [
+          "Janvier",
+          "Fevrier",
+          "Mars",
+          "Avril",
+          "Mai",
+          "Juin",
+          "Juillet",
+          "Aout",
+          "Septembre",
+          "Octobre",
+          "Novembre",
+          "Decembre",
+        ];
+        const days = [
+          "Dimanche",
+          "Lundi",
+          "Mardi",
+          "Mercredi",
+          "Jeudi",
+          "Vendredi",
+          "Samedi",
+        ];
+        const d = new Date(element.Date);
+        let monthDate = month[d.getMonth()];
+        let day = days[d.getDay()];
+        let date = d.getDate() + " " + monthDate + " " + d.getFullYear();
+        element.Jour = day;
+        element.Date = date;
+        element.Name = "Remarque";
+        tabCours.push(element);
+      } else {
+        const month = [
+          "Janvier",
+          "Fevrier",
+          "Mars",
+          "Avril",
+          "Mai",
+          "Juin",
+          "Juillet",
+          "Aout",
+          "Septembre",
+          "Octobre",
+          "Novembre",
+          "Decembre",
+        ];
+        const days = [
+          "Dimanche",
+          "Lundi",
+          "Mardi",
+          "Mercredi",
+          "Jeudi",
+          "Vendredi",
+          "Samedi",
+        ];
+        const d = new Date(element.Date);
+        let monthDate = month[d.getMonth()];
+        let day = days[d.getDay()];
+        let date = d.getDate() + " " + monthDate + " " + d.getFullYear();
+        element.Jour = day;
+        element.Date = date;
+        element.Name = "Remarque";
         tabCoursHistorique.push(element);
       }
     });
@@ -140,7 +250,6 @@ const CoursUser = computed(() => {
         }
       });
     }
-
     let duplicatesHistorique = [];
     const tempArrayHistorique = tabCoursHistorique.sort();
     for (let i = 0; i < tempArrayHistorique.length; i++) {
@@ -159,7 +268,6 @@ const CoursUser = computed(() => {
       });
     }
   }
-
   let coursObj;
   const tabCoursByDate = [];
   tabCours.forEach((element) => {
@@ -180,7 +288,6 @@ const CoursUser = computed(() => {
     }
     tabCoursByDate.push(coursObj);
   });
-
   let coursObjHistorique;
   const tabCoursHistoriqueByDate = [];
   tabCoursHistorique.forEach((element) => {
@@ -201,20 +308,44 @@ const CoursUser = computed(() => {
     }
     tabCoursHistoriqueByDate.push(coursObjHistorique);
   });
-
-  const uniqueCoursByDate = new Set(tabCoursByDate);
-  const uniqueCoursHistoriqueByDate = new Set(tabCoursHistoriqueByDate);
-
+  const uniqueCoursByDate = new Set();
+  tabCoursByDate.forEach((element) => {
+    uniqueCoursByDate.add(element);
+    uniqueCoursByDate.forEach((element2) => {
+      if (element.Date === element2.Date && element.Cours !== element2.Cours) {
+        element.Cours.forEach((element3) => {
+          element2.Cours.push(element3);
+          uniqueCoursByDate.delete(element);
+        });
+      }
+    });
+  });
+  const uniqueCoursHistoriqueByDate = new Set();
+  tabCoursHistoriqueByDate.forEach((element) => {
+    uniqueCoursHistoriqueByDate.add(element);
+    uniqueCoursHistoriqueByDate.forEach((element2) => {
+      if (element.Date === element2.Date && element.Cours !== element2.Cours) {
+        element.Cours.forEach((element3) => {
+          element2.Cours.push(element3);
+          uniqueCoursHistoriqueByDate.delete(element);
+        });
+      }
+    });
+  });
+  console.log(uniqueCoursByDate);
+  console.log(uniqueCoursHistoriqueByDate);
   return { uniqueCoursByDate, uniqueCoursHistoriqueByDate };
 });
 
 const Matiere = computed(() => {
   const tabMatiere = [];
   const tabMatiereHistorique = [];
+  const uniqueMatiereColor = new Set();
   if (!classeCours.value?.length) {
     return [];
   } else {
     classeCours.value.forEach((element) => {
+      uniqueMatiereColor.add(element.matiere_id);
       if (element.Debut > dateStr) {
         tabMatiere.push(element.matiere_id);
       } else {
@@ -230,40 +361,59 @@ const Matiere = computed(() => {
 function valueHasChanged(event) {
   const cours = document.querySelectorAll(".cours");
   const spanCours = document.querySelectorAll(".spanCours");
-
   cours.forEach((coursSolo) => {
     coursSolo.style.display = "none";
   });
-
   spanCours.forEach((coursSolo) => {
     coursSolo.style.display = "none";
   });
-
   const val = event.target.value;
-
   if (val === "Tous les cours") {
     cours.forEach((coursSolo) => {
       coursSolo.style.display = "block";
     });
-
     spanCours.forEach((coursSolo) => {
       coursSolo.style.display = "block";
     });
   } else {
     const boxes = document.querySelectorAll("." + val);
-
     boxes.forEach((box) => {
       box.style.display = "block";
     });
   }
 }
-
 function valueHasClicked(event) {
+  const btnClasses = document.querySelectorAll(".btnClasse");
+  btnClasses.forEach((btnClasse) => {
+    btnClasse.classList.remove("isActive");
+  });
+  event.target.classList.add("isActive");
+  const cours = document.querySelectorAll(".cours");
+  const spanCours = document.querySelectorAll(".spanCours");
+  cours.forEach((coursSolo) => {
+    coursSolo.style.display = "none";
+  });
+  spanCours.forEach((coursSolo) => {
+    coursSolo.style.display = "none";
+  });
+  document.querySelector(".charger").style.display = "block";
   const classe = event.target.innerHTML;
-
   selectedClasses.value = classe;
+  console.log(selectedClasses.value);
+  setTimeout(hideLoader, 1000);
 }
 
+function hideLoader() {
+  document.querySelector(".charger").style.display = "none";
+  const cours = document.querySelectorAll(".cours");
+  const spanCours = document.querySelectorAll(".spanCours");
+  cours.forEach((coursSolo) => {
+    coursSolo.style.display = "block";
+  });
+  spanCours.forEach((coursSolo) => {
+    coursSolo.style.display = "block";
+  });
+}
 function toggleHistorique() {
   if (historique.value) {
     historique.value = false;
@@ -272,11 +422,9 @@ function toggleHistorique() {
   }
   const cours = document.querySelectorAll(".cours");
   const spanCours = document.querySelectorAll(".spanCours");
-
   cours.forEach((coursSolo) => {
     coursSolo.style.display = "block";
   });
-
   spanCours.forEach((coursSolo) => {
     coursSolo.style.display = "block";
   });
@@ -288,6 +436,16 @@ function setClass(day) {
     uniqueClass.add(element.matiere_id);
   });
   const str1 = Array.from(uniqueClass).join(" ");
+  var e = document.querySelector("select");
+  e.value = "Tous les cours";
+  const cours = document.querySelectorAll(".cours");
+  const spanCours = document.querySelectorAll(".spanCours");
+  cours.forEach((coursSolo) => {
+    coursSolo.style.display = "block";
+  });
+  spanCours.forEach((coursSolo) => {
+    coursSolo.style.display = "block";
+  });
   return str1;
 }
 
@@ -299,6 +457,40 @@ function voirDetails(id, matiere_id) {
   sessionStorage.setItem("idDetailsMatiere", id);
   sessionStorage.setItem("matiere_idDetailsMatiere", matiere_id);
 }
+
+fetch(BASE_URL + "matiere")
+  .then((res) => res.json())
+  .then((AllMatiere) => {
+    var couleurMatiereOb;
+    const matiereColor = [];
+    var i = 0;
+    AllMatiere.forEach((matiere) => {
+      couleurMatiereOb = Object();
+      couleurMatiereOb.id = matiere.id;
+      couleurMatiereOb.color = randomColor({ seed: i });
+      matiereColor.push(couleurMatiereOb);
+      i++;
+    });
+    console.log(matiereColor);
+    matiereColor.forEach((element) => {
+      document.head.insertAdjacentHTML(
+        "beforeend",
+        "<style>." +
+        element.id +
+        "{border-color:" +
+        element.color +
+        " !important}</style>"
+      );
+    });
+  });
+
+window.onload = function loader() {
+  document.querySelector(".loading-box").style.display = "flex";
+  setTimeout(showPage, 1000);
+};
+function showPage() {
+  document.querySelector(".loading-box").style.display = "none";
+}
 </script>
 
 <template>
@@ -306,19 +498,7 @@ function voirDetails(id, matiere_id) {
     <h1>
       Vous êtes connectés en tant que : <b>{{ userSession }}</b>
     </h1>
-    <div>
-      <div class="buttons is-mobile columns is-centered mx-1 my-1">
-        <button
-          v-for="classe in Classes"
-          :key="classe"
-          @click="valueHasClicked($event)"
-          class="column button has-background-light has-text-black is-medium is-one-fifth-mobile is-danger"
-        >
-          {{ classe.id }}
-        </button>
-      </div>
-    </div>
-    <div class="select is-danger">
+     <div class="select is-danger">
       <select @change="valueHasChanged($event)">
         <option>Tous les cours</option>
         <template v-if="!historique">
@@ -327,91 +507,125 @@ function voirDetails(id, matiere_id) {
           </option>
         </template>
         <template v-if="historique">
-          <option
-            v-for="matiere in Matiere.uniqueMatiereHistorique"
-            :key="matiere"
-          >
+          <option v-for="matiere in Matiere.uniqueMatiereHistorique" :key="matiere">
             {{ matiere }}
           </option>
         </template>
       </select>
     </div>
     <div style="display: flex; justify-content: center; margin-top: 15px">
-      <Switch
-        v-model:checked="shouldReceiveNewsletter"
-        label="Historique"
-        @change="toggleHistorique()"
-      />
+      <Switch v-model:checked="shouldReceiveNewsletter" label="Historique" @change="toggleHistorique()" />
     </div>
     <Toggle v-model="value" />
-    <div class="columns is-centered tile is-ancestor">
+    <div class="charger">Loading...</div>
+        <div class="columns is-centered tile is-ancestor">
       <div class="column is-three-quarters">
         <div class="tile is-parent is-vertical">
           <template v-if="historique">
-            <template
-              v-for="day in CoursUser.uniqueCoursHistoriqueByDate"
-              :key="day.Jour"
-            >
-              <span
-                style="text-align: left"
-                :class="setClass(day)"
-                class="spanCours"
-                >{{ day.Date }}</span
-              >
-              <card-cours
-                v-for="cours in day.Cours"
-                :key="cours.id"
-                :data-id="cours.id"
-                :class="cours.matiere_id"
-                class="cours"
-                :debut="cours.HeureDebut"
-                :fin="cours.HeureFin"
-                :cours="cours.matiere_id"
-                :salle="cours.salle_id"
-              >
-                <button
-                  class="button is-pulled-right is-white has-background-light"
-                  @click="voirDetails(cours.id, cours.matiere_id)"
-                >
+            <template v-for="day in CoursClasse.uniqueCoursHistoriqueByDate" :key="day.Jour">
+              <span style="text-align: left" :class="setClass(day)" class="spanCours">{{ day.Date }}</span>
+              <template v-for="cours in day.Cours" :key="cours.id">
+              <card-cours v-if="cours.Name == 'Cours'" :key="cours.id" :data-id="cours.id" :class="cours.matiere_id"
+                class="cours" :debut="cours.HeureDebut" :fin="cours.HeureFin" :cours="cours.matiere_id"
+                :salle="cours.salle_id">
+                <button v-show="role == 'Administration'" class="button is-pulled-right is-white has-background-light"
+                  @click="displayDeleteModal(cours.id)">
                   <span class="icon is-small">
-                    <i class="fa fa-info"></i>
+                    <i class="fa fa-trash"></i>
+                  </span>
+                </button>
+
+                <button v-show="role == 'Administration'" class="button is-pulled-right is-white has-background-light"
+                  @click="
+                    displayUpdateModal(
+                      cours.id,
+                      cours.salle_id,
+                    )
+                  ">
+                  <span class="icon is-small">
+                    <i class="fa fa-pencil"></i>
                   </span>
                 </button>
               </card-cours>
+              <card-remarque v-else-if="cours.Name == 'Remarque'" :data-id="cours.id" :class="cours.matiere_id"
+              class="cours remarque" :titre="cours.Titre" :description="cours.Description" :matiere_id="cours.matiere_id">
+              <button v-show="role == 'Administration'" class="button is-pulled-right is-white has-background-light"
+                @click="displayDeleteModal(cours.id)">
+                <span class="icon is-small">
+                  <i class="fa fa-trash"></i>
+                </span>
+              </button>
+
+              <button v-show="role == 'Administration'" class="button is-pulled-right is-white has-background-light"
+                @click="
+                  displayUpdateModal(
+                    cours.id,
+                    cours.salle_id,
+                  )
+                ">
+                <span class="icon is-small">
+                  <i class="fa fa-pencil"></i>
+                </span>
+              </button>
+            </card-remarque>
+            </template>
             </template>
           </template>
-          <template v-for="day in CoursUser.uniqueCoursByDate" :key="day.Jour">
-            <span
-              style="text-align: left"
-              :class="setClass(day)"
-              class="spanCours"
-              >{{ day.Date }}</span
-            >
-            <card-cours
-              v-for="cours in day.Cours"
-              :key="cours.id"
-              :data-id="cours.id"
-              :class="cours.matiere_id"
-              class="cours"
-              :debut="cours.HeureDebut"
-              :fin="cours.HeureFin"
-              :cours="cours.matiere_id"
-              :salle="cours.salle_id"
-            >
-              <button
-                class="button is-pulled-right is-white has-background-light"
-                @click="voirDetails(cours.id, cours.matiere_id)"
-              >
+          <template v-for="day in CoursClasse.uniqueCoursByDate" :key="day.Jour">
+            <span style="text-align: left" :class="setClass(day)" class="spanCours">{{ day.Date }}</span>
+            <HR v-if="dateStrTest == day.Date && historique" :class="setClass(day)" class="spanCours"
+              style="background-color: blue; height: 5px">
+            </HR>
+            <template v-for="cours in day.Cours" :key="cours.id">
+            <card-cours v-if="cours.Name == 'Cours'" :data-id="cours.id" :class="cours.matiere_id"
+              class="cours" :debut="cours.HeureDebut" :fin="cours.HeureFin" :cours="cours.matiere_id"
+              :salle="cours.salle_id">
+              <button v-show="role == 'Administration'" class="button is-pulled-right is-white has-background-light"
+                @click="displayDeleteModal(cours.id)">
                 <span class="icon is-small">
-                  <i class="fa fa-info"></i>
+                  <i class="fa fa-trash"></i>
+                </span>
+              </button>
+
+              <button v-show="role == 'Administration'" class="button is-pulled-right is-white has-background-light"
+                @click="
+                  displayUpdateModal(
+                    cours.id,
+                    cours.salle_id,
+                  )
+                ">
+                <span class="icon is-small">
+                  <i class="fa fa-pencil"></i>
                 </span>
               </button>
             </card-cours>
+            <card-remarque v-else-if="cours.Name == 'Remarque'" :data-id="cours.id" :class="cours.matiere_id"
+              class="cours remarque" :titre="cours.Titre" :description="cours.Description" :matiere_id="cours.matiere_id">
+              <button v-show="role == 'Administration'" class="button is-pulled-right is-white has-background-light"
+                @click="displayDeleteModal(cours.id)">
+                <span class="icon is-small">
+                  <i class="fa fa-trash"></i>
+                </span>
+              </button>
+
+              <button v-show="role == 'Administration'" class="button is-pulled-right is-white has-background-light"
+                @click="
+                  displayUpdateModal(
+                    cours.id,
+                    cours.salle_id,
+                  )
+                ">
+                <span class="icon is-small">
+                  <i class="fa fa-pencil"></i>
+                </span>
+              </button>
+            </card-remarque>
+            </template>
           </template>
-          <div v-if="CoursUser.uniqueCoursByDate == undefined">
+          <div v-if="CoursClasse.uniqueCoursByDate == undefined">
             <h2>Cours en chargement</h2>
           </div>
-          <div v-else-if="CoursUser.uniqueCoursByDate.size == 0 && !historique">
+          <div v-else-if="CoursClasse.uniqueCoursByDate.size == 0 && !historique">
             <h2>Plus de cours actuellement</h2>
           </div>
         </div>
@@ -433,4 +647,75 @@ function voirDetails(id, matiere_id) {
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.charger,
+.charger:before,
+.charger:after {
+  background: #ffffff;
+  -webkit-animation: load1 1s infinite ease-in-out;
+  animation: load1 1s infinite ease-in-out;
+  width: 1em;
+  height: 4em;
+}
+
+.charger {
+  color: #333;
+  text-indent: -9999em;
+  margin: 88px auto;
+  position: relative;
+  font-size: 11px;
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s;
+  display: none;
+}
+
+.charger:before,
+.charger:after {
+  position: absolute;
+  top: 0;
+  content: "";
+}
+
+.charger:before {
+  left: -1.5em;
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
+}
+
+.charger:after {
+  left: 1.5em;
+}
+
+@-webkit-keyframes load1 {
+
+  0%,
+  80%,
+  100% {
+    box-shadow: 0 0;
+    height: 4em;
+  }
+
+  40% {
+    box-shadow: 0 -2em;
+    height: 5em;
+  }
+}
+
+@keyframes load1 {
+
+  0%,
+  80%,
+  100% {
+    box-shadow: 0 0;
+    height: 4em;
+  }
+
+  40% {
+    box-shadow: 0 -2em;
+    height: 5em;
+  }
+}
+</style>
