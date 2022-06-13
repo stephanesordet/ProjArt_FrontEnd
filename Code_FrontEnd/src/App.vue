@@ -1,4 +1,3 @@
-import TheReturnButtonVue from "./components/TheReturnButton.vue";
 <script setup>
 import { ref, computed, watchEffect } from "vue";
 import TheNavbar from "./components/TheNavbar.vue";

@@ -4,13 +4,7 @@ import TheDetailsEvent from "./components/TheDetailsEvent.vue";
 import BaseBoutonRetour from "./components/TheReturnButton.vue";
 import { BASE_URL } from "../composables/store.js";
 import TheReturnButton from "./components/TheReturnButton.vue";
-// import { useFetch } from '../composables/fetch.js';
-
-// const { data: remarques } = useFetch(
-//   ""
-// );
-// à mettre dans le composant
-// v-for="remarque in remarques" :titre="remarque.titre" :description="remarque.description" :visibilite="remarque.visibilite" :user="remarque.fk_user" :date="remarque.date" :matiere="remarque.fk_matiere"
+import { changeFormatDate } from "../composables/function.js";
 
 let idDetailsEvent = ref(sessionStorage.getItem("idDetailsEvent"));
 
@@ -45,9 +39,16 @@ const allEvents = computed(() => {
 </script>
 
 <template>
-  <the-details-event v-for="events in allEvents" :Debut="changeFormatDate(events.Debut)"
-    :Fin="changeFormatDate(events.Fin)" :Lieu="events.Lieu" :user_Email="events.user_Email"
-    :Description="events.Description" :Titre="events.Titre"></the-details-event>
+  <TheReturnButton></TheReturnButton>
+  <the-details-event
+    v-for="events in allEvents"
+    :Debut="changeFormatDate(events.Debut)"
+    :Fin="changeFormatDate(events.Fin)"
+    :Lieu="events.Lieu"
+    :user_Email="events.user_Email"
+    :Description="events.Description"
+    :Titre="events.Titre"
+  ></the-details-event>
 </template>
 
 <style scoped>
