@@ -12,6 +12,7 @@ import Switch from "./components/Switch.vue";
 import randomColor from 'randomcolor';
 import { BASE_URL } from "../composables/store";
 import { currentCoursId } from "../composables/store";
+import TheLoader from "./components/TheLoader.vue";
 
 const { data: classes } = useFetch(BASE_URL + "classes");
 const selectedClasses = ref("M49-1");
@@ -255,9 +256,31 @@ function valueHasChanged(event) {
   }
 }
 function valueHasClicked(event) {
-  const classe = event.target.innerHTML;
+  const cours = document.querySelectorAll(".cours");
+  const spanCours = document.querySelectorAll(".spanCours");
+  cours.forEach((coursSolo) => {
+    coursSolo.style.display = "none";
+  });
+  spanCours.forEach((coursSolo) => {
+    coursSolo.style.display = "none";
+  });
+  document.querySelector(".charger").style.display = "block";
+  const classe = event.target.innerHTML;  
   selectedClasses.value = classe;
   console.log(selectedClasses.value);
+  setTimeout(hideLoader, 1000);
+}
+
+function hideLoader(){
+  document.querySelector(".charger").style.display = "none";
+  const cours = document.querySelectorAll(".cours");
+  const spanCours = document.querySelectorAll(".spanCours");
+  cours.forEach((coursSolo) => {
+    coursSolo.style.display = "block";
+  });
+  spanCours.forEach((coursSolo) => {
+    coursSolo.style.display = "block";
+  });
 }
 function toggleHistorique() {
   if (historique.value) {
@@ -343,12 +366,21 @@ fetch(BASE_URL + "matiere")
       document.head.insertAdjacentHTML("beforeend", '<style>.' + element.id + '{border-color:' + element.color + ' !important}</style>');
     });
   });
+
+  window.onload = function loader() {
+    document.querySelector(".loading-box").style.display = "flex";
+    setTimeout(showPage, 1000);
+  }
+  function showPage() {
+  document.querySelector(".loading-box").style.display = "none";
+}
 </script>
 <template>
-  <div class="main mx-4 my-1">
+<TheLoader></TheLoader>
+  <div class="main mx-4 my-1 contenu">
     <div>
       <div class="buttons is-mobile columns is-centered mx-1 my-1">
-        <button v-for="classe in Classes" :key="classe" @click="selectedClasses = classe.id"
+        <button v-for="classe in Classes" :key="classe" @click="valueHasClicked($event)"
           class="column button has-background-light has-text-black is-medium is-one-fifth-mobile is-danger">
           {{ classe.id }}
         </button>
@@ -373,6 +405,7 @@ fetch(BASE_URL + "matiere")
       <Switch v-model:checked="shouldReceiveNewsletter" label="Historique" @change="toggleHistorique()" />
     </div>
     <Toggle v-model="value" />
+    <div class="charger">Loading...</div>
     <div class="columns is-centered tile is-ancestor">
       <div class="column is-three-quarters">
         <div class="tile is-parent is-vertical">
@@ -547,4 +580,65 @@ fetch(BASE_URL + "matiere")
   bottom: 20px;
   right: 40px;
 }
+.charger,
+.charger:before,
+.charger:after {
+  background: #ffffff;
+  -webkit-animation: load1 1s infinite ease-in-out;
+  animation: load1 1s infinite ease-in-out;
+  width: 1em;
+  height: 4em;
+}
+.charger {
+  color: #333;
+  text-indent: -9999em;
+  margin: 88px auto;
+  position: relative;
+  font-size: 11px;
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s;
+  display: none;
+}
+.charger:before,
+.charger:after {
+  position: absolute;
+  top: 0;
+  content: '';
+}
+.charger:before {
+  left: -1.5em;
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
+}
+.charger:after {
+  left: 1.5em;
+}
+@-webkit-keyframes load1 {
+  0%,
+  80%,
+  100% {
+    box-shadow: 0 0;
+    height: 4em;
+  }
+  40% {
+    box-shadow: 0 -2em;
+    height: 5em;
+  }
+}
+@keyframes load1 {
+  0%,
+  80%,
+  100% {
+    box-shadow: 0 0;
+    height: 4em;
+  }
+  40% {
+    box-shadow: 0 -2em;
+    height: 5em;
+  }
+}
+
 </style>
