@@ -9,12 +9,8 @@ defineProps({
   Lieu: {
     type: String,
   },
-  Debut: {
-    type: Date,
-  },
-  Fin: {
-    type: Date,
-  },
+  Debut: {},
+  Fin: {},
   user_Email: {
     type: String,
   },

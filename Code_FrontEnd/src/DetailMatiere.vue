@@ -9,15 +9,15 @@ import BaseInputSubmit from "./components/BaseInputSubmit.vue";
 import BaseInput from "./components/BaseInput.vue";
 import BaseModalForm from "./components/BaseModalForm.vue";
 import TheReturnButton from "./components/TheReturnButton.vue";
-import { BASE_URL } from "../composables/store";
+import {
+  BASE_URL,
+  idDetailsMatiere,
+  matiere_idDetailsMatiere,
+} from "../composables/store";
 import axios from "axios";
 import { changeFormatDateWithoutHoursMinutes } from "../composables/function.js";
 
 let userSession = ref(sessionStorage.getItem("user"));
-let idDetailsMatiere = ref(sessionStorage.getItem("idDetailsMatiere"));
-let matiere_idDetailsMatiere = ref(
-  sessionStorage.getItem("matiere_idDetailsMatiere")
-);
 
 // ---------------------- Fetch data for this cours -----------------------------
 const cours = ref([]);
