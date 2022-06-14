@@ -527,7 +527,7 @@ fetch(BASE_URL + "matiere")
       <div class="buttons is-mobile columns is-centered mx-1 my-1">
         <button v-for="classe in Classes" :key="classe" @click="valueHasClicked($event)"
           class="column button has-background-light has-text-black is-medium is-one-fifth-mobile is-danger btnClasse has-text-centered">
-          <span class="is-size-6-mobile">{{ classe.id }}</span>
+          {{ classe.id }}
         </button>
       </div>
     </div>
