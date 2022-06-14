@@ -237,7 +237,7 @@ fetch(BASE_URL + "role")
             <i class="fa fa-trash"></i>
           </span>
         </button>
-        <button v-show="role == 'Administration' || role == 'AGE'"
+        <button v-show="role == 'Adm inistration' || role == 'AGE'"
           class="button is-pulled-right is-white has-background-light" @click="
             displayUpdateModal(
               events.id,

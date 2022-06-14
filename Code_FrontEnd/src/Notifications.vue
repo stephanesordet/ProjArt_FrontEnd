@@ -93,7 +93,7 @@ fetch(BASE_URL + "role")
       :object="response.notification.Objet"
       :envoiHeure="changeFormatDate(response.notification.EnvoiHeureDate)"
       :message="response.notification.Message"
-      :class="role"
+      :class="response.roles"
     >
     </card-notif>
   </the-card-wrapper>
