@@ -11,6 +11,8 @@ let email = ref("");
 let hash = ref(window.location.hash);
 let userSession = ref(false);
 let showMailErrorModalForm = ref(false);
+let showResetOk = ref(false);
+let showProblem = ref(false);
 
 function compareMail(email) {
     const refMail = "heig-vd.ch";
@@ -31,10 +33,16 @@ function sendEmail(email) {
                 {}
             )
             .then((res) => {
-
+                if (res.data.includes("user not found")) {
+                    showMailErrorModalForm.value = !showMailErrorModalForm.value;
+                }else if(res.data.includes("Message sent successfully")){
+                    showResetOk.value = !showResetOk.value;
+                }else{
+                    showProblem.value = !showProblem.value;
+                }
             })
             .catch((error) => {
-                // error.response.status Check status code
+                 showProblem.value = !showProblem.value;
                 console.log(error);
             })
             .finally(() => {
@@ -99,6 +107,18 @@ function changeHash() {
         <BaseInputSubmit>
             <input type="submit" class="button is-primary is-rounded" value="Compris"
                 @click="showMailErrorModalForm = false" />
+        </BaseInputSubmit>
+    </BaseModalForm>
+
+
+     <!-- MODAL FORM @MAIL PROBLEM -->
+    <BaseModalForm :class="{ 'is-active': showProblem }" @close="showProblem = false">
+        <BaseFormModal>
+            <h2 class="title is-4">Problème inconnu lors de l'envoi du mail !</h2>
+        </BaseFormModal>
+        <BaseInputSubmit>
+            <input type="submit" class="button is-primary is-rounded" value="Réessayer"
+                @click="showProblem = false" />
         </BaseInputSubmit>
     </BaseModalForm>
 

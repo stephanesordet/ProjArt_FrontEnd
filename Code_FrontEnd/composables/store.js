@@ -14,3 +14,5 @@ export const idDetailsMatiere = ref(sessionStorage.getItem("idDetailsMatiere"));
 export const matiere_idDetailsMatiere = ref(
   sessionStorage.getItem("matiere_idDetailsMatiere")
 );
+
+export const todayDate = new Date().toISOString().split('T')[0];

@@ -50,17 +50,14 @@ document.addEventListener("DOMContentLoaded", () => {
 function logout() {
   sessionStorage.removeItem("user");
   sessionStorage.removeItem("role");
-  window.location.hash = "#accueil";
-  window.location.reload();
+  window.location.hash = "#";
 }
 
 const props = defineProps({
   routes: {
-    type: Object,
     required: true,
   },
   curHash: {
-    type: String,
     required: true,
   },
 });

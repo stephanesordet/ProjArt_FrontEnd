@@ -13,7 +13,8 @@ import {
   BASE_URL,
   idDetailsMatiere,
   matiere_idDetailsMatiere,
-} from "../composables/store";
+  todayDate,
+} from "../composables/store.js";
 import axios from "axios";
 import { changeFormatDateWithoutHoursMinutes } from "../composables/function.js";
 
@@ -159,7 +160,7 @@ function addRemarqueCours() {
         <label class="label" for="Remarque">Remarque</label>
 
         <div class="select">
-          <select v-model="Visibilite">
+          <select v-model="Visibilite" required>
             <option disabled selected hidden value="">
               Choisissez la visibilité
             </option>
@@ -177,6 +178,8 @@ function addRemarqueCours() {
             class="input"
             type="date"
             placeholder="Entrez une date de début"
+            required
+            :min="todayDate"
           />
         </template>
       </BaseInput>
@@ -189,6 +192,7 @@ function addRemarqueCours() {
             class="input"
             type="text"
             placeholder="Entrez le nom de la remarque"
+            required
           />
         </template>
       </BaseInput>
@@ -200,7 +204,8 @@ function addRemarqueCours() {
             v-model="Description"
             class="input"
             type="text"
-            placeholder="Entrez uen description"
+            placeholder="Entrez une description"
+            required
           />
         </template>
       </BaseInput>
@@ -229,4 +234,7 @@ function addRemarqueCours() {
 
 <style scoped>
 @import "https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css";
+div > select {
+  width: 300px;
+}
 </style>

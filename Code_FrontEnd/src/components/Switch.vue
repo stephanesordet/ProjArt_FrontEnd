@@ -13,29 +13,27 @@
 </template>
 
 <script>
-  export default {
-    name: "Switch",
-    inheritAttrs: false,
-    props: {
-      label: {
-        type: String,
-        required: true,
-      },
-      checked: {
-        type: Boolean,
-        required: true,
-      },
+export default {
+  name: "Switch",
+  inheritAttrs: false,
+  props: {
+    label: {
+      required: true,
     },
-  };
+    checked: {
+      required: true,
+    },
+  },
+};
 </script>
 
 <style scoped>
-  .containerSwitch {
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-  }
-  .label {
+.containerSwitch {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+.label {
   margin-left: 12px;
   color: #1a202c;
 }

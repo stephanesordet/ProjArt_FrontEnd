@@ -10,7 +10,7 @@ import BaseInput from "./components/BaseInput.vue";
 import BaseModalForm from "./components/BaseModalForm.vue";
 import Switch from "./components/Switch.vue";
 import randomColor from "randomcolor";
-import { BASE_URL, currentEventId } from "../composables/store";
+import { BASE_URL, currentEventId, todayDate } from "../composables/store";
 import { currentCoursId } from "../composables/store";
 
 const { data: classes } = useFetch(BASE_URL + "classes");
@@ -524,9 +524,9 @@ fetch(BASE_URL + "matiere")
 <template>
   <div class="main mx-4 my-1 contenu">
     <div>
-      <div class="is-mobile columns buttons is-centered mx-1 my-1">
+      <div class="buttons is-mobile columns is-centered mx-1 my-1">
         <button v-for="classe in Classes" :key="classe" @click="valueHasClicked($event)"
-          class="column button has-background-light has-text-black is-medium is-one-fifth-mobile is-danger btnClasse has-text-centered is-size-6-mobile">
+          class="column button has-background-light has-text-black is-medium is-one-fifth-mobile is-danger btnClasse has-text-centered">
           {{ classe.id }}
         </button>
       </div>
@@ -620,7 +620,7 @@ fetch(BASE_URL + "matiere")
   <!-- MODAL FORM  -->
   <BaseModalForm :class="{ 'is-active': showModalForm }" @close="showModalForm = false">
     <!-- AJOUT COURS  -->
-    <BaseFormModal>
+    <BaseFormModal @submit.prevent="addCours()">
       <h1 class="title is-1">Nouveau cours</h1>
       <div class="field" style="width: 300px">
         <label class="label" for="Années">Années</label>
@@ -642,7 +642,7 @@ fetch(BASE_URL + "matiere")
       <div class="field" style="width: 300px">
         <label class="label" for="Matières">Matières</label>
         <div class="select">
-          <select v-model="matiereForm">
+          <select v-model="matiereForm" required>
             <option value="" disabled selected hidden>Matières</option>
             <option v-for="matiere in MatieresAnnee" v-show="matiere.Annee == selectedAnnee">
               {{ matiere.id }}
@@ -653,42 +653,43 @@ fetch(BASE_URL + "matiere")
       <BaseInput>
         <template v-slot:label>Classe(s)</template>
         <template v-slot:input>
-          <input v-model="classeForm" class="input" type="texte" placeholder="Exemple : M49-1 M49-2" />
+          <input v-model="classeForm" class="input" type="texte" placeholder="Exemple : M49-1 M49-2" required />
         </template>
       </BaseInput>
       <BaseInput>
         <template v-slot:label>Date</template>
         <template v-slot:input>
-          <input v-model="dateCoursForm" class="input" type="date" placeholder="Entrez une date" />
+          <input v-model="dateCoursForm" class="input" type="date" placeholder="Entrez une date" required
+            :min="todayDate" />
         </template>
       </BaseInput>
       <BaseInput>
         <template v-slot:label>Heure de début</template>
         <template v-slot:input>
-          <input v-model="heureDebutForm" class="input" type="time" placeholder="Entrez une heure de début" />
+          <input v-model="heureDebutForm" class="input" type="time" placeholder="Entrez une heure de début" required />
         </template>
       </BaseInput>
       <BaseInput>
         <template v-slot:label>Heure de fin</template>
         <template v-slot:input>
-          <input v-model="heureFinForm" class="input" type="time" placeholder="Entrez une heure de fin" />
+          <input v-model="heureFinForm" class="input" type="time" placeholder="Entrez une heure de fin" required />
         </template>
       </BaseInput>
       <BaseInput>
         <template v-slot:label>Professeur</template>
         <template v-slot:input>
-          <input v-model="profForm" class="input" type="texte" placeholder="Exemple : JHS" />
+          <input v-model="profForm" class="input" type="texte" placeholder="Exemple : JHS" required />
         </template>
       </BaseInput>
       <BaseInput>
         <template v-slot:label>Salle(s)</template>
         <template v-slot:input>
-          <input v-model="lieuForm" class="input" type="text" placeholder="Exemple: T153 T154" />
+          <input v-model="lieuForm" class="input" type="text" placeholder="Exemple: T153 T154" required />
         </template>
       </BaseInput>
 
       <BaseInputSubmit>
-        <input type="submit" class="button is-danger is-rounded" value="Ajouter le cours" @click="addCours()" />
+        <input type="submit" class="button is-danger is-rounded" value="Ajouter le cours" />
       </BaseInputSubmit>
     </BaseFormModal>
   </BaseModalForm>
@@ -702,7 +703,7 @@ fetch(BASE_URL + "matiere")
       <BaseInput>
         <template v-slot:label>Date</template>
         <template v-slot:input>
-          <input v-model="dateCoursForm" class="input" type="date" placeholder="Entrez une date" />
+          <input v-model="dateCoursForm" class="input" type="date" placeholder="Entrez une date" :min="todayDate" />
         </template>
       </BaseInput>
       <BaseInput>

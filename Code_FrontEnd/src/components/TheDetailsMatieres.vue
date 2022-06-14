@@ -2,12 +2,8 @@
 import { ref } from "vue";
 
 defineProps({
-  prof: {
-    type: String,
-  },
-  matiere: {
-    type: String,
-  },
+  prof: {},
+  matiere: {},
 });
 </script>
 

@@ -4,7 +4,7 @@ import TheDetailsEvent from "./components/TheDetailsEvent.vue";
 import BaseBoutonRetour from "./components/TheReturnButton.vue";
 import { BASE_URL, idDetailsEvent } from "../composables/store.js";
 import TheReturnButton from "./components/TheReturnButton.vue";
-import { changeFormatDate } from "../composables/function.js";
+import { changeFormatDateWithoutHoursMinutes } from "../composables/function.js";
 
 // ---------------------- Fetch data for this event -----------------------------
 const events = ref([]);
@@ -42,8 +42,8 @@ const allEvents = computed(() => {
   <TheReturnButton></TheReturnButton>
   <the-details-event
     v-for="events in allEvents"
-    :Debut="changeFormatDate(events.Debut)"
-    :Fin="changeFormatDate(events.Fin)"
+    :Debut="changeFormatDateWithoutHoursMinutes(events.Debut)"
+    :Fin="changeFormatDateWithoutHoursMinutes(events.Fin)"
     :Lieu="events.Lieu"
     :user_Email="events.user_Email"
     :Description="events.Description"
