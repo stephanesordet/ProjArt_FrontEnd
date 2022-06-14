@@ -5,12 +5,10 @@ import CardNotif from "./components/CardNotif.vue";
 import { useFetch } from "../composables/fetch";
 import TheBreadCrums from "./components/TheBreadcrums.vue";
 import BaseFormModal from "./components/BaseFormModal.vue";
-import BaseInputSubmit from "./components/BaseInputSubmit.vue";
-import BaseInput from "./components/BaseInput.vue";
 import BaseModalForm from "./components/BaseModalForm.vue";
 import { BASE_URL } from "../composables/store";
 import { changeFormatDate } from "../composables/function.js";
-import randomColor from 'randomcolor';
+import randomColor from "randomcolor";
 
 const userSession = ref(sessionStorage.getItem("user"));
 const role = ref(sessionStorage.getItem("role"));
@@ -69,17 +67,17 @@ fetch(BASE_URL + "role")
       couleurMatiereOb.id = matiere.id;
       couleurMatiereOb.color = randomColor({ seed: i });
       matiereColor.push(couleurMatiereOb);
-      i+=7;
+      i += 7;
     });
     console.log(matiereColor);
     matiereColor.forEach((element) => {
       document.head.insertAdjacentHTML(
         "beforeend",
         "<style>." +
-        element.id +
-        "{border-color:" +
-        element.color +
-        " !important}</style>"
+          element.id +
+          "{border-color:" +
+          element.color +
+          " !important}</style>"
       );
     });
   });
