@@ -346,7 +346,7 @@ const Matiere = computed(() => {
   const tabMatiere = [];
   const tabMatiereHistorique = [];
   const uniqueMatiereColor = new Set();
-  if (!classeCours.value?.length || !userRemarque.value?.length) {
+  if (!classeCours.value?.length && !userRemarque.value?.length) {
     return [];
   } else {
     classeCours.value.forEach((element) => {
