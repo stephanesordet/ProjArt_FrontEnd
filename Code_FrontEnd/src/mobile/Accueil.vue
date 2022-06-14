@@ -21,6 +21,7 @@ const selectedClasses = ref("M49-1");
 const classeCours = ref([]);
 
 var dateActuelle = new Date();
+const dateStr = formatDateView(dateActuelle);
 
 const lundiSemaine = ref([
   formatDate(
@@ -36,8 +37,6 @@ const vendrediSemaine = ref([
 
 var viewLundiSemaine = ref([]);
 var viewVendrediSemaine = ref([]);
-
-const dateStr = formatDateView(dateActuelle);
 
 watchEffect(() => {
   fetch(BASE_URL + "cours/classe/" + selectedClasses.value)
