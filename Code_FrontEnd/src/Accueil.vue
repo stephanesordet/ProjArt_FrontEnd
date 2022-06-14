@@ -1,7 +1,7 @@
 <script setup>
 import { def } from "@vue/shared";
 import axios from "axios";
-import { computed, ref, watchEffect } from "vue";
+import { computed, ref, watch, watchEffect } from "vue";
 import { useFetch } from "../composables/fetch";
 import CardCours from "./components/CardCours.vue";
 import BaseFormModal from "./components/BaseFormModal.vue";
@@ -15,6 +15,8 @@ import { currentCoursId } from "../composables/store";
 import TheLoader from "./components/TheLoader.vue";
 
 const { data: classes } = useFetch(BASE_URL + "classes");
+const { data: matieres } = useFetch(BASE_URL + "matiere");
+
 const selectedClasses = ref("M49-1");
 const historique = ref(false);
 const classeCours = ref([]);
@@ -23,7 +25,9 @@ watchEffect(() => {
     .then((res) => res.json())
     .then((coursClasse) => (classeCours.value = coursClasse));
 });
+
 const role = ref(sessionStorage.getItem("role"));
+const userSession = ref(sessionStorage.getItem("user"));
 const date = new Date();
 const dateStrTest = formatDateView(date);
 const dateStr =
@@ -260,6 +264,20 @@ const Matiere = computed(() => {
   return { uniqueMatiere, uniqueMatiereHistorique };
 });
 
+const MatieresAnnee = computed(() => {
+  const tabMatiere = [];
+  if (!matieres.value?.length) {
+    return [];
+  } else {
+    matieres.value.forEach((element) => {
+
+      tabMatiere.push(element);
+    });
+  }
+  console.log(tabMatiere.value)
+  return tabMatiere;
+});
+
 let showModalForm = ref(false);
 let showDeleteModalForm = ref(false);
 let showUpdateModalForm = ref(false);
@@ -267,10 +285,22 @@ let showUpdateModalForm = ref(false);
 //Traitement du form after submit
 const dateCoursForm = ref("");
 const selectedclasseForm = ref("");
+const classeForm = ref("");
 const heureDebutForm = ref("");
 const heureFinForm = ref("");
 const matiereForm = ref("");
 const lieuForm = ref("");
+const selectedAnnee = ref();
+
+watchEffect(() => {
+  console.log(dateCoursForm.value)
+  console.log(heureDebutForm.value)
+  console.log(heureFinForm.value)
+  console.log(matiereForm.value)
+  console.log(lieuForm.value)
+  console.log(classeForm.value)
+
+})
 
 async function addCours() {
   try {
@@ -278,7 +308,10 @@ async function addCours() {
       .post(BASE_URL + "cours/create", {
         Debut: dateCoursForm.value + " " + heureDebutForm.value,
         Fin: dateCoursForm.value + " " + heureFinForm.value,
-        matiere_id: matiereForm.value,
+        Matiere: matiereForm.value,
+        Salles: lieuForm.value,
+        Classes: classeForm.value,
+        User: userSession.value,
       })
       .then(() => {
         window.location.reload();
@@ -330,10 +363,16 @@ function valueHasClicked(event) {
   document.querySelector(".charger").style.display = "block";
   const classe = event.target.innerHTML;
   selectedClasses.value = classe;
-  console.log(selectedClasses.value);
   setTimeout(hideLoader, 1000);
 }
 
+function toggleActiveAnnee(event) {
+  const btnClasses = document.querySelectorAll(".btnAnnee");
+  btnClasses.forEach((btnClasse) => {
+    btnClasse.classList.remove("isActive");
+  });
+  event.target.classList.add("isActive");
+}
 function hideLoader() {
   document.querySelector(".charger").style.display = "none";
   const cours = document.querySelectorAll(".cours");
@@ -392,7 +431,6 @@ function displayUpdateModal(id, salle) {
 
 }
 
-watchEffect()
 
 async function updateCours() {
   try {
@@ -401,8 +439,13 @@ async function updateCours() {
         Debut: dateCoursForm.value + " " + heureDebutForm.value,
         Fin: dateCoursForm.value + " " + heureFinForm.value,
         Salles: lieuForm.value,
+        User: userSession.value,
       })
       .then(() => {
+        dateCoursForm.value = "";
+        heureDebutForm.value = "";
+        heureFinForm.value = "";
+        lieuForm.value = "";
         //window.location.reload();
       });
     console.log(cours);
@@ -413,7 +456,9 @@ async function updateCours() {
 
 function deleteCours() {
   axios
-    .post(BASE_URL + "cours/delete/" + currentCoursId.value)
+    .post(BASE_URL + "cours/delete/" + currentCoursId.value, {
+      User: userSession.value,
+    })
     .then((res) => {
       //Perform Success Action
     })
@@ -422,7 +467,7 @@ function deleteCours() {
       console.log(error);
     })
     .finally(() => {
-      //window.location.reload();
+      window.location.reload();
     });
 }
 
@@ -496,7 +541,9 @@ function showPage() {
         <div class="tile is-parent is-vertical">
           <template v-if="historique">
             <template v-for="day in CoursClasse.uniqueCoursHistoriqueByDate" :key="day.Jour">
-              <span style="text-align: left" :class="setClass(day)" class="spanCours">{{ day.Date }}</span>
+              <span style="text-align: left" :class="setClass(day)" class="spanCours">{{
+                  day.Date
+              }}</span>
               <card-cours v-for="cours in day.Cours" :key="cours.id" :data-id="cours.id" :class="cours.matiere_id"
                 class="cours" :debut="cours.HeureDebut" :fin="cours.HeureFin" :cours="cours.matiere_id"
                 :salle="cours.salle_id">
@@ -570,8 +617,43 @@ function showPage() {
   <!-- MODAL FORM  -->
   <BaseModalForm :class="{ 'is-active': showModalForm }" @close="showModalForm = false">
     <!-- AJOUT COURS  -->
-    <BaseFormModal @submit.prevent="addCours()">
+    <BaseFormModal>
       <h1 class="title is-1">Nouveau cours</h1>
+      <div class="field" style="width: 300px">
+        <label class="label" for="Années">Années</label>
+        <div class="buttons are-small is-mobile  is-centered mx-1 my-1">
+          <button @click="selectedAnnee = 1, toggleActiveAnnee($event)"
+            class=" button has-background-light has-text-black is-medium is-one-fifth-mobile is-danger btnAnnee">
+            1ère
+          </button>
+          <button @click="selectedAnnee = 2, toggleActiveAnnee($event)"
+            class=" button has-background-light has-text-black is-medium is-one-fifth-mobile is-danger btnAnnee">
+            2ème
+          </button>
+          <button @click="selectedAnnee = 3, toggleActiveAnnee($event)"
+            class=" button has-background-light has-text-black is-medium is-one-fifth-mobile is-danger btnAnnee">
+            3ème
+          </button>
+        </div>
+      </div>
+      <div class="field" style="width: 300px">
+        <label class="label" for="Matières">Matières</label>
+        <div class="select">
+          <select>
+            <option value="" disabled selected hidden>Matières</option>
+            <option v-for="matiere in MatieresAnnee" v-show="matiere.Annee == selectedAnnee"
+              @click="matiereForm = matiere.id">
+              {{ matiere.id }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <BaseInput>
+        <template v-slot:label>Classe(s)</template>
+        <template v-slot:input>
+          <input v-model="classeForm" class="input" type="texte" placeholder="Exemple : M49-1 M49-2" />
+        </template>
+      </BaseInput>
       <BaseInput>
         <template v-slot:label>Date</template>
         <template v-slot:input>
@@ -592,14 +674,14 @@ function showPage() {
       </BaseInput>
 
       <BaseInput>
-        <template v-slot:label>Lieu</template>
+        <template v-slot:label>Salle(s)</template>
         <template v-slot:input>
-          <input v-model="lieuForm" class="input" type="text" placeholder="Entrez le lieu d'une classe" />
+          <input v-model="lieuForm" class="input" type="text" placeholder="Exemple: T153 T154" />
         </template>
       </BaseInput>
 
       <BaseInputSubmit>
-        <input type="submit" class="button is-danger is-rounded" value="Ajouter le cours" />
+        <input type="submit" class="button is-danger is-rounded" value="Ajouter le cours" @click="addCours()" />
       </BaseInputSubmit>
     </BaseFormModal>
   </BaseModalForm>
@@ -629,9 +711,9 @@ function showPage() {
         </template>
       </BaseInput>
       <BaseInput>
-        <template v-slot:label>Lieu</template>
+        <template v-slot:label>Classe(s)</template>
         <template v-slot:input>
-          <input v-model="lieuForm" class="input" type="text" placeholder="Entrez le lieu d'une classe" />
+          <input v-model="lieuForm" class="input" type="text" placeholder="Entrez la/les classe(s)" />
         </template>
       </BaseInput>
       <BaseInputSubmit>

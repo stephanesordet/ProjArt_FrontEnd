@@ -49,7 +49,7 @@ function useFetchLogin(password, email) {
             sessionStorage.setItem("role", "AGE");
           }
 
-          showWelcomeModalForm.value = !showWelcomeModalForm.value;
+          /*  showWelcomeModalForm.value = !showWelcomeModalForm.value; */
           setTimeout(() => {
             window.location.hash = "#accueil";
             window.location.reload()
