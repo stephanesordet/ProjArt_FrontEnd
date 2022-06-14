@@ -13,7 +13,7 @@ import ArrowPrev from "../components/ArrowPrev.vue";
 import ArrowNext from "../components/ArrowNext.vue";
 import randomColor from "randomcolor";
 import TheLoader from "../components/TheLoader.vue";
-import 'BASE_URL' from "../../composables/store";
+import { BASE_URL } from "../../composables/store";
 
 const { data: classes } = useFetch(BASE_URL + "classes");
 
