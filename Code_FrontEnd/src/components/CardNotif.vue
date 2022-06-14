@@ -8,10 +8,7 @@ defineProps({
 </script>
 <template>
   <article class="tile is-child notification is-light has-text-left-mobile">
-    <link
-      rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-    />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
     <span class="icon">
       <i class="fa fa-solid fa-circle fa-lg"></i>
     </span>
@@ -20,17 +17,11 @@ defineProps({
     <p class="is-size-5">
       {{ message }}
     </p>
+    <slot></slot>
   </article>
 </template>
 
 <style scoped>
-.icon {
-  color: #ff3860;
-  position: absolute;
-  right: 10px;
-  top: 10px;
-}
-
 article {
   border-left-width: 15px;
   border-style: solid;

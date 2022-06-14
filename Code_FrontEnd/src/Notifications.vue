@@ -8,15 +8,24 @@ import BaseFormModal from "./components/BaseFormModal.vue";
 import BaseModalForm from "./components/BaseModalForm.vue";
 import { BASE_URL } from "../composables/store";
 import { changeFormatDate } from "../composables/function.js";
+<<<<<<< Updated upstream
 import randomColor from "randomcolor";
+=======
+import randomColor from 'randomcolor';
+import axios from "axios";
+>>>>>>> Stashed changes
 
 const userSession = ref(sessionStorage.getItem("user"));
 const role = ref(sessionStorage.getItem("role"));
 const notifications = ref([]);
+const newNotifs = ref("")
 
 window.addEventListener("hashchange", () => {
   userSession.value = sessionStorage.getItem("user");
   role.value = sessionStorage.getItem("role");
+  if (window.location.hash === "#notifications" && newNotifs.value !== "") {
+    updateNotifs();
+  }
 });
 
 watchEffect(() => {
@@ -27,13 +36,7 @@ watchEffect(() => {
   }
 });
 
-/* setInterval(function () {
-  fetch(BASE_URL + "notifications/" + userSession.value)
-    .then((res) => res.json())
-    .then((notifResults) => (notifications.value = notifResults));
-}, 2000000); */
 
-const notifCount = 5;
 
 const allNotifications = computed(() => {
   const tabNotifications = [];
@@ -43,15 +46,16 @@ const allNotifications = computed(() => {
   } else {
     notifications.value.forEach((element) => {
       tabNotifications.push(element);
+      if (element.status == false) {
+        newNotifs.value += "," + element.notification.id;
+      }
     });
-    if (tabNotifications.length != notifCount) {
-      console.log(tabNotifications.length);
-    } else {
-      console.log("no new notif");
-    }
   }
+
   return tabNotifications;
 });
+
+
 
 // ---------------------- Boolean for showing the modal form -----------------------------
 let showModalForm = ref(false);
@@ -81,18 +85,40 @@ fetch(BASE_URL + "role")
       );
     });
   });
+
+function updateNotifs() {
+  axios
+    .post(BASE_URL + "notifications/read/", {
+      User: userSession.value,
+      Notifications: newNotifs.value.substring(1)
+      // ---------------------- !!!!!!!!! CHANGER !!!!!!!!! -----------------------------
+    })
+    .then((res) => {
+      //Perform Success Action
+      console.log(res);
+
+    })
+    .catch((error) => {
+      // error.response.status Check status code
+      console.log(error);
+    })
+    .finally(() => {
+    });
+}
+
+watchEffect(() => {
+  console.log(newNotifs.value)
+})
 </script>
 
 <template>
   <the-card-wrapper>
-    <card-notif
-      v-for="response in allNotifications"
-      :user="role"
-      :object="response.notification.Objet"
-      :envoiHeure="changeFormatDate(response.notification.EnvoiHeureDate)"
-      :message="response.notification.Message"
-      :class="response.roles"
-    >
+    <card-notif v-for="response in allNotifications" :user="role" :object="response.notification.Objet"
+      :envoiHeure="changeFormatDate(response.notification.EnvoiHeureDate)" :message="response.notification.Message"
+      :class="response.roles">
+      <span v-if="response.status == false" class="icon">
+        <i class="fa fa-solid fa-circle fa-lg"></i>
+      </span>
     </card-notif>
   </the-card-wrapper>
 </template>
@@ -102,5 +128,12 @@ fetch(BASE_URL + "role")
   position: fixed;
   bottom: 20px;
   right: 40px;
+}
+
+.icon {
+  color: #ff3860;
+  position: absolute;
+  right: 10px;
+  top: 10px;
 }
 </style>

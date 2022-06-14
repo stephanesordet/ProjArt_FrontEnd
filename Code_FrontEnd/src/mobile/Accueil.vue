@@ -230,6 +230,7 @@ function afficheForm() {
 }
 
 let showModalForm = ref(false);
+let showInfoModal = ref(false);
 
 //Traitement du form after submit
 const dateCours = ref("");
@@ -241,48 +242,39 @@ const lieu = ref("");
 
 const selectedClasseModal = ref("");
 
-watchEffect(() => {
-  console.log(dateCours.value);
-  console.log(selectedclasseModal.value);
-  console.log(heureDebut.value);
-  console.log(heureFin.value);
-  console.log(matiere.value);
-  console.log(lieu.value);
-});
-/* function addCours() {
-  axios
-    .post(BASE_URL + "cours/create", {
-      Debut: date.value + ' ' + heureDebut.value,
-      Fin: date.value + ' ' + heureFin.value,
-      matiere_id: matiere.value,
-    })
-    .then((res) => {
-      //Perform Success Action
-      console.log(res);
-    })
-    .catch((error) => {
-      // error.response.status Check status code
-      console.log(error);
-    })
-    .finally(() => {
-      window.location.reload();
-    })
-} */
+const messageToUser = ref("");
+
 
 async function addCours() {
   try {
     const cours = await axios
       .post(BASE_URL + "cours/create", {
-        Debut: dateCours.value + " " + heureDebut.value,
-        Fin: dateCours.value + " " + heureFin.value,
-        matiere_id: matiere.value,
+        Debut: dateCoursForm.value + " " + heureDebutForm.value,
+        Fin: dateCoursForm.value + " " + heureFinForm.value,
+        Matiere: matiereForm.value,
+        Salles: lieuForm.value,
+        Classes: classeForm.value,
+        User: userSession.value,
+        Prof: profForm.value,
       })
-      .then(() => {
-        window.location.reload();
-      });
+      .then((response) => {
+        showModalForm.value = !showModalForm.value;
+        messageToUser.value = "Cours ajouté avec succès";
+        showInfoModal.value = !showInfoModal.value;
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+      })
+      .then(() => { });
     console.log(cours);
   } catch (e) {
     console.log(e);
+    showModalForm.value = !showModalForm.value;
+    messageToUser.value = "Erreur lors de l'ajout du cours";
+    showInfoModal.value = !showInfoModal.value;
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
   }
 }
 
@@ -353,6 +345,14 @@ function changeSemaine(change) {
   viewVendrediSemaine.value = formatDateView(new Date(vendrediSemaine.value[0]));
 }
 
+function toggleActiveAnnee(event) {
+  const btnClasses = document.querySelectorAll(".btnAnnee");
+  btnClasses.forEach((btnClasse) => {
+    btnClasse.classList.remove("isActive");
+  });
+  event.target.classList.add("isActive");
+}
+
 fetch(BASE_URL + "matiere")
   .then((res) => res.json())
   .then((AllMatiere) => {
@@ -386,7 +386,7 @@ fetch(BASE_URL + "matiere")
     <div>
       <div class="is-mobile buttons columns is-centered mx-1 my-1">
         <button v-for="classe in Classes" :key="classe" @click="valueHasClicked($event)"
-          class="column button has-background-light has-text-black is-medium is-one-fifth-mobile is-danger btnClasse is-size-6-mobile has-text-centered">
+          class="column button has-background-light has-text-black is-medium is-one-fifth-mobile is-danger btnClasse is-size-6-mobile">
           {{ classe.id }}
         </button>
       </div>
@@ -431,64 +431,84 @@ fetch(BASE_URL + "matiere")
   <!-- MODAL FORM  -->
   <BaseModalForm :class="{ 'is-active': showModalForm }" @close="showModalForm = false">
     <!-- AJOUT COURS  -->
-    <BaseFormModal @submit.prevent="addCours()">
+    <BaseFormModal>
       <h1 class="title is-1">Nouveau cours</h1>
-
+      <div class="field" style="width: 300px">
+        <label class="label" for="Années">Années</label>
+        <div class="buttons are-small is-mobile is-centered mx-1 my-1">
+          <button @click="(selectedAnnee = 1), toggleActiveAnnee($event)"
+            class="button has-background-light has-text-black is-medium is-one-fifth-mobile is-danger btnAnnee">
+            1ère
+          </button>
+          <button @click="(selectedAnnee = 2), toggleActiveAnnee($event)"
+            class="button has-background-light has-text-black is-medium is-one-fifth-mobile is-danger btnAnnee">
+            2ème
+          </button>
+          <button @click="(selectedAnnee = 3), toggleActiveAnnee($event)"
+            class="button has-background-light has-text-black is-medium is-one-fifth-mobile is-danger btnAnnee">
+            3ème
+          </button>
+        </div>
+      </div>
+      <div class="field" style="width: 300px">
+        <label class="label" for="Matières">Matières</label>
+        <div class="select">
+          <select v-model="matiereForm">
+            <option value="" disabled selected hidden>Matières</option>
+            <option v-for="matiere in MatieresAnnee" v-show="matiere.Annee == selectedAnnee">
+              {{ matiere.id }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <BaseInput>
+        <template v-slot:label>Classe(s)</template>
+        <template v-slot:input>
+          <input v-model="classeForm" class="input" type="texte" placeholder="Exemple : M49-1 M49-2" />
+        </template>
+      </BaseInput>
       <BaseInput>
         <template v-slot:label>Date</template>
         <template v-slot:input>
-          <input v-model="date" class="input" type="date" placeholder="Entrez une date" />
+          <input v-model="dateCoursForm" class="input" type="date" placeholder="Entrez une date" />
         </template>
       </BaseInput>
-
-      <BaseInput>
-        <template v-slot:label>Classe</template>
-        <template v-slot:input>
-          <div class="select">
-            <select v-model="selectedclasseModal">
-              <option v-for="classe in Classes" @click="selectedclasseModal = classe.id">
-                {{ classe.id }}
-              </option>
-            </select>
-          </div>
-        </template>
-      </BaseInput>
-
-      <BaseInput>
-        <template v-slot:label>Matière</template>
-        <template v-slot:input>
-          <div class="select">
-            <select v-model="matiere">
-              <option>Droit2</option>
-            </select>
-          </div>
-        </template>
-      </BaseInput>
-
       <BaseInput>
         <template v-slot:label>Heure de début</template>
         <template v-slot:input>
-          <input v-model="heureDebut" class="input" type="time" placeholder="Entrez une heure de début" />
+          <input v-model="heureDebutForm" class="input" type="time" placeholder="Entrez une heure de début" />
         </template>
       </BaseInput>
-
       <BaseInput>
         <template v-slot:label>Heure de fin</template>
         <template v-slot:input>
-          <input v-model="heureFin" class="input" type="time" placeholder="Entrez une heure de fin" />
+          <input v-model="heureFinForm" class="input" type="time" placeholder="Entrez une heure de fin" />
         </template>
       </BaseInput>
-
       <BaseInput>
-        <template v-slot:label>Lieu</template>
+        <template v-slot:label>Professeur</template>
         <template v-slot:input>
-          <input v-model="lieu" class="input" type="text" placeholder="Entrez le lieu d'une classe" />
+          <input v-model="profForm" class="input" type="texte" placeholder="Exemple : JHS" />
+        </template>
+      </BaseInput>
+      <BaseInput>
+        <template v-slot:label>Salle(s)</template>
+        <template v-slot:input>
+          <input v-model="lieuForm" class="input" type="text" placeholder="Exemple: T153 T154" />
         </template>
       </BaseInput>
 
       <BaseInputSubmit>
-        <input type="submit" class="button is-danger is-rounded" value="Ajouter le cours" />
+        <input type="submit" class="button is-danger is-rounded" value="Ajouter le cours" @click="addCours()" />
       </BaseInputSubmit>
+    </BaseFormModal>
+  </BaseModalForm>
+
+  <!-- MODAL FORM INFO  -->
+  <BaseModalForm :class="{ 'is-active': showInfoModal }" @close="showInfoModal = false">
+    <!-- CRUD ACTION  -->
+    <BaseFormModal>
+      <h1 class="title is-2">{{ messageToUser }}</h1>
     </BaseFormModal>
   </BaseModalForm>
 </template>

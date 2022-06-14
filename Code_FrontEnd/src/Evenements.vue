@@ -82,8 +82,13 @@ function addEvent() {
       messageToUser.value = "Erreur lors de la création de l'événement";
       showInfoModal.value = !showInfoModal.value;
       setTimeout(() => {
+<<<<<<< Updated upstream
         window.location.reload();
       }, 1000);
+=======
+        //window.location.reload()
+      }, 1000)
+>>>>>>> Stashed changes
     })
     .finally(() => {});
 }
@@ -209,20 +214,10 @@ fetch(BASE_URL + "role")
 <template>
   <div class="main my-4 mx-4">
     <the-card-wrapper>
-      <card-event
-        v-for="events in allEvents"
-        :id="events.id"
-        :debut="changeFormatDateWithoutHoursMinutes(events.Debut)"
-        :fin="changeFormatDateWithoutHoursMinutes(events.Fin)"
-        :titre="events.Titre"
-        :lieu="events.Lieu"
-        :description="events.Description"
-        :class="events.role_id"
-      >
-        <button
-          class="button is-pulled-right is-white has-background-light"
-          @click="voirDetails(events.id)"
-        >
+      <card-event v-for="events in allEvents" :id="events.id" :debut="changeFormatDateWithoutHoursMinutes(events.Debut)"
+        :fin="changeFormatDateWithoutHoursMinutes(events.Fin)" :titre="events.Titre" :lieu="events.Lieu"
+        :description="events.Description" :class="events.role_id">
+        <button class="button is-pulled-right is-white has-background-light" @click="voirDetails(events.id)">
           <span class="icon is-small">
             <i class="fa fa-info"></i>
           </span>
@@ -271,10 +266,7 @@ fetch(BASE_URL + "role")
   </div>
 
   <!-- MODAL FORM  -->
-  <BaseModalForm
-    :class="{ 'is-active': showModalForm }"
-    @close="showModalForm = false"
-  >
+  <BaseModalForm :class="{ 'is-active': showModalForm }" @close="showModalForm = false">
     <!-- AJOUT EVENT  -->
     <BaseFormModal @submit.prevent="addEvent()">
       <h1 class="title is-1">Nouvel évènement</h1>
