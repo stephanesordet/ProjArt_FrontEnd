@@ -1,6 +1,7 @@
 <template>
     <div class="loading-box">
-        <div class="lds-heart"><div></div></div>
+        <div class="lds-ripple"><div></div><div></div></div>
+        <h2 class="chargement"></h2>
     </div>
 </template>
 
@@ -10,6 +11,44 @@
 </script>
 
 <style scoped>
+.chargement::before {
+            content: "Nous chargeons vos données";
+            animation: animate infinite 10s;
+        }
+  
+        @keyframes animate {
+  
+            0% {
+                content: "Cela prend un peu de temps";
+            }
+  
+            50% {
+                content: "Pourquoi pas un peu de café ?";
+            }
+  
+            75% {
+                content: "Gaps est vraiment lent...";
+            }
+            100% {
+                content: "Nous chargeons vos données";
+            }
+        }
+.chargement {
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 150px;
+    text-transform: uppercase;
+    position: absolute;
+    color: #959595;
+    animation: color-change 1s infinite;
+}
+
+@keyframes color-change {
+  0% { color: #343434; }
+  50% { color: #959595; }
+  100% { color: #343434; }
+}
 .loading-box{
     position: fixed;
     top: 0;
@@ -17,64 +56,65 @@
     width: 100%;
     height: 100%;
     background: rgba(0,0,0,1);
-    z-index: 9999;
-    display: flex;
+    z-index: 999;
+    display: none;
     justify-content: center;
     align-items: center;
 }
-.lds-heart {
+.lds-ripple {
   display: inline-block;
   position: relative;
   width: 80px;
   height: 80px;
-  transform: rotate(45deg);
-  transform-origin: 40px 40px;
 }
-.lds-heart div {
-  top: 32px;
-  left: 32px;
+.lds-ripple div {
   position: absolute;
-  width: 32px;
-  height: 32px;
-  background: #fff;
-  animation: lds-heart 1.2s infinite cubic-bezier(0.215, 0.61, 0.355, 1);
+  border: 4px solid #fff;
+  opacity: 1;
+  border-radius: 50%;
+  animation: lds-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
 }
-.lds-heart div:after,
-.lds-heart div:before {
-  content: " ";
-  position: absolute;
-  display: block;
-  width: 32px;
-  height: 32px;
-  background: #fff;
+.lds-ripple div:nth-child(2) {
+  animation-delay: -0.5s;
 }
-.lds-heart div:before {
-  left: -24px;
-  border-radius: 50% 0 0 50%;
-}
-.lds-heart div:after {
-  top: -24px;
-  border-radius: 50% 50% 0 0;
-}
-@keyframes lds-heart {
+@keyframes lds-ripple {
   0% {
-    transform: scale(0.95);
+    top: 36px;
+    left: 36px;
+    width: 0;
+    height: 0;
+    opacity: 0;
+  }
+  4.9% {
+    top: 36px;
+    left: 36px;
+    width: 0;
+    height: 0;
+    opacity: 0;
   }
   5% {
-    transform: scale(1.1);
-  }
-  39% {
-    transform: scale(0.85);
-  }
-  45% {
-    transform: scale(1);
-  }
-  60% {
-    transform: scale(0.95);
+    top: 36px;
+    left: 36px;
+    width: 0;
+    height: 0;
+    opacity: 1;
   }
   100% {
-    transform: scale(0.9);
+    top: 0px;
+    left: 0px;
+    width: 72px;
+    height: 72px;
+    opacity: 0;
   }
+}
+.hidden {
+  opacity:0;
+}
+.console-underscore {
+   display:inline-block;
+  position:relative;
+  top:-0.14em;
+  left:10px;
 }
 
 </style>

@@ -5,6 +5,7 @@ import BaseFormModal from "./components/BaseFormModal.vue";
 import BaseModalForm from "./components/BaseModalForm.vue";
 import axios from "axios";
 import { BASE_URL } from "../composables/store";
+import TheLoader from "./components/TheLoader.vue";
 
 let email = ref("");
 let password = ref("");
@@ -26,6 +27,7 @@ function compareMail(email) {
 
 function useFetchLogin(password, email) {
   if (compareMail(email)) {
+    document.querySelector(".loading-box").style.display = "flex";
     axios
       .post(BASE_URL+'login', {
         Email: email,
@@ -33,7 +35,6 @@ function useFetchLogin(password, email) {
       })
       .then((res) => {
         if (res.data.includes("connected") || res.data.includes("DB")) {
-
           sessionStorage.setItem("user", email);
           userSession.value = sessionStorage.getItem("user");
           if (res.data.includes("Professeur")) {
@@ -47,17 +48,18 @@ function useFetchLogin(password, email) {
           }
 
           /*  showWelcomeModalForm.value = !showWelcomeModalForm.value; */
-          setTimeout(() => {
             window.location.hash = "#accueil";
-            window.location.reload()
-          }, 1000);
+            //window.location.reload();
+            document.querySelector(".loading-box").style.display = "none";
 
         } else if (
           res.data.includes("user found : error in password or username")
         ) {
+          document.querySelector(".loading-box").style.display = "none";
           showUserPswErrorModalForm.value = !showUserPswErrorModalForm.value;
           userSession.value = null;
         } else {
+          document.querySelector(".loading-box").style.display = "none";
           showUserPswErrorModalForm.value = !showUserPswErrorModalForm.value;
           userSession.value = null;
         }
@@ -80,6 +82,7 @@ function changeHash() {
 </script>
 
 <template>
+<TheLoader></TheLoader>
   <section class="hero">
     <!-- To accept bulma's icons -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
@@ -118,14 +121,14 @@ function changeHash() {
   </section>
 
   <!-- MODAL FORM WELCOME -->
-  <BaseModalForm :class="{ 'is-active': showWelcomeModalForm }" @close="showWelcomeModalForm = false">
+  <BaseModalForm :class="{ 'is-active': showWelcomeModalForm }" @close="showWelcomeModalForm = false" style="z-index: index 9999;">
 
     <BaseFormModal>
-      <h2 class="title is-4">Bienvenue dans <b>Kairos</b> </h2>
+      <h2 class="title is-4">Lors de votre première connexion, nous chargeons les données de GAPS. Ce système étant très lent, nous vons coneillons de boire votre café ! </h2>
     </BaseFormModal>
     <BaseInputSubmit>
-      <input type="submit" class="button is-primary is-rounded" value="Entrer"
-        @click="showWelcomeModalForm = false, changeHash()" />
+      <input type="submit" class="button is-primary is-rounded" value="Je vais y aller !"
+        @click="showWelcomeModalForm = false" />
     </BaseInputSubmit>
   </BaseModalForm>
 
