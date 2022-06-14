@@ -374,10 +374,10 @@ fetch(BASE_URL + "matiere")
       document.head.insertAdjacentHTML(
         "beforeend",
         "<style>." +
-          element.id +
-          "{border-color:" +
-          element.color +
-          " !important}</style>"
+        element.id +
+        "{border-color:" +
+        element.color +
+        " !important}</style>"
       );
     });
   });
@@ -385,13 +385,9 @@ fetch(BASE_URL + "matiere")
 <template>
   <div class="main mx-4 my-1">
     <div>
-      <div class="buttons is-mobile columns is-centered mx-1 my-1">
-        <button
-          v-for="classe in Classes"
-          :key="classe"
-          @click="valueHasClicked($event)"
-          class="column button has-background-light has-text-black is-medium is-one-fifth-mobile is-danger btnClasse"
-        >
+      <div class="is-mobile buttons columns is-centered mx-1 my-1">
+        <button v-for="classe in Classes" :key="classe" @click="valueHasClicked($event)"
+          class="column button has-background-light has-text-black is-medium is-one-fifth-mobile is-danger btnClasse is-size-6-mobile has-text-centered">
           {{ classe.id }}
         </button>
       </div>
@@ -407,25 +403,14 @@ fetch(BASE_URL + "matiere")
           <template v-for="day in CoursClasse.uniqueCoursByDate" :key="day.Jour">
             <template v-if="checkDate(day.DateTest)">
               <span style="text-align: left" :class="setClass(day)" class="spanCours">{{
-                day.Date
+                  day.Date
               }}</span>
-              <HR
-                v-if="dateStr == day.Date"
-                :class="setClass(day)"
-                class="spanCours"
-                style="background-color: blue; height: 5px"
-              ></HR>
-              <card-cours
-                v-for="cours in day.Cours"
-                :key="cours.id"
-                :data-id="cours.id"
-                :class="cours.matiere_id"
-                class="cours"
-                :debut="cours.HeureDebut"
-                :fin="cours.HeureFin"
-                :cours="cours.matiere_id"
-                :salle="cours.salle_id"
-              >
+              <HR v-if="dateStr == day.Date" :class="setClass(day)" class="spanCours"
+                style="background-color: blue; height: 5px">
+              </HR>
+              <card-cours v-for="cours in day.Cours" :key="cours.id" :data-id="cours.id" :class="cours.matiere_id"
+                class="cours" :debut="cours.HeureDebut" :fin="cours.HeureFin" :cours="cours.matiere_id"
+                :salle="cours.salle_id">
               </card-cours>
             </template>
           </template>
@@ -436,13 +421,8 @@ fetch(BASE_URL + "matiere")
       </div>
     </div>
     <div>
-      <button
-        v-show="role == 'Administration'"
-        class="button is-right js-modal-trigger"
-        data-target="modal-js-example"
-        id="fixedbutton"
-        @click="showModalForm = !showModalForm"
-      >
+      <button v-show="role == 'Administration'" class="button is-right js-modal-trigger" data-target="modal-js-example"
+        id="fixedbutton" @click="showModalForm = !showModalForm">
         <span class="icon is-large has-text-danger">
           <i class="fa fa-4x fa-plus-square"></i>
         </span>
@@ -489,45 +469,26 @@ fetch(BASE_URL + "matiere")
       <BaseInput>
         <template v-slot:label>Heure de début</template>
         <template v-slot:input>
-          <input
-            v-model="heureDebut"
-            class="input"
-            type="time"
-            placeholder="Entrez une heure de début"
-          />
+          <input v-model="heureDebut" class="input" type="time" placeholder="Entrez une heure de début" />
         </template>
       </BaseInput>
 
       <BaseInput>
         <template v-slot:label>Heure de fin</template>
         <template v-slot:input>
-          <input
-            v-model="heureFin"
-            class="input"
-            type="time"
-            placeholder="Entrez une heure de fin"
-          />
+          <input v-model="heureFin" class="input" type="time" placeholder="Entrez une heure de fin" />
         </template>
       </BaseInput>
 
       <BaseInput>
         <template v-slot:label>Lieu</template>
         <template v-slot:input>
-          <input
-            v-model="lieu"
-            class="input"
-            type="text"
-            placeholder="Entrez le lieu d'une classe"
-          />
+          <input v-model="lieu" class="input" type="text" placeholder="Entrez le lieu d'une classe" />
         </template>
       </BaseInput>
 
       <BaseInputSubmit>
-        <input
-          type="submit"
-          class="button is-danger is-rounded"
-          value="Ajouter le cours"
-        />
+        <input type="submit" class="button is-danger is-rounded" value="Ajouter le cours" />
       </BaseInputSubmit>
     </BaseFormModal>
   </BaseModalForm>
@@ -538,6 +499,7 @@ fetch(BASE_URL + "matiere")
   bottom: 20px;
   right: 40px;
 }
+
 .charger,
 .charger:before,
 .charger:after {
@@ -547,6 +509,7 @@ fetch(BASE_URL + "matiere")
   width: 1em;
   height: 4em;
 }
+
 .charger {
   color: #333;
   text-indent: -9999em;
@@ -560,44 +523,54 @@ fetch(BASE_URL + "matiere")
   animation-delay: -0.16s;
   display: none;
 }
+
 .charger:before,
 .charger:after {
   position: absolute;
   top: 0;
   content: "";
 }
+
 .charger:before {
   left: -1.5em;
   -webkit-animation-delay: -0.32s;
   animation-delay: -0.32s;
 }
+
 .charger:after {
   left: 1.5em;
 }
+
 @-webkit-keyframes load1 {
+
   0%,
   80%,
   100% {
     box-shadow: 0 0;
     height: 4em;
   }
+
   40% {
     box-shadow: 0 -2em;
     height: 5em;
   }
 }
+
 @keyframes load1 {
+
   0%,
   80%,
   100% {
     box-shadow: 0 0;
     height: 4em;
   }
+
   40% {
     box-shadow: 0 -2em;
     height: 5em;
   }
 }
+
 button.isActive {
   background-color: #f14668 !important;
   color: #ffffff !important;

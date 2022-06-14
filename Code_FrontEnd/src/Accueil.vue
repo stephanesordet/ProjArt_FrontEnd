@@ -524,9 +524,9 @@ fetch(BASE_URL + "matiere")
 <template>
   <div class="main mx-4 my-1 contenu">
     <div>
-      <div class="buttons is-mobile columns is-centered mx-1 my-1">
+      <div class="is-mobile columns buttons is-centered mx-1 my-1">
         <button v-for="classe in Classes" :key="classe" @click="valueHasClicked($event)"
-          class="column button has-background-light has-text-black is-medium is-one-fifth-mobile is-danger btnClasse has-text-centered">
+          class="column button has-background-light has-text-black is-medium is-one-fifth-mobile is-danger btnClasse has-text-centered is-size-6-mobile">
           {{ classe.id }}
         </button>
       </div>
