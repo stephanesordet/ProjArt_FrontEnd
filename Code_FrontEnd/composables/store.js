@@ -8,3 +8,9 @@ export let currentCoursId = ref(2);
 export let currentMatiereId = ref("");
 
 export let currentEventId = ref(null);
+
+export const idDetailsEvent = ref(sessionStorage.getItem("idDetailsEvent"));
+export const idDetailsMatiere = ref(sessionStorage.getItem("idDetailsMatiere"));
+export const matiere_idDetailsMatiere = ref(
+  sessionStorage.getItem("matiere_idDetailsMatiere")
+);

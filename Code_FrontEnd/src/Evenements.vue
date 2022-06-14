@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, watchEffect } from "vue";
+import { ref, computed, watchEffect, nextTick } from "vue";
 import CardEvent from "./components/CardEvent.vue";
 import TheCardWrapper from "./components/TheCardWrapper.vue";
 import BaseFormModal from "./components/BaseFormModal.vue";
@@ -9,7 +9,7 @@ import BaseModalForm from "./components/BaseModalForm.vue";
 import { currentEventId } from "../composables/store";
 import axios from "axios";
 import { useFetch } from "../composables/fetch.js";
-import { BASE_URL } from "../composables/store";
+import { BASE_URL, idDetailsEvent } from "../composables/store.js";
 import { changeFormatDateWithoutHoursMinutes } from "../composables/function.js";
 
 // ---------------------- Fetch data for all events -----------------------------
@@ -164,14 +164,11 @@ function deleteEvent() {
     });
 }
 
-function voirDetails(id) {
-  console.log("detailEvents " + id);
-  window.location.hash = "#detailEvent";
-  window.location.reload();
-
+async function voirDetails(id) {
   sessionStorage.setItem("idDetailsEvent", id);
-  //console.log(sessionStorage.getItem("idDetailsEvent"));
-  //sessionStorage.setItem("matiere_idDetailsMatiere", matiere_id);
+  idDetailsEvent.value = id;
+  await nextTick();
+  window.location.hash = "#detailEvent";
 }
 </script>
 
@@ -226,7 +223,10 @@ function voirDetails(id) {
   </div>
 
   <!-- MODAL FORM  -->
-  <BaseModalForm :class="{ 'is-active': showModalForm }" @close="showModalForm = false">
+  <BaseModalForm
+    :class="{ 'is-active': showModalForm }"
+    @close="showModalForm = false"
+  >
     <!-- AJOUT EVENT  -->
     <BaseFormModal @submit.prevent="addEvent()">
       <h1 class="title is-1">Nouvel évènement</h1>
