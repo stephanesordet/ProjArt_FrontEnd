@@ -14,7 +14,6 @@ import {
   idDetailsMatiere,
   matiere_idDetailsMatiere,
 } from "../composables/store";
-import TheLoader from "./components/TheLoader.vue";
 import randomColor from "randomcolor";
 import CardRemarque from "./components/CardRemarque.vue";
 
@@ -88,7 +87,7 @@ function formatDateView(date) {
 const CoursClasse = computed(() => {
   const tabCours = [];
   const tabCoursHistorique = [];
-  if (!classeCours.value?.length || !userRemarque.value?.length) {
+  if (!classeCours.value?.length && !userRemarque.value?.length) {
     return [];
   } else {
     classeCours.value.forEach((element) => {
@@ -500,13 +499,6 @@ fetch(BASE_URL + "matiere")
     });
   });
 
-window.onload = function loader() {
-  document.querySelector(".loading-box").style.display = "flex";
-  setTimeout(showPage, 1000);
-};
-function showPage() {
-  document.querySelector(".loading-box").style.display = "none";
-}
 </script>
 
 <template>
