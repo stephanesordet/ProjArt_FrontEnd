@@ -5,25 +5,20 @@ import BaseBoutonRetour from "./components/TheReturnButton.vue";
 import { BASE_URL, idDetailsEvent } from "../composables/store.js";
 import TheReturnButton from "./components/TheReturnButton.vue";
 import { changeFormatDate } from "../composables/function.js";
-// import { useFetch } from '../composables/fetch.js';
-
-// const { data: remarques } = useFetch(
-//   ""
-// );
-// à mettre dans le composant
-// v-for="remarque in remarques" :titre="remarque.titre" :description="remarque.description" :visibilite="remarque.visibilite" :user="remarque.fk_user" :date="remarque.date" :matiere="remarque.fk_matiere"
 
 // ---------------------- Fetch data for this event -----------------------------
 const events = ref([]);
 
 watchEffect(() => {
-  fetch(BASE_URL + "events/id/" + idDetailsEvent.value)
-    .then((res) => res.json())
-    .then((eventsResults) => (events.value = eventsResults))
-    .then(() => {
-      console.log(events.value);
-      console.log(idDetailsEvent.value);
-    });
+  if (idDetailsEvent.value != null) {
+    fetch(BASE_URL + "events/id/" + idDetailsEvent.value)
+      .then((res) => res.json())
+      .then((eventsResults) => (events.value = eventsResults))
+      .then(() => {
+        console.log(events.value);
+        console.log(idDetailsEvent.value);
+      });
+  }
 });
 
 const allEvents = computed(() => {

@@ -24,9 +24,11 @@ const cours = ref([]);
 const remarques = ref([]);
 
 watchEffect(() => {
-  fetch(BASE_URL + "cours/info/" + idDetailsMatiere.value)
-    .then((res) => res.json())
-    .then((coursResults) => (cours.value = coursResults));
+  if (idDetailsMatiere.value != null) {
+    fetch(BASE_URL + "cours/info/" + idDetailsMatiere.value)
+      .then((res) => res.json())
+      .then((coursResults) => (cours.value = coursResults));
+  }
 
   fetch(
     BASE_URL +
