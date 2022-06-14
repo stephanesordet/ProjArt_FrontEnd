@@ -11,10 +11,11 @@ import BaseModalForm from "../components/BaseModalForm.vue";
 import Switch from "../components/Switch.vue";
 import ArrowPrev from "../components/ArrowPrev.vue";
 import ArrowNext from "../components/ArrowNext.vue";
-import randomColor from 'randomcolor';
+import randomColor from "randomcolor";
 import TheLoader from "../components/TheLoader.vue";
+import BASE_URL from "../../composables/store";
 
-const { data: classes } = useFetch("http://localhost:8000/api/classes");
+const { data: classes } = useFetch(BASE_URL + "classes");
 
 const selectedClasses = ref("M49-1");
 
@@ -22,25 +23,31 @@ const classeCours = ref([]);
 
 var dateActuelle = new Date();
 
-const lundiSemaine = ref([formatDate(new Date(dateActuelle.setDate(dateActuelle.getDate()-dateActuelle.getDay()+1)))]);
+const lundiSemaine = ref([
+  formatDate(
+    new Date(dateActuelle.setDate(dateActuelle.getDate() - dateActuelle.getDay() + 1))
+  ),
+]);
 
-const vendrediSemaine = ref([formatDate(new Date(dateActuelle.setDate(dateActuelle.getDate()-dateActuelle.getDay()+5)))]);
+const vendrediSemaine = ref([
+  formatDate(
+    new Date(dateActuelle.setDate(dateActuelle.getDate() - dateActuelle.getDay() + 5))
+  ),
+]);
 
 var viewLundiSemaine = ref([]);
 var viewVendrediSemaine = ref([]);
 
 const dateStr = formatDateView(dateActuelle);
 
-
 watchEffect(() => {
-  fetch("http://127.0.0.1:8000/api/cours/classe/" + selectedClasses.value)
+  fetch(BASE_URL + "cours/classe/" + selectedClasses.value)
     .then((res) => res.json())
     .then((coursClasse) => (classeCours.value = coursClasse));
 });
 
-
 function padTo2Digits(num) {
-  return num.toString().padStart(2, '0');
+  return num.toString().padStart(2, "0");
 }
 
 function formatDate(date) {
@@ -48,14 +55,27 @@ function formatDate(date) {
     padTo2Digits(date.getMonth() + 1),
     padTo2Digits(date.getDate()),
     date.getFullYear(),
-  ].join('/');
+  ].join("/");
 }
 
 function formatDateView(date) {
-    const month = ["Janvier", "Fevrier", "Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Decembre"];
-    let monthDate = month[date.getMonth()];
-    let dates = date.getDate() + " " + monthDate + " " + date.getFullYear();
-    return dates;
+  const month = [
+    "Janvier",
+    "Fevrier",
+    "Mars",
+    "Avril",
+    "Mai",
+    "Juin",
+    "Juillet",
+    "Aout",
+    "Septembre",
+    "Octobre",
+    "Novembre",
+    "Decembre",
+  ];
+  let monthDate = month[date.getMonth()];
+  let dates = date.getDate() + " " + monthDate + " " + date.getFullYear();
+  return dates;
 }
 
 function checkDate(date) {
@@ -63,21 +83,21 @@ function checkDate(date) {
   var dateVendredi = vendrediSemaine.value[0];
   var dateCheck = date.toString();
 
-var d1 = dateLundi.split("/");
-var d2 = dateVendredi.split("/");
-var c = dateCheck.split("/");
+  var d1 = dateLundi.split("/");
+  var d2 = dateVendredi.split("/");
+  var c = dateCheck.split("/");
 
-var from = new Date(d1);
-var to   = new Date(d2);
-var check = new Date(c);
+  var from = new Date(d1);
+  var to = new Date(d2);
+  var check = new Date(c);
 
-var reponse = false;
+  var reponse = false;
 
   if (check >= from && check <= to) {
     reponse = true;
   }
 
-return reponse;
+  return reponse;
 }
 
 const role = ref(sessionStorage.getItem("role"));
@@ -88,20 +108,41 @@ const CoursClasse = computed(() => {
     return [];
   } else {
     classeCours.value.forEach((element) => {
-        const month = ["Janvier", "Fevrier", "Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Decembre"];
-        const days = ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"];
-        const d = new Date(element.Debut);
-        const f = new Date(element.Fin);
-        let monthDate = month[d.getMonth()];
-        let day = days[d.getDay()];
-        let date = d.getDate() + " " + monthDate + " " + d.getFullYear();
-        let heureDebut = d.getHours() + ":" + String(d.getMinutes()).padStart(2, "0");
-        let heureFin = f.getHours() + ":" + String(f.getMinutes()).padStart(2, "0");
-        element.Jour = day;
-        element.Date = date;
-        element.HeureDebut = heureDebut;
-        element.HeureFin = heureFin;
-        tabCours.push(element);
+      const month = [
+        "Janvier",
+        "Fevrier",
+        "Mars",
+        "Avril",
+        "Mai",
+        "Juin",
+        "Juillet",
+        "Aout",
+        "Septembre",
+        "Octobre",
+        "Novembre",
+        "Decembre",
+      ];
+      const days = [
+        "Dimanche",
+        "Lundi",
+        "Mardi",
+        "Mercredi",
+        "Jeudi",
+        "Vendredi",
+        "Samedi",
+      ];
+      const d = new Date(element.Debut);
+      const f = new Date(element.Fin);
+      let monthDate = month[d.getMonth()];
+      let day = days[d.getDay()];
+      let date = d.getDate() + " " + monthDate + " " + d.getFullYear();
+      let heureDebut = d.getHours() + ":" + String(d.getMinutes()).padStart(2, "0");
+      let heureFin = f.getHours() + ":" + String(f.getMinutes()).padStart(2, "0");
+      element.Jour = day;
+      element.Date = date;
+      element.HeureDebut = heureDebut;
+      element.HeureFin = heureFin;
+      tabCours.push(element);
     });
     let duplicates = [];
     const tempArray = tabCours.sort();
@@ -212,7 +253,7 @@ watchEffect(() => {
 });
 /* function addCours() {
   axios
-    .post("http://localhost:8000/api/cours/create", {
+    .post(BASE_URL + "cours/create", {
       Debut: date.value + ' ' + heureDebut.value,
       Fin: date.value + ' ' + heureFin.value,
       matiere_id: matiere.value,
@@ -233,7 +274,7 @@ watchEffect(() => {
 async function addCours() {
   try {
     const cours = await axios
-      .post("http://localhost:8000/api/cours/create", {
+      .post(BASE_URL + "cours/create", {
         Debut: dateCours.value + " " + heureDebut.value,
         Fin: dateCours.value + " " + heureFin.value,
         matiere_id: matiere.value,
@@ -252,7 +293,7 @@ function valueHasClicked(event) {
   btnClasses.forEach((btnClasse) => {
     btnClasse.classList.remove("isActive");
   });
-  event.target.classList.add('isActive');
+  event.target.classList.add("isActive");
   const cours = document.querySelectorAll(".cours");
   const spanCours = document.querySelectorAll(".spanCours");
   cours.forEach((coursSolo) => {
@@ -262,13 +303,13 @@ function valueHasClicked(event) {
     coursSolo.style.display = "none";
   });
   document.querySelector(".charger").style.display = "block";
-  const classe = event.target.innerHTML;  
+  const classe = event.target.innerHTML;
   selectedClasses.value = classe;
   console.log(selectedClasses.value);
   setTimeout(hideLoader, 1000);
 }
 
-function hideLoader(){
+function hideLoader() {
   document.querySelector(".charger").style.display = "none";
   const cours = document.querySelectorAll(".cours");
   const spanCours = document.querySelectorAll(".spanCours");
@@ -280,69 +321,92 @@ function hideLoader(){
   });
 }
 
-function setClass(day){
+function setClass(day) {
   const uniqueClass = new Set();
   day.Cours.forEach((element) => {
     uniqueClass.add(element.matiere_id);
   });
-  const str1 = Array.from(uniqueClass).join(' ');
+  const str1 = Array.from(uniqueClass).join(" ");
   return str1;
 }
 
-function changeSemaine(change){
-  if(change === "previous"){
-    lundiSemaine.value[0] = formatDate(new Date(dateActuelle.setDate(dateActuelle.getDate()-dateActuelle.getDay()+1-7)));
-    vendrediSemaine.value[0] = formatDate(new Date(dateActuelle.setDate(dateActuelle.getDate()-dateActuelle.getDay()+5)));
-  }else{
-    lundiSemaine.value[0] = formatDate(new Date(dateActuelle.setDate(dateActuelle.getDate()-dateActuelle.getDay()+1+7)));
-    vendrediSemaine.value[0] = formatDate(new Date(dateActuelle.setDate(dateActuelle.getDate()-dateActuelle.getDay()+5)));
+function changeSemaine(change) {
+  if (change === "previous") {
+    lundiSemaine.value[0] = formatDate(
+      new Date(
+        dateActuelle.setDate(dateActuelle.getDate() - dateActuelle.getDay() + 1 - 7)
+      )
+    );
+    vendrediSemaine.value[0] = formatDate(
+      new Date(dateActuelle.setDate(dateActuelle.getDate() - dateActuelle.getDay() + 5))
+    );
+  } else {
+    lundiSemaine.value[0] = formatDate(
+      new Date(
+        dateActuelle.setDate(dateActuelle.getDate() - dateActuelle.getDay() + 1 + 7)
+      )
+    );
+    vendrediSemaine.value[0] = formatDate(
+      new Date(dateActuelle.setDate(dateActuelle.getDate() - dateActuelle.getDay() + 5))
+    );
   }
 
-   viewLundiSemaine.value = formatDateView(new Date(lundiSemaine.value[0]));
-   viewVendrediSemaine.value = formatDateView(new Date(vendrediSemaine.value[0]));
+  viewLundiSemaine.value = formatDateView(new Date(lundiSemaine.value[0]));
+  viewVendrediSemaine.value = formatDateView(new Date(vendrediSemaine.value[0]));
 }
 
-fetch("http://127.0.0.1:8000/api/matiere")
-    .then((res) => res.json())
-    .then((AllMatiere) => {
+fetch(BASE_URL + "matiere")
+  .then((res) => res.json())
+  .then((AllMatiere) => {
     console.log("----------------------");
     console.log(matiere);
     var couleurMatiereOb;
     const matiereColor = [];
     var i = 0;
-        AllMatiere.forEach((matiere) => {
-             couleurMatiereOb = Object();
-            couleurMatiereOb.id = matiere.id;
-            couleurMatiereOb.color = randomColor({seed: i});;
-            matiereColor.push(couleurMatiereOb);
-            i++;
-        });
-        console.log(matiereColor);
+    AllMatiere.forEach((matiere) => {
+      couleurMatiereOb = Object();
+      couleurMatiereOb.id = matiere.id;
+      couleurMatiereOb.color = randomColor({ seed: i });
+      matiereColor.push(couleurMatiereOb);
+      i++;
+    });
+    console.log(matiereColor);
     matiereColor.forEach((element) => {
-       document.head.insertAdjacentHTML("beforeend", '<style>.'+element.id+'{border-color:'+element.color+' !important}</style>');
+      document.head.insertAdjacentHTML(
+        "beforeend",
+        "<style>." +
+          element.id +
+          "{border-color:" +
+          element.color +
+          " !important}</style>"
+      );
     });
-    });
+  });
 
-    window.onload = function loader() {
-    document.querySelector(".loading-box").style.display = "flex";
-    setTimeout(showPage, 1000);
-  }
-  function showPage() {
+window.onload = function loader() {
+  document.querySelector(".loading-box").style.display = "flex";
+  setTimeout(showPage, 1000);
+};
+function showPage() {
   document.querySelector(".loading-box").style.display = "none";
 }
 </script>
 <template>
-<TheLoader></TheLoader>
+  <TheLoader></TheLoader>
   <div class="main mx-4 my-1">
     <div>
       <div class="buttons is-mobile columns is-centered mx-1 my-1">
-        <button v-for="classe in Classes" :key="classe" @click="valueHasClicked($event)"
-          class="column button has-background-light has-text-black is-medium is-one-fifth-mobile is-danger btnClasse">
+        <button
+          v-for="classe in Classes"
+          :key="classe"
+          @click="valueHasClicked($event)"
+          class="column button has-background-light has-text-black is-medium is-one-fifth-mobile is-danger btnClasse"
+        >
           {{ classe.id }}
         </button>
       </div>
     </div>
-    <p> Semaine du </p>
+    <p>Semaine du</p>
     <ArrowPrev :span="viewLundiSemaine" @click="changeSemaine('previous')" />
     <span> au </span>
     <ArrowNext :span="viewVendrediSemaine" @click="changeSemaine('next')" />
@@ -351,22 +415,44 @@ fetch("http://127.0.0.1:8000/api/matiere")
       <div class="column is-three-quarters">
         <div class="tile is-parent is-vertical">
           <template v-for="day in CoursClasse.uniqueCoursByDate" :key="day.Jour">
-          <template v-if="checkDate(day.DateTest)">
-          <span style="text-align:left;" :class="setClass(day)" class="spanCours">{{day.Date}}</span>
-          <HR v-if="dateStr == day.Date" :class="setClass(day)" class="spanCours" style="background-color: blue; height:5px;"></HR>
-          <card-cours v-for="cours in day.Cours" :key="cours.id" :data-id="cours.id" :class="cours.matiere_id" class="cours" :debut="cours.HeureDebut" :fin="cours.HeureFin" :cours="cours.matiere_id" :salle="cours.salle_id">
-          </card-cours>
+            <template v-if="checkDate(day.DateTest)">
+              <span style="text-align: left" :class="setClass(day)" class="spanCours">{{
+                day.Date
+              }}</span>
+              <HR
+                v-if="dateStr == day.Date"
+                :class="setClass(day)"
+                class="spanCours"
+                style="background-color: blue; height: 5px"
+              ></HR>
+              <card-cours
+                v-for="cours in day.Cours"
+                :key="cours.id"
+                :data-id="cours.id"
+                :class="cours.matiere_id"
+                class="cours"
+                :debut="cours.HeureDebut"
+                :fin="cours.HeureFin"
+                :cours="cours.matiere_id"
+                :salle="cours.salle_id"
+              >
+              </card-cours>
+            </template>
           </template>
-          </template>
-          <div v-if="(CoursClasse.uniqueCoursByDate == undefined)">
+          <div v-if="CoursClasse.uniqueCoursByDate == undefined">
             <h2>Cours en chargement</h2>
           </div>
         </div>
       </div>
     </div>
     <div>
-      <button v-show="role == 'Administration'" class="button is-right js-modal-trigger" data-target="modal-js-example"
-        id="fixedbutton" @click="showModalForm = !showModalForm">
+      <button
+        v-show="role == 'Administration'"
+        class="button is-right js-modal-trigger"
+        data-target="modal-js-example"
+        id="fixedbutton"
+        @click="showModalForm = !showModalForm"
+      >
         <span class="icon is-large has-text-danger">
           <i class="fa fa-4x fa-plus-square"></i>
         </span>
@@ -413,26 +499,45 @@ fetch("http://127.0.0.1:8000/api/matiere")
       <BaseInput>
         <template v-slot:label>Heure de début</template>
         <template v-slot:input>
-          <input v-model="heureDebut" class="input" type="time" placeholder="Entrez une heure de début" />
+          <input
+            v-model="heureDebut"
+            class="input"
+            type="time"
+            placeholder="Entrez une heure de début"
+          />
         </template>
       </BaseInput>
 
       <BaseInput>
         <template v-slot:label>Heure de fin</template>
         <template v-slot:input>
-          <input v-model="heureFin" class="input" type="time" placeholder="Entrez une heure de fin" />
+          <input
+            v-model="heureFin"
+            class="input"
+            type="time"
+            placeholder="Entrez une heure de fin"
+          />
         </template>
       </BaseInput>
 
       <BaseInput>
         <template v-slot:label>Lieu</template>
         <template v-slot:input>
-          <input v-model="lieu" class="input" type="text" placeholder="Entrez le lieu d'une classe" />
+          <input
+            v-model="lieu"
+            class="input"
+            type="text"
+            placeholder="Entrez le lieu d'une classe"
+          />
         </template>
       </BaseInput>
 
       <BaseInputSubmit>
-        <input type="submit" class="button is-danger is-rounded" value="Ajouter le cours" />
+        <input
+          type="submit"
+          class="button is-danger is-rounded"
+          value="Ajouter le cours"
+        />
       </BaseInputSubmit>
     </BaseFormModal>
   </BaseModalForm>
@@ -469,7 +574,7 @@ fetch("http://127.0.0.1:8000/api/matiere")
 .charger:after {
   position: absolute;
   top: 0;
-  content: '';
+  content: "";
 }
 .charger:before {
   left: -1.5em;
@@ -503,7 +608,7 @@ fetch("http://127.0.0.1:8000/api/matiere")
     height: 5em;
   }
 }
-button.isActive{
+button.isActive {
   background-color: #f14668 !important;
   color: #ffffff !important;
 }
