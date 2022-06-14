@@ -1,19 +1,20 @@
 <template>
-    <a @click="$emit('click', 'previous')" class="previous round">&#8249;</a>
-    <span @click="$emit('click', 'previous')" class="dateSemaine">{{ span }}</span>
+  <a @click="$emit('click', 'previous')" class="previous round">&#8249;</a>
+  <span @click="$emit('click', 'previous')" class="dateSemaine">{{
+    span
+  }}</span>
 </template>
 
 <script>
-  export default {
-    name: "ArrowPrev",
-    inheritAttrs: false,
-    props: {
-      span: {
-        type: String,
-        required: true,
-      },
+export default {
+  name: "ArrowPrev",
+  inheritAttrs: false,
+  props: {
+    span: {
+      required: true,
     },
-  };
+  },
+};
 </script>
 
 <style scoped>

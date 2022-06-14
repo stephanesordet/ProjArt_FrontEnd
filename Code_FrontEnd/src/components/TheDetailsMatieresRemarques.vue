@@ -11,24 +11,12 @@ const messageToUser = ref("");
 let showInfoModal = ref(false);
 
 defineProps({
-  user_Email: {
-    type: String,
-  },
-  Titre: {
-    type: String,
-  },
-  Description: {
-    type: String,
-  },
-  DateRemarque: {
-    type: Date,
-  },
-  Visibilite: {
-    type: String,
-  },
-  id: {
-    type: Number,
-  },
+  user_Email: {},
+  Titre: {},
+  Description: {},
+  DateRemarque: {},
+  Visibilite: {},
+  id: {},
 });
 
 function deleteRemarque(id) {
@@ -40,8 +28,8 @@ function deleteRemarque(id) {
       messageToUser.value = "Remarque supprimée avec succès";
       showInfoModal.value = !showInfoModal.value;
       setTimeout(() => {
-        window.location.reload()
-      }, 1000)
+        window.location.reload();
+      }, 1000);
     })
     .catch((error) => {
       // error.response.status Check status code
@@ -49,16 +37,18 @@ function deleteRemarque(id) {
       messageToUser.value = "Remarque supprimée avec succès";
       showInfoModal.value = !showInfoModal.value;
       setTimeout(() => {
-        window.location.reload()
-      }, 1000)
+        window.location.reload();
+      }, 1000);
     })
-    .finally(() => {
-    });
+    .finally(() => {});
 }
 </script>
 
 <template>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <link
+    rel="stylesheet"
+    href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+  />
   <div class="column">
     <div class="icon-text">
       <span class="icon is-small">
@@ -80,8 +70,11 @@ function deleteRemarque(id) {
         <span>Privée</span>
       </span>
 
-      <button v-show="user_Email == userValue" class="button is-pulled-right is-white has-background-light"
-        @click="deleteRemarque(id)">
+      <button
+        v-show="user_Email == userValue"
+        class="button is-pulled-right is-white has-background-light"
+        @click="deleteRemarque(id)"
+      >
         <span class="icon is-small">
           <i class="fa fa-trash"></i>
         </span>
@@ -95,7 +88,10 @@ function deleteRemarque(id) {
     </p>
   </div>
   <!-- MODAL FORM INFO  -->
-  <BaseModalForm :class="{ 'is-active': showInfoModal }" @close="showInfoModal = false">
+  <BaseModalForm
+    :class="{ 'is-active': showInfoModal }"
+    @close="showInfoModal = false"
+  >
     <!-- CRUD ACTION  -->
     <BaseFormModal>
       <h1 class="title is-2">{{ messageToUser }}</h1>
@@ -113,7 +109,7 @@ div .column {
   margin-bottom: 1rem;
 }
 
-div .column>p {
+div .column > p {
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
 }

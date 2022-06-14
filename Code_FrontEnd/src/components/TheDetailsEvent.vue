@@ -1,19 +1,11 @@
 <script setup>
 defineProps({
-  Titre: {
-    type: String,
-  },
-  Description: {
-    type: String,
-  },
-  Lieu: {
-    type: String,
-  },
+  Titre: {},
+  Description: {},
+  Lieu: {},
   Debut: {},
   Fin: {},
-  user_Email: {
-    type: String,
-  },
+  user_Email: {},
 });
 </script>
 
