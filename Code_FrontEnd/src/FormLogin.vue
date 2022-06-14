@@ -27,13 +27,10 @@ function compareMail(email) {
 function useFetchLogin(password, email) {
   if (compareMail(email)) {
     axios
-      .post(
-        BASE_URL + "login?Email=" +
-        email +
-        "&Password=" +
-        password,
-        {}
-      )
+      .post(BASE_URL+'login', {
+        Email: email,
+        Password: password
+      })
       .then((res) => {
         if (res.data.includes("connected") || res.data.includes("DB")) {
 
