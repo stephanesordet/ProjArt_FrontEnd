@@ -11,6 +11,7 @@ import axios from "axios";
 import { useFetch } from "../composables/fetch.js";
 import { BASE_URL } from "../composables/store";
 import { changeFormatDateWithoutHoursMinutes } from "../composables/function.js";
+import randomColor from 'randomcolor';
 
 // ---------------------- Fetch data for all events -----------------------------
 const { data: events } = useFetch(BASE_URL + "events/");
@@ -18,13 +19,23 @@ const userSession = ref(sessionStorage.getItem("user"));
 const role = ref(sessionStorage.getItem("role"));
 const auteur = ref(false);
 
+const date = new Date();
+const dateStr =
+  date.getFullYear() +
+  "-" +
+  ("00" + (date.getMonth() + 1)).slice(-2) +
+  "-" +
+  ("00" + date.getDate()).slice(-2);
+
 const allEvents = computed(() => {
   const tabEvents = [];
   if (!events.value?.length) {
     return [];
   } else {
     events.value.forEach((element) => {
-      tabEvents.push(element);
+       if (element.Debut >= dateStr) {
+          tabEvents.push(element);
+       }
     });
   }
   return tabEvents;
@@ -141,16 +152,36 @@ function voirDetails(id) {
   //console.log(sessionStorage.getItem("idDetailsEvent"));
   //sessionStorage.setItem("matiere_idDetailsMatiere", matiere_id);
 }
+
+fetch(BASE_URL + "role")
+  .then((res) => res.json())
+  .then((AllMatiere) => {
+    var couleurMatiereOb;
+    const matiereColor = [];
+    var i = 0;
+    AllMatiere.forEach((matiere) => {
+      couleurMatiereOb = Object();
+      couleurMatiereOb.id = matiere.id;
+      couleurMatiereOb.color = randomColor({ seed: i });
+      matiereColor.push(couleurMatiereOb);
+      i+=7;
+    });
+    console.log(matiereColor);
+    matiereColor.forEach((element) => {
+      document.head.insertAdjacentHTML(
+        "beforeend",
+        "<style>." +
+        element.id +
+        "{border-color:" +
+        element.color +
+        " !important}</style>"
+      );
+    });
+  });
 </script>
 
 <template>
   <div class="main my-4 mx-4">
-    <div class="select is-danger">
-      <select>
-        <option>Tous les events</option>
-        <option>With options ?</option>
-      </select>
-    </div>
     <the-card-wrapper>
       <card-event
         v-for="events in allEvents"
@@ -160,6 +191,7 @@ function voirDetails(id) {
         :titre="events.Titre"
         :lieu="events.Lieu"
         :description="events.Description"
+        :class="events.role_id"
       >
         <button
           class="button is-pulled-right is-white has-background-light"
