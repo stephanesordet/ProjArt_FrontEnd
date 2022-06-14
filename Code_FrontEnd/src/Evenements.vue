@@ -83,9 +83,12 @@ function addEvent() {
       showInfoModal.value = !showInfoModal.value;
       setTimeout(() => {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         window.location.reload();
       }, 1000);
 =======
+=======
+>>>>>>> Stashed changes
         //window.location.reload()
       }, 1000)
 >>>>>>> Stashed changes
