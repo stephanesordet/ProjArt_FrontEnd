@@ -8,15 +8,8 @@ import BaseFormModal from "./components/BaseFormModal.vue";
 import BaseModalForm from "./components/BaseModalForm.vue";
 import { BASE_URL } from "../composables/store";
 import { changeFormatDate } from "../composables/function.js";
-<<<<<<< Updated upstream
-import randomColor from "randomcolor";
-=======
 import randomColor from 'randomcolor';
 import axios from "axios";
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 
 const userSession = ref(sessionStorage.getItem("user"));
 const role = ref(sessionStorage.getItem("role"));
@@ -26,8 +19,15 @@ const newNotifs = ref("")
 window.addEventListener("hashchange", () => {
   userSession.value = sessionStorage.getItem("user");
   role.value = sessionStorage.getItem("role");
-  if (window.location.hash === "#notifications" && newNotifs.value !== "") {
+  if (window.location.hash == "#notifications" && newNotifs.value != "") {
     updateNotifs();
+    window.addEventListener('hashchange', () => {
+      if (window.location.hash != "#notifications") {
+        fetch(BASE_URL + "notifications/" + userSession.value)
+          .then((res) => res.json())
+          .then((notifResults) => (notifications.value = notifResults));
+      }
+    });
   }
 });
 
@@ -39,6 +39,13 @@ watchEffect(() => {
   }
 });
 
+setInterval(() => {
+  if (userSession.value != null) {
+    fetch(BASE_URL + "notifications/" + userSession.value)
+      .then((res) => res.json())
+      .then((notifResults) => (notifications.value = notifResults));
+  }
+}, 60000);
 
 
 const allNotifications = computed(() => {
@@ -49,13 +56,13 @@ const allNotifications = computed(() => {
   } else {
     notifications.value.forEach((element) => {
       tabNotifications.push(element);
-      if (element.status == false) {
+      if (element.status == false && !newNotifs.value.includes(element.notification.id)) {
         newNotifs.value += "," + element.notification.id;
       }
     });
   }
 
-  return tabNotifications;
+  return tabNotifications.reverse();
 });
 
 
@@ -81,10 +88,10 @@ fetch(BASE_URL + "role")
       document.head.insertAdjacentHTML(
         "beforeend",
         "<style>." +
-          element.id +
-          "{border-color:" +
-          element.color +
-          " !important}</style>"
+        element.id +
+        "{border-color:" +
+        element.color +
+        " !important}</style>"
       );
     });
   });
@@ -106,12 +113,19 @@ function updateNotifs() {
       console.log(error);
     })
     .finally(() => {
-    });
-}
 
+    });
+
+  newNotifs.value = "";
+}
 watchEffect(() => {
   console.log(newNotifs.value)
 })
+
+setInterval(() => {
+  console.log(newNotifs.value)
+}, 5000)
+
 </script>
 
 <template>
