@@ -1,6 +1,4 @@
 <script setup>
-import { currentCoursId } from "../../composables/store.js";
-
 defineProps({
   cours: {},
   debut: {},

@@ -1,7 +1,6 @@
 <script setup>
 import { def } from "@vue/shared";
 import { computed, ref, nextTick, watchEffect } from "vue";
-import { useFetch } from "../composables/fetch";
 import CardCours from "./components/CardCours.vue";
 import BaseFormModal from "./components/BaseFormModal.vue";
 import BaseInputSubmit from "./components/BaseInputSubmit.vue";
@@ -498,7 +497,6 @@ fetch(BASE_URL + "matiere")
       );
     });
   });
-
 </script>
 
 <template>
@@ -645,8 +643,13 @@ fetch(BASE_URL + "matiere")
       </div>
     </div>
     <div>
-      <button v-show="role == 'Administration'" class="button is-right js-modal-trigger" data-target="modal-js-example"
-        id="fixedbutton" @click="showModalForm = !showModalForm">
+      <button
+        v-show="role == 'Administration'"
+        class="button is-right js-modal-trigger"
+        data-target="modal-js-example"
+        id="fixedbutton"
+        @click="showModalForm = !showModalForm"
+      >
         <span class="icon is-large has-text-danger">
           <i class="fa fa-4x fa-plus-square"></i>
         </span>

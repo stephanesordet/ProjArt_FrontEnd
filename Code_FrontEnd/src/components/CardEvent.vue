@@ -1,6 +1,4 @@
 <script setup>
-import { currentEventId } from "../../composables/store";
-
 defineProps({
   id: {},
   titre: {},

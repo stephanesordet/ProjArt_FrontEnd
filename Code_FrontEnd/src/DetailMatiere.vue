@@ -2,7 +2,6 @@
 import { ref, computed, watchEffect } from "vue";
 import TheDetailsMatieres from "./components/TheDetailsMatieres.vue";
 import TheDetailsMatieresRemarques from "./components/TheDetailsMatieresRemarques.vue";
-import CardEvent from "./components/CardEvent.vue";
 import TheCardWrapper from "./components/TheCardWrapper.vue";
 import BaseFormModal from "./components/BaseFormModal.vue";
 import BaseInputSubmit from "./components/BaseInputSubmit.vue";

@@ -2,26 +2,24 @@
 import { ref, computed, watchEffect } from "vue";
 import TheCardWrapper from "./components/TheCardWrapper.vue";
 import CardNotif from "./components/CardNotif.vue";
-import { useFetch } from "../composables/fetch";
-import TheBreadCrums from "./components/TheBreadcrums.vue";
 import BaseFormModal from "./components/BaseFormModal.vue";
 import BaseModalForm from "./components/BaseModalForm.vue";
-import { BASE_URL } from "../composables/store";
+import { BASE_URL } from "../composables/store.js";
 import { changeFormatDate } from "../composables/function.js";
-import randomColor from 'randomcolor';
+import randomColor from "randomcolor";
 import axios from "axios";
 
 const userSession = ref(sessionStorage.getItem("user"));
 const role = ref(sessionStorage.getItem("role"));
 const notifications = ref([]);
-const newNotifs = ref("")
+const newNotifs = ref("");
 
 window.addEventListener("hashchange", () => {
   userSession.value = sessionStorage.getItem("user");
   role.value = sessionStorage.getItem("role");
   if (window.location.hash == "#notifications" && newNotifs.value != "") {
     updateNotifs();
-    window.addEventListener('hashchange', () => {
+    window.addEventListener("hashchange", () => {
       if (window.location.hash != "#notifications") {
         fetch(BASE_URL + "notifications/" + userSession.value)
           .then((res) => res.json())
@@ -47,7 +45,6 @@ setInterval(() => {
   }
 }, 60000);
 
-
 const allNotifications = computed(() => {
   const tabNotifications = [];
 
@@ -56,7 +53,10 @@ const allNotifications = computed(() => {
   } else {
     notifications.value.forEach((element) => {
       tabNotifications.push(element);
-      if (element.status == false && !newNotifs.value.includes(element.notification.id)) {
+      if (
+        element.status == false &&
+        !newNotifs.value.includes(element.notification.id)
+      ) {
         newNotifs.value += "," + element.notification.id;
       }
     });
@@ -64,8 +64,6 @@ const allNotifications = computed(() => {
 
   return tabNotifications.reverse();
 });
-
-
 
 // ---------------------- Boolean for showing the modal form -----------------------------
 let showModalForm = ref(false);
@@ -88,10 +86,10 @@ fetch(BASE_URL + "role")
       document.head.insertAdjacentHTML(
         "beforeend",
         "<style>." +
-        element.id +
-        "{border-color:" +
-        element.color +
-        " !important}</style>"
+          element.id +
+          "{border-color:" +
+          element.color +
+          " !important}</style>"
       );
     });
   });
@@ -100,39 +98,40 @@ function updateNotifs() {
   axios
     .post(BASE_URL + "notifications/read/", {
       User: userSession.value,
-      Notifications: newNotifs.value.substring(1)
+      Notifications: newNotifs.value.substring(1),
       // ---------------------- !!!!!!!!! CHANGER !!!!!!!!! -----------------------------
     })
     .then((res) => {
       //Perform Success Action
       console.log(res);
-
     })
     .catch((error) => {
       // error.response.status Check status code
       console.log(error);
     })
-    .finally(() => {
-
-    });
+    .finally(() => {});
 
   newNotifs.value = "";
 }
 watchEffect(() => {
-  console.log(newNotifs.value)
-})
+  console.log(newNotifs.value);
+});
 
 setInterval(() => {
-  console.log(newNotifs.value)
-}, 5000)
-
+  console.log(newNotifs.value);
+}, 5000);
 </script>
 
 <template>
   <the-card-wrapper>
-    <card-notif v-for="response in allNotifications" :user="role" :object="response.notification.Objet"
-      :envoiHeure="changeFormatDate(response.notification.EnvoiHeureDate)" :message="response.notification.Message"
-      :class="response.roles">
+    <card-notif
+      v-for="response in allNotifications"
+      :user="role"
+      :object="response.notification.Objet"
+      :envoiHeure="changeFormatDate(response.notification.EnvoiHeureDate)"
+      :message="response.notification.Message"
+      :class="response.roles"
+    >
       <span v-if="response.status == false" class="icon">
         <i class="fa fa-solid fa-circle fa-lg"></i>
       </span>

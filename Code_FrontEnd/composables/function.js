@@ -1,3 +1,4 @@
+// ---------------------- Function that transform date to format YYYY-MM-DD -----------------------------
 export function changeFormatDate(date) {
     let myDate = date;
   
@@ -15,6 +16,7 @@ export function changeFormatDate(date) {
     return time;
   }
 
+  // ---------------------- Function that transform date to format YYYY-MM-DD, without hours and minutes  -----------------------------
   export function changeFormatDateWithoutHoursMinutes(date) {
     let myDate = date;
   

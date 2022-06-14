@@ -10,7 +10,7 @@ import BaseInput from "./components/BaseInput.vue";
 import BaseModalForm from "./components/BaseModalForm.vue";
 import Switch from "./components/Switch.vue";
 import randomColor from "randomcolor";
-import { BASE_URL, currentEventId, todayDate } from "../composables/store";
+import { BASE_URL, todayDate } from "../composables/store";
 import { currentCoursId } from "../composables/store";
 
 const { data: classes } = useFetch(BASE_URL + "classes");

@@ -43,15 +43,6 @@ defineProps({
       <p class="is-size-6">
         {{ Fin }}
       </p>
-
-      <!--       <div class="column buttons is-pulled-right">
-        <button class="button is-danger is-rounded">
-          <span>Supprimer</span>
-        </button>
-        <button class="button is-danger is-rounded">
-          <span>Modifer</span>
-        </button>
-      </div> -->
     </div>
   </div>
 </template>

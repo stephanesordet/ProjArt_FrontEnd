@@ -8,7 +8,6 @@ import Accueil from "./Accueil.vue";
 import AccueilMobile from "./mobile/Accueil.vue";
 import DetailMatiere from "./DetailMatiere.vue";
 import Notifications from "./Notifications.vue";
-import AjoutCours from "./FormAjoutCours.vue";
 import DetailEvent from "./DetailEvent.vue";
 import PasswordReset from "./PasswordReset.vue";
 import TheReturnButton from "./components/TheReturnButton.vue";
@@ -50,10 +49,6 @@ function isMobileDevice() {
         label: "Notifications",
         component: Notifications,
       },
-      "#ajoutCours": {
-        label: "Ajouter un cours",
-        component: AjoutCours,
-      },
       "#detailEvent": {
         label: "Detail event",
         component: DetailEvent,
@@ -88,10 +83,6 @@ function isMobileDevice() {
       "#notifications": {
         label: "Notifications",
         component: Notifications,
-      },
-      "#ajoutCours": {
-        label: "Ajouter un cours",
-        component: AjoutCours,
       },
       "#detailEvent": {
         label: "Detail event",

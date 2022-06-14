@@ -16,11 +16,6 @@
       @click="$emit('close')"
     ></button>
   </div>
-
-  <!--   <button class="js-modal-trigger" data-target="modal-js-example">
-    BUTTON FOR MODAL
-  </button> -->
 </template>
 
-<style>
-</style>
+<style></style>
