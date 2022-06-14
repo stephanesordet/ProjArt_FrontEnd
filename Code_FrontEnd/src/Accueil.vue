@@ -281,6 +281,7 @@ const MatieresAnnee = computed(() => {
 let showModalForm = ref(false);
 let showDeleteModalForm = ref(false);
 let showUpdateModalForm = ref(false);
+let showInfoModalForm = ref(false);
 
 //Traitement du form after submit
 const dateCoursForm = ref("");
@@ -291,16 +292,8 @@ const heureFinForm = ref("");
 const matiereForm = ref("");
 const lieuForm = ref("");
 const selectedAnnee = ref();
-
-watchEffect(() => {
-  console.log(dateCoursForm.value)
-  console.log(heureDebutForm.value)
-  console.log(heureFinForm.value)
-  console.log(matiereForm.value)
-  console.log(lieuForm.value)
-  console.log(classeForm.value)
-
-})
+const messageToUser = ref("");
+const profForm = ref("");
 
 async function addCours() {
   try {
@@ -312,7 +305,13 @@ async function addCours() {
         Salles: lieuForm.value,
         Classes: classeForm.value,
         User: userSession.value,
+        Prof: profForm.value
       })
+      /* .then((response) => {
+        setTimeout(
+          messageToUser.value = "Cours ajouté avec succès", 1000
+        )
+      }) */
       .then(() => {
         window.location.reload();
       });
@@ -321,6 +320,16 @@ async function addCours() {
     console.log(e);
   }
 }
+
+watchEffect(() => {
+  console.log(dateCoursForm.value)
+  console.log(heureDebutForm.value)
+  console.log(heureFinForm.value)
+  console.log(matiereForm.value)
+  console.log(lieuForm.value)
+  console.log(classeForm.value)
+  console.log(userSession.value)
+})
 
 function valueHasChanged(event) {
   const cours = document.querySelectorAll(".cours");
@@ -672,7 +681,12 @@ function showPage() {
           <input v-model="heureFinForm" class="input" type="time" placeholder="Entrez une heure de fin" />
         </template>
       </BaseInput>
-
+      <BaseInput>
+        <template v-slot:label>Professeur</template>
+        <template v-slot:input>
+          <input v-model="profForm" class="input" type="texte" placeholder="Exemple : JHS" />
+        </template>
+      </BaseInput>
       <BaseInput>
         <template v-slot:label>Salle(s)</template>
         <template v-slot:input>
@@ -733,6 +747,14 @@ function showPage() {
       <BaseInputSubmit>
         <input type="submit" class="button is-primary is-rounded" value="Retour" @click="showDeleteModalForm = false" />
       </BaseInputSubmit>
+    </BaseFormModal>
+  </BaseModalForm>
+
+  <!-- MODAL FORM INFO  -->
+  <BaseModalForm :class="{ 'is-active': showInfoModal }" @close="showInfoModal = false">
+    <!-- CRUD ACTION  -->
+    <BaseFormModal>
+      <h1 class="title is-2">{{ messageToUser }}</h1>
     </BaseFormModal>
   </BaseModalForm>
 </template>
