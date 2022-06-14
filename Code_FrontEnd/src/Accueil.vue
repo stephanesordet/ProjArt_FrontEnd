@@ -354,6 +354,7 @@ function valueHasChanged(event) {
     });
   }
 }
+
 function valueHasClicked(event) {
   const btnClasses = document.querySelectorAll(".btnClasse");
   btnClasses.forEach((btnClasse) => {
@@ -392,6 +393,7 @@ function hideLoader() {
     coursSolo.style.display = "block";
   });
 }
+
 function toggleHistorique() {
   if (historique.value) {
     historique.value = false;
