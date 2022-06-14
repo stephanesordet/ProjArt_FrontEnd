@@ -1,19 +1,18 @@
 <template>
-    <span @click="$emit('click', 'next')" class="dateSemaine">{{ span }}</span>
-    <a @click="$emit('click', 'next')" class="next round">&#8250;</a>
+  <span @click="$emit('click', 'next')" class="dateSemaine">{{ span }}</span>
+  <a @click="$emit('click', 'next')" class="next round">&#8250;</a>
 </template>
 
 <script>
-  export default {
-    name: "ArrowNext",
-    inheritAttrs: false,
-    props: {
-      span: {
-        type: String,
-        required: true,
-      },
+export default {
+  name: "ArrowNext",
+  inheritAttrs: false,
+  props: {
+    span: {
+      required: true,
     },
-  };
+  },
+};
 </script>
 
 <style scoped>
@@ -44,7 +43,7 @@
   border-radius: 50%;
 }
 
-.dateSemaine{
+.dateSemaine {
   text-align: center;
 }
 </style>

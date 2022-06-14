@@ -2,27 +2,13 @@
 import { currentEventId } from "../../composables/store";
 
 defineProps({
-  id: {
-    type: Number,
-  },
-  titre: {
-    type: String,
-  },
-  debut: {
-    type: Date,
-  },
-  fin: {
-    type: Date,
-  },
-  classe: {
-    type: String,
-  },
-  lieu: {
-    type: String,
-  },
-  description: {
-    type: String,
-  },
+  id: {},
+  titre: {},
+  debut: {},
+  fin: {},
+  classe: {},
+  lieu: {},
+  description: {},
 });
 </script>
 

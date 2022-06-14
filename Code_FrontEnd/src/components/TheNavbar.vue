@@ -56,11 +56,9 @@ function logout() {
 
 const props = defineProps({
   routes: {
-    type: Object,
     required: true,
   },
   curHash: {
-    type: String,
     required: true,
   },
 });

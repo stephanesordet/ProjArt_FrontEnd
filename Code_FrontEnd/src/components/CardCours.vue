@@ -2,31 +2,21 @@
 import { currentCoursId } from "../../composables/store.js";
 
 defineProps({
-  cours: {
-    type: String,
-  },
-  debut: {
-    type: Date,
-  },
-  fin: {
-    type: Date,
-  },
-  classe: {
-    type: String,
-  },
-  salle: {
-    type: String,
-  },
-  id: {
-    type: Number,
-  },
+  cours: {},
+  debut: {},
+  fin: {},
+  classe: {},
+  salle: {},
+  id: {},
 });
-
 </script>
 
 <template>
   <article class="tile is-child notification is-light has-text-left-mobile">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
     <p class="is-size-4 has-text-weight-bold">{{ cours }}</p>
     <p class="is-size-6">{{ debut }} - {{ fin }}</p>
     <p class="is-size-5">
@@ -36,7 +26,6 @@ defineProps({
       {{ salle }}
     </p>
     <slot></slot>
-
   </article>
 </template>
 
