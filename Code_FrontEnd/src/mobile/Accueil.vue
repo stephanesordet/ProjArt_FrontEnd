@@ -12,7 +12,6 @@ import Switch from "../components/Switch.vue";
 import ArrowPrev from "../components/ArrowPrev.vue";
 import ArrowNext from "../components/ArrowNext.vue";
 import randomColor from "randomcolor";
-import TheLoader from "../components/TheLoader.vue";
 import { BASE_URL } from "../../composables/store";
 
 const { data: classes } = useFetch(BASE_URL + "classes");
@@ -382,17 +381,8 @@ fetch(BASE_URL + "matiere")
       );
     });
   });
-
-window.onload = function loader() {
-  document.querySelector(".loading-box").style.display = "flex";
-  setTimeout(showPage, 1000);
-};
-function showPage() {
-  document.querySelector(".loading-box").style.display = "none";
-}
 </script>
 <template>
-  <TheLoader></TheLoader>
   <div class="main mx-4 my-1">
     <div>
       <div class="buttons is-mobile columns is-centered mx-1 my-1">

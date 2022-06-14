@@ -12,7 +12,6 @@ import Switch from "./components/Switch.vue";
 import randomColor from "randomcolor";
 import { BASE_URL, currentEventId } from "../composables/store";
 import { currentCoursId } from "../composables/store";
-import TheLoader from "./components/TheLoader.vue";
 
 const { data: classes } = useFetch(BASE_URL + "classes");
 const { data: matieres } = useFetch(BASE_URL + "matiere");
@@ -521,17 +520,8 @@ fetch(BASE_URL + "matiere")
       );
     });
   });
-
-window.onload = function loader() {
-  document.querySelector(".loading-box").style.display = "flex";
-  setTimeout(showPage, 1000);
-};
-function showPage() {
-  document.querySelector(".loading-box").style.display = "none";
-}
 </script>
 <template>
-  <TheLoader></TheLoader>
   <div class="main mx-4 my-1 contenu">
     <div>
       <div class="buttons is-mobile columns is-centered mx-1 my-1">
