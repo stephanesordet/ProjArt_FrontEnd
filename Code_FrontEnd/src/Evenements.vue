@@ -34,6 +34,7 @@ const allEvents = computed(() => {
 const showModalForm = ref(false);
 const showUpdateModalForm = ref(false);
 const showDeleteModalForm = ref(false);
+const showInfoModal = ref(false);
 
 // ---------------------- Traitement form after submit -----------------------------
 const Titre = ref("");
@@ -41,6 +42,7 @@ const Description = ref("");
 const Lieu = ref("");
 const Debut = ref("");
 const Fin = ref("");
+const messageToUser = ref("");
 
 function addEvent() {
   axios
@@ -56,14 +58,23 @@ function addEvent() {
     .then((res) => {
       //Perform Success Action
       console.log(res);
-      window.location.reload();
+      showModalForm.value = !showModalForm.value;
+      messageToUser.value = "L'événement a été créé avec succès";
+      showInfoModal.value = !showInfoModal.value;
+      setTimeout(() => {
+        window.location.reload()
+      }, 1000)
     })
     .catch((error) => {
       // error.response.status Check status code
-      console.log(error);
+      showModalForm.value = !showModalForm.value;
+      messageToUser.value = "Erreur lors de la création de l'événement";
+      showInfoModal.value = !showInfoModal.value;
+      setTimeout(() => {
+        window.location.reload()
+      }, 1000)
     })
     .finally(() => {
-      //window.location.reload();
     });
 }
 
@@ -96,13 +107,24 @@ function updateEvent(user) {
     .then((res) => {
       //Perform Success Action
       console.log(res);
+      showUpdateModalForm.value = !showUpdateModalForm.value;
+      messageToUser.value = "L'événement a été modifié avec succès";
+      showInfoModal.value = !showInfoModal.value;
+      setTimeout(() => {
+        window.location.reload()
+      }, 1000)
     })
     .catch((error) => {
       // error.response.status Check status code
       console.log(error);
+      showUpdateModalForm.value = !showUpdateModalForm.value;
+      messageToUser.value = "Erreur lors de la modification de l'événement";
+      showInfoModal.value = !showInfoModal.value;
+      setTimeout(() => {
+        window.location.reload()
+      }, 1000)
     })
     .finally(() => {
-      window.location.reload();
     });
 }
 
@@ -122,13 +144,23 @@ function deleteEvent() {
     .then((res) => {
       //Perform Success Action
       console.log(res);
+      showDeleteModalForm.value = !showDeleteModalForm.value;
+      messageToUser.value = "L'événement a été supprimé avec succès";
+      showInfoModal.value = !showInfoModal.value;
+      setTimeout(() => {
+        window.location.reload()
+      }, 1000)
     })
     .catch((error) => {
       // error.response.status Check status code
       console.log(error);
+      messageToUser.value = "L'événement a été supprimé avec succès";
+      showInfoModal.value = !showInfoModal.value;
+      setTimeout(() => {
+        window.location.reload()
+      }, 1000)
     })
     .finally(() => {
-      window.location.reload();
     });
 }
 
@@ -152,36 +184,23 @@ function voirDetails(id) {
       </select>
     </div>
     <the-card-wrapper>
-      <card-event
-        v-for="events in allEvents"
-        :id="events.id"
-        :debut="changeFormatDateWithoutHoursMinutes(events.Debut)"
-        :fin="changeFormatDateWithoutHoursMinutes(events.Fin)"
-        :titre="events.Titre"
-        :lieu="events.Lieu"
-        :description="events.Description"
-      >
-        <button
-          class="button is-pulled-right is-white has-background-light"
-          @click="voirDetails(events.id)"
-        >
+      <card-event v-for="events in allEvents" :id="events.id" :debut="changeFormatDateWithoutHoursMinutes(events.Debut)"
+        :fin="changeFormatDateWithoutHoursMinutes(events.Fin)" :titre="events.Titre" :lieu="events.Lieu"
+        :description="events.Description">
+        <button class="button is-pulled-right is-white has-background-light" @click="voirDetails(events.id)">
           <span class="icon is-small">
             <i class="fa fa-info"></i>
           </span>
         </button>
-        <button
-          v-show="role == 'Administration' || role == 'AGE'"
+        <button v-show="role == 'Administration' || role == 'AGE'"
           class="button is-pulled-right is-white has-background-light"
-          @click="displayDeleteModal(events.id, events.user_Email)"
-        >
+          @click="displayDeleteModal(events.id, events.user_Email)">
           <span class="icon is-small">
             <i class="fa fa-trash"></i>
           </span>
         </button>
-        <button
-          v-show="role == 'Administration' || role == 'AGE'"
-          class="button is-pulled-right is-white has-background-light"
-          @click="
+        <button v-show="role == 'Administration' || role == 'AGE'"
+          class="button is-pulled-right is-white has-background-light" @click="
             displayUpdateModal(
               events.id,
               events.Titre,
@@ -191,21 +210,15 @@ function voirDetails(id) {
               events.Fin,
               events.user_Email
             )
-          "
-        >
+          ">
           <span class="icon is-small">
             <i class="fa fa-pencil"></i>
           </span>
         </button>
       </card-event>
     </the-card-wrapper>
-    <button
-      v-show="role == 'Administration' || role == 'AGE'"
-      class="button is-right js-modal-trigger"
-      data-target="modal-js-example"
-      id="fixedbutton"
-      @click="showModalForm = !showModalForm"
-    >
+    <button v-show="role == 'Administration' || role == 'AGE'" class="button is-right js-modal-trigger"
+      data-target="modal-js-example" id="fixedbutton" @click="showModalForm = !showModalForm">
       <span class="icon is-large has-text-danger">
         <i class="fa fa-4x fa-plus-square"></i>
       </span>
@@ -216,83 +229,51 @@ function voirDetails(id) {
   <BaseModalForm :class="{ 'is-active': showModalForm }" @close="showModalForm = false">
     <!-- AJOUT EVENT  -->
     <BaseFormModal @submit.prevent="addEvent()">
-      <h1 class="title is-1">Nouveau évènement</h1>
+      <h1 class="title is-1">Nouvel évènement</h1>
 
       <BaseInput>
         <template v-slot:label>Titre</template>
         <template v-slot:input>
-          <input
-            v-model="Titre"
-            class="input"
-            type="text"
-            placeholder="Entrez le nom de l'évènement"
-          />
+          <input v-model="Titre" class="input" type="text" placeholder="Entrez le nom de l'évènement" />
         </template>
       </BaseInput>
 
       <BaseInput>
         <template v-slot:label>Description</template>
         <template v-slot:input>
-          <input
-            v-model="Description"
-            class="input"
-            type="text"
-            placeholder="Entrez la description de l'évènement"
-          />
+          <input v-model="Description" class="input" type="text" placeholder="Entrez la description de l'évènement" />
         </template>
       </BaseInput>
 
       <BaseInput>
         <template v-slot:label>Lieu</template>
         <template v-slot:input>
-          <input
-            v-model="Lieu"
-            class="input"
-            type="text"
-            placeholder="Entrez la description de l'évènement"
-          />
+          <input v-model="Lieu" class="input" type="text" placeholder="Entrez la description de l'évènement" />
         </template>
       </BaseInput>
 
       <BaseInput>
         <template v-slot:label>Date de début</template>
         <template v-slot:input>
-          <input
-            v-model="Debut"
-            class="input"
-            type="datetime-local"
-            placeholder="Entrez une date de début"
-          />
+          <input v-model="Debut" class="input" type="datetime-local" placeholder="Entrez une date de début" />
         </template>
       </BaseInput>
 
       <BaseInput>
         <template v-slot:label>Date de fin</template>
         <template v-slot:input>
-          <input
-            v-model="Fin"
-            class="input"
-            type="datetime-local"
-            placeholder="Entrez une date de fin"
-          />
+          <input v-model="Fin" class="input" type="datetime-local" placeholder="Entrez une date de fin" />
         </template>
       </BaseInput>
 
       <BaseInputSubmit>
-        <input
-          type="submit"
-          class="button is-danger is-rounded"
-          value="Ajouter l'événement"
-        />
+        <input type="submit" class="button is-danger is-rounded" value="Ajouter l'événement" />
       </BaseInputSubmit>
     </BaseFormModal>
   </BaseModalForm>
 
   <!-- MODAL FORM UPDATE -->
-  <BaseModalForm
-    :class="{ 'is-active': showUpdateModalForm }"
-    @close="showUpdateModalForm = false"
-  >
+  <BaseModalForm :class="{ 'is-active': showUpdateModalForm }" @close="showUpdateModalForm = false">
     <!-- UPDATE EVENT  -->
     <BaseFormModal v-if="auteur" @submit.prevent="updateEvent()">
       <h1 class="title is-1">Modifier évènement</h1>
@@ -300,69 +281,40 @@ function voirDetails(id) {
       <BaseInput>
         <template v-slot:label>Titre</template>
         <template v-slot:input>
-          <input
-            v-model="Titre"
-            class="input"
-            type="text"
-            placeholder="Entrez le nom de l'évènement"
-          />
+          <input v-model="Titre" class="input" type="text" placeholder="Entrez le nom de l'évènement" />
         </template>
       </BaseInput>
 
       <BaseInput>
         <template v-slot:label>Description</template>
         <template v-slot:input>
-          <input
-            v-model="Description"
-            class="input"
-            type="text"
-            placeholder="Entrez la description de l'évènement"
-          />
+          <input v-model="Description" class="input" type="text" placeholder="Entrez la description de l'évènement" />
         </template>
       </BaseInput>
 
       <BaseInput>
         <template v-slot:label>Lieu</template>
         <template v-slot:input>
-          <input
-            v-model="Lieu"
-            class="input"
-            type="text"
-            placeholder="Entrez la description de l'évènement"
-          />
+          <input v-model="Lieu" class="input" type="text" placeholder="Entrez la description de l'évènement" />
         </template>
       </BaseInput>
 
       <BaseInput>
         <template v-slot:label>Date de début</template>
         <template v-slot:input>
-          <input
-            v-model="Debut"
-            class="input"
-            type="datetime-local"
-            placeholder="Entrez une date de début"
-          />
+          <input v-model="Debut" class="input" type="datetime-local" placeholder="Entrez une date de début" />
         </template>
       </BaseInput>
 
       <BaseInput>
         <template v-slot:label>Date de fin</template>
         <template v-slot:input>
-          <input
-            v-model="Fin"
-            class="input"
-            type="datetime-local"
-            placeholder="Entrez une date de fin"
-          />
+          <input v-model="Fin" class="input" type="datetime-local" placeholder="Entrez une date de fin" />
         </template>
       </BaseInput>
 
       <BaseInputSubmit>
-        <input
-          type="submit"
-          class="button is-danger is-rounded"
-          value="Modifier l'événement"
-        />
+        <input type="submit" class="button is-danger is-rounded" value="Modifier l'événement" />
       </BaseInputSubmit>
     </BaseFormModal>
 
@@ -372,69 +324,40 @@ function voirDetails(id) {
       <BaseInput>
         <template v-slot:label>Titre</template>
         <template v-slot:input>
-          <input
-            v-model="Titre"
-            class="input"
-            type="text"
-            placeholder="Entrez le nom de l'évènement"
-          />
+          <input v-model="Titre" class="input" type="text" placeholder="Entrez le nom de l'évènement" />
         </template>
       </BaseInput>
 
       <BaseInput>
         <template v-slot:label>Description</template>
         <template v-slot:input>
-          <input
-            v-model="Description"
-            class="input"
-            type="text"
-            placeholder="Entrez la description de l'évènement"
-          />
+          <input v-model="Description" class="input" type="text" placeholder="Entrez la description de l'évènement" />
         </template>
       </BaseInput>
 
       <BaseInput>
         <template v-slot:label>Lieu</template>
         <template v-slot:input>
-          <input
-            v-model="Lieu"
-            class="input"
-            type="text"
-            placeholder="Entrez la description de l'évènement"
-          />
+          <input v-model="Lieu" class="input" type="text" placeholder="Entrez la description de l'évènement" />
         </template>
       </BaseInput>
 
       <BaseInput>
         <template v-slot:label>Date de début</template>
         <template v-slot:input>
-          <input
-            v-model="Debut"
-            class="input"
-            type="datetime-local"
-            placeholder="Entrez une date de début"
-          />
+          <input v-model="Debut" class="input" type="datetime-local" placeholder="Entrez une date de début" />
         </template>
       </BaseInput>
 
       <BaseInput>
         <template v-slot:label>Date de fin</template>
         <template v-slot:input>
-          <input
-            v-model="Fin"
-            class="input"
-            type="datetime-local"
-            placeholder="Entrez une date de fin"
-          />
+          <input v-model="Fin" class="input" type="datetime-local" placeholder="Entrez une date de fin" />
         </template>
       </BaseInput>
 
       <BaseInputSubmit>
-        <input
-          type="submit"
-          class="button is-danger is-rounded"
-          value="Modifier l'événement"
-        />
+        <input type="submit" class="button is-danger is-rounded" value="Modifier l'événement" />
       </BaseInputSubmit>
     </BaseFormModal>
 
@@ -443,51 +366,36 @@ function voirDetails(id) {
       <h1 class="title is-2">Vous ne pouvez pas modifier cet évènement</h1>
 
       <BaseInputSubmit>
-        <input
-          type="submit"
-          class="button is-primary is-rounded"
-          value="Retour"
-          @click="showUpdateModalForm = false"
-        />
+        <input type="submit" class="button is-primary is-rounded" value="Retour" @click="showUpdateModalForm = false" />
       </BaseInputSubmit>
     </BaseFormModal>
   </BaseModalForm>
 
   <!-- MODAL FORM DELETE -->
-  <BaseModalForm
-    :class="{ 'is-active': showDeleteModalForm }"
-    @close="showDeleteModalForm = false"
-  >
+  <BaseModalForm :class="{ 'is-active': showDeleteModalForm }" @close="showDeleteModalForm = false">
     <!-- DELETE EVENT  -->
-    <BaseFormModal v-if="auteur" @submit.prevent="deleteEvent()">
+    <BaseFormModal v-if="auteur">
       <h1 class="title is-2">Voulez-vous vraiment supprimer l'évènement ?</h1>
       <BaseInputSubmit>
-        <input
-          type="submit"
-          class="button is-danger is-rounded"
-          value="Supprimer l'événement"
-          @click="deleteEvent()"
-        />
+        <input type="submit" class="button is-danger is-rounded" value="Supprimer l'événement" @click="deleteEvent()" />
       </BaseInputSubmit>
       <BaseInputSubmit>
-        <input
-          type="submit"
-          class="button is-primary is-rounded"
-          value="Retour"
-          @click="showDeleteModalForm = false"
-        />
+        <input type="submit" class="button is-primary is-rounded" value="Retour" @click="showDeleteModalForm = false" />
       </BaseInputSubmit>
     </BaseFormModal>
     <BaseFormModal v-else>
       <h1 class="title is-2">Vous ne pouvez pas supprimer l'évènement</h1>
       <BaseInputSubmit>
-        <input
-          type="submit"
-          class="button is-primary is-rounded"
-          value="Retour"
-          @click="showDeleteModalForm = false"
-        />
+        <input type="submit" class="button is-primary is-rounded" value="Retour" @click="showDeleteModalForm = false" />
       </BaseInputSubmit>
+    </BaseFormModal>
+  </BaseModalForm>
+
+  <!-- MODAL FORM INFO  -->
+  <BaseModalForm :class="{ 'is-active': showInfoModal }" @close="showInfoModal = false">
+    <!-- CRUD ACTION  -->
+    <BaseFormModal>
+      <h1 class="title is-2">{{ messageToUser }}</h1>
     </BaseFormModal>
   </BaseModalForm>
 </template>

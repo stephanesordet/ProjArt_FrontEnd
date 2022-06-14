@@ -281,7 +281,7 @@ const MatieresAnnee = computed(() => {
 let showModalForm = ref(false);
 let showDeleteModalForm = ref(false);
 let showUpdateModalForm = ref(false);
-let showInfoModalForm = ref(false);
+let showInfoModal = ref(false);
 
 //Traitement du form after submit
 const dateCoursForm = ref("");
@@ -307,29 +307,28 @@ async function addCours() {
         User: userSession.value,
         Prof: profForm.value
       })
-      /* .then((response) => {
-        setTimeout(
-          messageToUser.value = "Cours ajouté avec succès", 1000
-        )
-      }) */
+      .then((response) => {
+        showModalForm.value = !showModalForm.value;
+        messageToUser.value = "Cours ajouté avec succès";
+        showInfoModal.value = !showInfoModal.value;
+        setTimeout(() => {
+          window.location.reload()
+        }, 1000)
+      })
       .then(() => {
-        window.location.reload();
       });
     console.log(cours);
   } catch (e) {
     console.log(e);
+    showModalForm.value = !showModalForm.value;
+    messageToUser.value = "Erreur lors de l'ajout du cours";
+    showInfoModal.value = !showInfoModal.value;
+    setTimeout(() => {
+      window.location.reload()
+    }, 1000)
   }
 }
 
-watchEffect(() => {
-  console.log(dateCoursForm.value)
-  console.log(heureDebutForm.value)
-  console.log(heureFinForm.value)
-  console.log(matiereForm.value)
-  console.log(lieuForm.value)
-  console.log(classeForm.value)
-  console.log(userSession.value)
-})
 
 function valueHasChanged(event) {
   const cours = document.querySelectorAll(".cours");
@@ -455,11 +454,22 @@ async function updateCours() {
         heureDebutForm.value = "";
         heureFinForm.value = "";
         lieuForm.value = "";
-        //window.location.reload();
+        showUpdateModalForm.value = !showUpdateModalForm.value;
+        messageToUser.value = "Cours modifié avec succès"
+        showInfoModal.value = !showInfoModal.value;
+        setTimeout(() => {
+          window.location.reload()
+        }, 1000)
       });
     console.log(cours);
   } catch (e) {
     console.log(e);
+    showUpdateModalForm.value = !showUpdateModalForm.value;
+    messageToUser.value = "Erreur lors de la modification du cours"
+    showInfoModal.value = !showInfoModal.value;
+    setTimeout(() => {
+      window.location.reload()
+    }, 1000)
   }
 }
 
@@ -470,13 +480,23 @@ function deleteCours() {
     })
     .then((res) => {
       //Perform Success Action
+      showDeleteModalForm.value = !showDeleteModalForm.value;
+      messageToUser.value = "Cours supprimé avec succès"
+      showInfoModal.value = !showInfoModal.value;
+      setTimeout(() => {
+        window.location.reload()
+      }, 1000)
     })
     .catch((error) => {
       // error.response.status Check status code
-      console.log(error);
+      showDeleteModalForm.value = !showDeleteModalForm.value;
+      messageToUser.value = "Cours supprimé avec succès"
+      showInfoModal.value = !showInfoModal.value;
+      setTimeout(() => {
+        window.location.reload()
+      }, 1000)
     })
     .finally(() => {
-      window.location.reload();
     });
 }
 
