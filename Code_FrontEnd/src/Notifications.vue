@@ -10,6 +10,7 @@ import BaseInput from "./components/BaseInput.vue";
 import BaseModalForm from "./components/BaseModalForm.vue";
 import { BASE_URL } from "../composables/store";
 import { changeFormatDate } from "../composables/function.js";
+import randomColor from 'randomcolor';
 
 const userSession = ref(sessionStorage.getItem("user"));
 const role = ref(sessionStorage.getItem("role"));
@@ -56,6 +57,32 @@ const allNotifications = computed(() => {
 
 // ---------------------- Boolean for showing the modal form -----------------------------
 let showModalForm = ref(false);
+
+fetch(BASE_URL + "role")
+  .then((res) => res.json())
+  .then((AllMatiere) => {
+    var couleurMatiereOb;
+    const matiereColor = [];
+    var i = 0;
+    AllMatiere.forEach((matiere) => {
+      couleurMatiereOb = Object();
+      couleurMatiereOb.id = matiere.id;
+      couleurMatiereOb.color = randomColor({ seed: i });
+      matiereColor.push(couleurMatiereOb);
+      i+=7;
+    });
+    console.log(matiereColor);
+    matiereColor.forEach((element) => {
+      document.head.insertAdjacentHTML(
+        "beforeend",
+        "<style>." +
+        element.id +
+        "{border-color:" +
+        element.color +
+        " !important}</style>"
+      );
+    });
+  });
 </script>
 
 <template>
@@ -66,6 +93,7 @@ let showModalForm = ref(false);
       :object="response.notification.Objet"
       :envoiHeure="changeFormatDate(response.notification.EnvoiHeureDate)"
       :message="response.notification.Message"
+      :class="role"
     >
     </card-notif>
   </the-card-wrapper>

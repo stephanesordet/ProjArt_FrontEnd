@@ -744,13 +744,8 @@ function showPage() {
       </div>
     </div>
     <div>
-      <button
-        v-show="role == 'Administration'"
-        class="button is-right js-modal-trigger"
-        data-target="modal-js-example"
-        id="fixedbutton"
-        @click="showModalForm = !showModalForm"
-      >
+      <button v-show="role == 'Administration'" class="button is-right js-modal-trigger" data-target="modal-js-example"
+        id="fixedbutton" @click="showModalForm = !showModalForm">
         <span class="icon is-large has-text-danger">
           <i class="fa fa-4x fa-plus-square"></i>
         </span>
