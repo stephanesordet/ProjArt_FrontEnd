@@ -22,9 +22,11 @@ window.addEventListener("hashchange", () => {
 });
 
 watchEffect(() => {
-  fetch(BASE_URL + "notifications/" + userSession.value)
-    .then((res) => res.json())
-    .then((notifResults) => (notifications.value = notifResults));
+  if (userSession.value != null) {
+    fetch(BASE_URL + "notifications/" + userSession.value)
+      .then((res) => res.json())
+      .then((notifResults) => (notifications.value = notifResults));
+  }
 });
 
 /* setInterval(function () {

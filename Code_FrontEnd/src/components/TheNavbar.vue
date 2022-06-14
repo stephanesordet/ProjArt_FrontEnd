@@ -16,6 +16,8 @@ window.addEventListener("load", () => {
 
 window.addEventListener("hashchange", () => {
   page.value = window.location.hash;
+  document.querySelector("#navMenu").classList.remove("is-active");
+  document.querySelector("#navBurger").classList.remove("is-active");
   if (sessionStorage.getItem("user")) {
     session.value = true;
     role.value = sessionStorage.getItem("role");
@@ -76,6 +78,7 @@ const props = defineProps({
         <img id="logoNavbar" src="../assets/logoProjArt.png" />
       </a>
       <a
+        id="navBurger"
         role="button"
         class="navbar-burger mt-6"
         data-target="navMenu"

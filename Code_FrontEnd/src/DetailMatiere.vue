@@ -9,24 +9,26 @@ import BaseInputSubmit from "./components/BaseInputSubmit.vue";
 import BaseInput from "./components/BaseInput.vue";
 import BaseModalForm from "./components/BaseModalForm.vue";
 import TheReturnButton from "./components/TheReturnButton.vue";
-import { BASE_URL } from "../composables/store";
+import {
+  BASE_URL,
+  idDetailsMatiere,
+  matiere_idDetailsMatiere,
+} from "../composables/store";
 import axios from "axios";
 import { changeFormatDateWithoutHoursMinutes } from "../composables/function.js";
 
 let userSession = ref(sessionStorage.getItem("user"));
-let idDetailsMatiere = ref(sessionStorage.getItem("idDetailsMatiere"));
-let matiere_idDetailsMatiere = ref(
-  sessionStorage.getItem("matiere_idDetailsMatiere")
-);
 
 // ---------------------- Fetch data for this cours -----------------------------
 const cours = ref([]);
 const remarques = ref([]);
 
 watchEffect(() => {
-  fetch(BASE_URL + "cours/info/" + idDetailsMatiere.value)
-    .then((res) => res.json())
-    .then((coursResults) => (cours.value = coursResults));
+  if (idDetailsMatiere.value != null) {
+    fetch(BASE_URL + "cours/info/" + idDetailsMatiere.value)
+      .then((res) => res.json())
+      .then((coursResults) => (cours.value = coursResults));
+  }
 
   fetch(
     BASE_URL +
@@ -71,6 +73,7 @@ const allRemarques = computed(() => {
 
 // ---------------------- Boolean for showing the modal form -----------------------------
 let showModalForm = ref(false);
+let showInfoModal = ref(false);
 
 // ---------------------- Traitement form after submit -----------------------------
 const Titre = ref("");
@@ -78,6 +81,7 @@ const Description = ref("");
 const Visibilite = ref("");
 const DateRemarque = ref("");
 const id = ref("");
+const messageToUser = ref("");
 
 function addRemarqueCours() {
   axios
@@ -92,11 +96,22 @@ function addRemarqueCours() {
     .then((res) => {
       //Perform Success Action
       console.log(res);
-      window.location.reload();
+      showModalForm.value = !showModalForm.value;
+      messageToUser.value = "Remarque ajoutée avec succès";
+      showInfoModal.value = !showInfoModal.value;
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
     })
     .catch((error) => {
       // error.response.status Check status code
       console.log(error);
+      showModalForm.value = !showModalForm.value;
+      messageToUser.value = "Remarque ajoutée avec succès";
+      showInfoModal.value = !showInfoModal.value;
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
     })
     .finally(() => {
       //window.location.reload();
@@ -143,10 +158,10 @@ function addRemarqueCours() {
       <div class="field" style="width: 300px">
         <label class="label" for="Remarque">Remarque</label>
 
-        <div class="control">
+        <div class="select">
           <select v-model="Visibilite">
-            <option disabled value="">
-              Choisissez la visibilité de votre remarque
+            <option disabled selected hidden value="">
+              Choisissez la visibilité
             </option>
             <option value="public">Publique</option>
             <option value="prive">Privée</option>
@@ -173,7 +188,7 @@ function addRemarqueCours() {
             v-model="Titre"
             class="input"
             type="text"
-            placeholder="Entrez le nom de l'évènement"
+            placeholder="Entrez le nom de la remarque"
           />
         </template>
       </BaseInput>
@@ -185,7 +200,7 @@ function addRemarqueCours() {
             v-model="Description"
             class="input"
             type="text"
-            placeholder="Entrez la description de l'évènement"
+            placeholder="Entrez uen description"
           />
         </template>
       </BaseInput>
@@ -194,9 +209,20 @@ function addRemarqueCours() {
         <input
           type="submit"
           class="button is-danger is-rounded"
-          value="Ajouter le cours"
+          value="Ajouter la remarque"
         />
       </BaseInputSubmit>
+    </BaseFormModal>
+  </BaseModalForm>
+
+  <!-- MODAL FORM INFO  -->
+  <BaseModalForm
+    :class="{ 'is-active': showInfoModal }"
+    @close="showInfoModal = false"
+  >
+    <!-- CRUD ACTION  -->
+    <BaseFormModal>
+      <h1 class="title is-2">{{ messageToUser }}</h1>
     </BaseFormModal>
   </BaseModalForm>
 </template>
