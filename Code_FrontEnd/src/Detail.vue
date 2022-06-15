@@ -15,47 +15,8 @@ import randomColor from "randomcolor";
 import CardInfoVue from "./components/CardInfo.vue";
 
 // ---------------------- Fetch data for all events -----------------------------
-const { data: classe } = useFetch(BASE_URL + "classes/filiere/COMEM+/");
 const userSession = ref(sessionStorage.getItem("user"));
 const role = ref(sessionStorage.getItem("role"));
-
-const allClasse = computed(() => {
-  const tabCalsse = [];
-  if (!classe.value?.length) {
-    return [];
-  } else {
-    classe.value.forEach((element) => {
-        tabCalsse.push(element);
-    });
-  }
-  return tabCalsse;
-});
-
-fetch(BASE_URL + "classes/filiere/COMEM+/")
-  .then((res) => res.json())
-  .then((AllMatiere) => {
-    var couleurMatiereOb;
-    const matiereColor = [];
-    var i = 0;
-    AllMatiere.forEach((matiere) => {
-      couleurMatiereOb = Object();
-      couleurMatiereOb.id = matiere.id;
-      couleurMatiereOb.color = randomColor({ seed: i });
-      matiereColor.push(couleurMatiereOb);
-      i += 7;
-    });
-    console.log(matiereColor);
-    matiereColor.forEach((element) => {
-      document.head.insertAdjacentHTML(
-        "beforeend",
-        "<style>." +
-          element.id +
-          "{border-color:" +
-          element.color +
-          " !important}</style>"
-      );
-    });
-  });
 
     function changeVue() {
     window.location.hash = "#Etudiant";

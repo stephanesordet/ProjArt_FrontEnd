@@ -1,4 +1,6 @@
-import { ref } from "vue";
+import {
+  ref
+} from "vue";
 // ---------------------- This file contains variable that are used in different files -----------------------------
 export const BASE_URL = "http://localhost:8000/api/";
 export const currentCoursId = ref(null);

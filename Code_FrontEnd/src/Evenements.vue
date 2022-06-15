@@ -209,7 +209,8 @@ fetch(BASE_URL + "role")
 <template>
   <div class="main my-4 mx-4">
     <the-card-wrapper>
-      <card-event
+      <template v-if="role == 'Administration' || role == 'AGE'">
+       <card-event
         v-for="events in allEvents"
         :id="events.id"
         :debut="changeFormatDateWithoutHoursMinutes(events.Debut)"
@@ -220,7 +221,7 @@ fetch(BASE_URL + "role")
         :class="events.role_id"
       >
         <button
-          class="button is-pulled-right is-white has-background-light"
+          class="button btnAdmin is-pulled-right is-white has-background-light"
           @click="voirDetails(events.id)"
         >
           <span class="icon is-small">
@@ -229,7 +230,7 @@ fetch(BASE_URL + "role")
         </button>
         <button
           v-show="role == 'Administration' || role == 'AGE'"
-          class="button is-pulled-right is-white has-background-light"
+          class="button btnAdmin is-pulled-right is-white has-background-light"
           @click="displayDeleteModal(events.id, events.user_Email)"
         >
           <span class="icon is-small">
@@ -237,8 +238,8 @@ fetch(BASE_URL + "role")
           </span>
         </button>
         <button
-          v-show="role == 'Adm inistration' || role == 'AGE'"
-          class="button is-pulled-right is-white has-background-light"
+          v-show="role == 'Administration' || role == 'AGE'"
+          class="button btnAdmin is-pulled-right is-white has-background-light"
           @click="
             displayUpdateModal(
               events.id,
@@ -256,10 +257,62 @@ fetch(BASE_URL + "role")
           </span>
         </button>
       </card-event>
+      </template>
+      <template v-else>
+              <card-event
+        v-for="events in allEvents"
+        :id="events.id"
+        :debut="changeFormatDateWithoutHoursMinutes(events.Debut)"
+        :fin="changeFormatDateWithoutHoursMinutes(events.Fin)"
+        :titre="events.Titre"
+        :lieu="events.Lieu"
+        :description="events.Description"
+        :class="events.role_id"
+        @click="voirDetails(events.id)"
+        style="cursor: pointer;"
+      >
+        <button
+          class="button btnAdmin is-pulled-right is-white has-background-light"
+          @click="voirDetails(events.id)"
+        >
+          <span class="icon is-small">
+            <i class="fa fa-info"></i>
+          </span>
+        </button>
+        <button
+          v-show="role == 'Administration' || role == 'AGE'"
+          class="button btnAdmin is-pulled-right is-white has-background-light"
+          @click="displayDeleteModal(events.id, events.user_Email)"
+        >
+          <span class="icon is-small">
+            <i class="fa fa-trash"></i>
+          </span>
+        </button>
+        <button
+          v-show="role == 'Administration' || role == 'AGE'"
+          class="button btnAdmin is-pulled-right is-white has-background-light"
+          @click="
+            displayUpdateModal(
+              events.id,
+              events.Titre,
+              events.Description,
+              events.Lieu,
+              events.Debut,
+              events.Fin,
+              events.user_Email
+            )
+          "
+        >
+          <span class="icon is-small">
+            <i class="fa fa-pencil"></i>
+          </span>
+        </button>
+      </card-event>
+      </template>
     </the-card-wrapper>
     <button
       v-show="role == 'Administration' || role == 'AGE'"
-      class="button is-right js-modal-trigger"
+      class="button btnAdmin is-right js-modal-trigger"
       data-target="modal-js-example"
       id="fixedbutton"
       @click="showModalForm = !showModalForm"

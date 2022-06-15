@@ -11,10 +11,6 @@ import Notifications from "./Notifications.vue";
 import DetailEvent from "./DetailEvent.vue";
 import PasswordReset from "./PasswordReset.vue";
 import Information from "./Information.vue";
-import Classe from "./Classe.vue";
-import Detail from "./Detail.vue";
-import Prof from "./Prof.vue";
-import Etudiant from "./Etudiant.vue";
 import TheReturnButton from "./components/TheReturnButton.vue";
 var routes = {};
 let userSession = ref(false);
@@ -66,22 +62,6 @@ function isMobileDevice() {
         label: "Information",
         component: Information,
       },
-       "#Classe": {
-        label: "Classe",
-        component: Classe,
-      },
-      "#Detail": {
-        label: "Detail",
-        component: Detail,
-      },
-      "#Prof": {
-        label: "Prof",
-        component: Prof,
-      },
-      "#Etudiant": {
-        label: "Etudiant",
-        component: Etudiant,
-      },
     };
   } else {
     routes = {
@@ -120,22 +100,6 @@ function isMobileDevice() {
        "#Information": {
         label: "Information",
         component: Information,
-      },
-       "#Classe": {
-        label: "Classe",
-        component: Classe,
-      },
-      "#Detail": {
-        label: "Detail",
-        component: Detail,
-      },
-      "#Prof": {
-        label: "Prof",
-        component: Prof,
-      },
-      "#Etudiant": {
-        label: "Etudiant",
-        component: Etudiant,
       },
     };
   }

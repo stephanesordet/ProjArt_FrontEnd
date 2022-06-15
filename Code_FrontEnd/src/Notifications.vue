@@ -62,7 +62,11 @@ const allNotifications = computed(() => {
     });
   }
 
-  return tabNotifications.reverse();
+  tabNotifications.sort((a, b) => {
+    return b.notification.date - a.notification.date;
+  });
+
+  return tabNotifications
 });
 
 // ---------------------- Boolean for showing the modal form -----------------------------

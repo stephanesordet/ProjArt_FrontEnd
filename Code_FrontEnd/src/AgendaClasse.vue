@@ -1,7 +1,7 @@
 <script setup>
 import { def } from "@vue/shared";
 import { computed, ref, nextTick, watchEffect } from "vue";
-import CardCours from "./components/CardCours.vue";
+import CardCours from "./components/CardCoursLink.vue";
 import BaseFormModal from "./components/BaseFormModal.vue";
 import BaseInputSubmit from "./components/BaseInputSubmit.vue";
 import BaseInput from "./components/BaseInput.vue";
@@ -552,7 +552,7 @@ fetch(BASE_URL + "matiere")
               <template v-for="cours in day.Cours" :key="cours.id">
                 <card-cours v-if="cours.Name == 'Cours'" :key="cours.id" :data-id="cours.id" :class="cours.matiere_id"
                   class="cours" :debut="cours.HeureDebut" :fin="cours.HeureFin" :cours="cours.matiere_id"
-                  :salle="cours.salle_id">
+                  :salle="cours.salle_id" @click="voirDetails(cours.id, cours.matiere_id)">
                   <button v-show="role == 'Administration'" class="button is-pulled-right is-white has-background-light"
                     @click="displayDeleteModal(cours.id)">
                     <span class="icon is-small">
@@ -575,7 +575,7 @@ fetch(BASE_URL + "matiere")
                 </card-cours>
                 <card-remarque v-else-if="cours.Name == 'Remarque'" :data-id="cours.id" :class="cours.matiere_id"
                   class="cours remarque" :Visibilite="cours.Visibilite" :titre="cours.Titre"
-                  :description="cours.Description" :matiere_id="cours.matiere_id">
+                  :description="cours.Description" :matiere_id="cours.matiere_id" @click="voirDetails(cours.id, cours.matiere_id)">
                   <button v-show="role == 'Administration'" class="button is-pulled-right is-white has-background-light"
                     @click="displayDeleteModal(cours.id)">
                     <span class="icon is-small">
@@ -590,7 +590,7 @@ fetch(BASE_URL + "matiere")
                     </span>
                   </button>
                   <button class="button is-pulled-right is-white has-background-light"
-                    @click="voirDetails(cours.cours_id, cours.matiere_id)">
+                    @click="voirDetails(cours.id, cours.matiere_id)">
                     <span class="icon is-small">
                       <i class="fa fa-info"></i>
                     </span>
@@ -606,7 +606,7 @@ fetch(BASE_URL + "matiere")
             </HR>
             <template v-for="cours in day.Cours" :key="cours.id">
               <card-cours v-if="cours.Name == 'Cours'" :data-id="cours.id" :class="cours.matiere_id" class="cours"
-                :debut="cours.HeureDebut" :fin="cours.HeureFin" :cours="cours.matiere_id" :salle="cours.salle_id">
+                :debut="cours.HeureDebut" :fin="cours.HeureFin" :cours="cours.matiere_id" :salle="cours.salle_id" @click="voirDetails(cours.id, cours.matiere_id)">
                 <button v-show="role == 'Administration'" class="button is-pulled-right is-white has-background-light"
                   @click="displayDeleteModal(cours.id)">
                   <span class="icon is-small">
@@ -629,7 +629,7 @@ fetch(BASE_URL + "matiere")
               </card-cours>
               <card-remarque v-else-if="cours.Name == 'Remarque'" :data-id="cours.id" :class="cours.matiere_id"
                 class="cours remarque" :Visibilite="cours.Visibilite" :titre="cours.Titre"
-                :description="cours.Description" :matiere_id="cours.matiere_id">
+                :description="cours.Description" :matiere_id="cours.matiere_id" @click="voirDetails(cours.id, cours.matiere_id)">
                 <button v-show="role == 'Administration'" class="button is-pulled-right is-white has-background-light"
                   @click="displayDeleteModal(cours.id)">
                   <span class="icon is-small">
@@ -644,7 +644,7 @@ fetch(BASE_URL + "matiere")
                   </span>
                 </button>
                 <button class="button is-pulled-right is-white has-background-light"
-                  @click="voirDetails(cours.cours_id, cours.matiere_id)">
+                  @click="voirDetails(cours.id, cours.matiere_id)">
                   <span class="icon is-small">
                     <i class="fa fa-info"></i>
                   </span>

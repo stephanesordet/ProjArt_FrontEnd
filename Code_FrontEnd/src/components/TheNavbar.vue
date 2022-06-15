@@ -142,6 +142,7 @@ watchEffect(() => {
           Agenda personnel
         </a>
         <a class="navbar-item" href="#evenements"> Evenements </a>
+        <a class="navbar-item" href="#Information"> Informations </a>
         <a v-show="role != 'Administration' && role != 'AGE'" class="navbar-item" href="#notifications">
           <span class="icon">
             <i v-show="newNotifs == true" class="fa fa-bell" style="color:red" @click="newNotifs = false"></i>
