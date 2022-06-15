@@ -20,8 +20,8 @@ export default {
   text-decoration: none;
   display: inline-block;
   padding: 8px 16px;
-  margin-left: 50px;
-  margin-right: 50px;
+  margin-left: 30px;
+
 }
 
 .round:hover {

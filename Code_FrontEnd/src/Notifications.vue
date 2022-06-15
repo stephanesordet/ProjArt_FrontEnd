@@ -70,7 +70,7 @@ const allNotifications = computed(() => {
     });
   }
 
-  return tabNotifications.reverse();
+  return tabNotifications.();
 });
 
 // ---------------------- Boolean for showing the modal form -----------------------------

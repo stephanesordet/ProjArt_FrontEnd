@@ -29,7 +29,7 @@ function useFetchLogin(password, email) {
   if (compareMail(email)) {
     document.querySelector(".loading-box").style.display = "flex";
     axios
-      .post(BASE_URL+'login', {
+      .post(BASE_URL + 'login', {
         Email: email,
         Password: password
       })
@@ -47,10 +47,10 @@ function useFetchLogin(password, email) {
             sessionStorage.setItem("role", "AGE");
           }
 
-          /*  showWelcomeModalForm.value = !showWelcomeModalForm.value; */
-            window.location.hash = "#accueil";
-            //window.location.reload();
-            document.querySelector(".loading-box").style.display = "none";
+          window.location.hash = "#accueil";
+          window.location.reload();
+          document.querySelector(".loading-box").style.display = "none";
+
 
         } else if (
           res.data.includes("user found : error in password or username")
@@ -75,14 +75,11 @@ function useFetchLogin(password, email) {
     showMailErrorModalForm.value = !showMailErrorModalForm.value;
   }
 }
-function changeHash() {
 
-
-}
 </script>
 
 <template>
-<TheLoader></TheLoader>
+  <TheLoader></TheLoader>
   <section class="hero">
     <!-- To accept bulma's icons -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
@@ -121,10 +118,12 @@ function changeHash() {
   </section>
 
   <!-- MODAL FORM WELCOME -->
-  <BaseModalForm :class="{ 'is-active': showWelcomeModalForm }" @close="showWelcomeModalForm = false" style="z-index: index 9999;">
+  <BaseModalForm :class="{ 'is-active': showWelcomeModalForm }" @close="showWelcomeModalForm = false"
+    style="z-index: index 9999;">
 
     <BaseFormModal>
-      <h2 class="title is-4">Lors de votre première connexion, nous chargeons les données de GAPS. Ce système étant très lent, nous vons coneillons de boire votre café ! </h2>
+      <h2 class="title is-4">Lors de votre première connexion, nous chargeons les données de GAPS. Ce système étant très
+        lent, nous vons coneillons de boire votre café ! </h2>
     </BaseFormModal>
     <BaseInputSubmit>
       <input type="submit" class="button is-primary is-rounded" value="Je vais y aller !"

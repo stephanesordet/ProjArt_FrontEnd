@@ -13,12 +13,15 @@ import ArrowPrev from "../components/ArrowPrev.vue";
 import ArrowNext from "../components/ArrowNext.vue";
 import randomColor from "randomcolor";
 import { BASE_URL } from "../../composables/store";
+import { currentCoursId } from "../../composables/store";
 
 const { data: classes } = useFetch(BASE_URL + "classes");
+const { data: matieres } = useFetch(BASE_URL + "matiere");
 
 const selectedClasses = ref("M49-1");
 
 const classeCours = ref([]);
+const userSession = ref(sessionStorage.getItem("user"));
 
 var dateActuelle = new Date();
 const dateStr = formatDateView(dateActuelle);
@@ -229,20 +232,37 @@ function afficheForm() {
   console.log(4);
 }
 
+const MatieresAnnee = computed(() => {
+  const tabMatiere = [];
+  if (!matieres.value?.length) {
+    return [];
+  } else {
+    matieres.value.forEach((element) => {
+      tabMatiere.push(element);
+    });
+  }
+  console.log(tabMatiere.value);
+  return tabMatiere;
+});
+
 let showModalForm = ref(false);
+let showDeleteModalForm = ref(false);
+let showUpdateModalForm = ref(false);
 let showInfoModal = ref(false);
 
 //Traitement du form after submit
-const dateCours = ref("");
-const selectedclasseModal = ref("");
-const heureDebut = ref("");
-const heureFin = ref("");
-const matiere = ref("");
-const lieu = ref("");
+const dateCoursForm = ref("");
+const selectedclasseForm = ref("");
+const classeForm = ref("");
+const heureDebutForm = ref("");
+const heureFinForm = ref("");
+const matiereForm = ref("");
+const lieuForm = ref("");
+const selectedAnnee = ref();
+const messageToUser = ref("");
+const profForm = ref("");
 
 const selectedClasseModal = ref("");
-
-const messageToUser = ref("");
 
 
 async function addCours() {
@@ -353,11 +373,79 @@ function toggleActiveAnnee(event) {
   event.target.classList.add("isActive");
 }
 
+function displayUpdateModal(id, salle) {
+  showUpdateModalForm.value = !showUpdateModalForm.value;
+  currentCoursId.value = id;
+  lieuForm.value = salle;
+}
+
+async function updateCours() {
+  try {
+    const cours = await axios
+      .post(BASE_URL + "cours/modif/" + currentCoursId.value, {
+        Debut: dateCoursForm.value + " " + heureDebutForm.value,
+        Fin: dateCoursForm.value + " " + heureFinForm.value,
+        Salles: lieuForm.value,
+        User: userSession.value,
+      })
+      .then(() => {
+        dateCoursForm.value = "";
+        heureDebutForm.value = "";
+        heureFinForm.value = "";
+        lieuForm.value = "";
+        showUpdateModalForm.value = !showUpdateModalForm.value;
+        messageToUser.value = "Cours modifié avec succès";
+        showInfoModal.value = !showInfoModal.value;
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+      });
+    console.log(cours);
+  } catch (e) {
+    console.log(e);
+    showUpdateModalForm.value = !showUpdateModalForm.value;
+    messageToUser.value = "Erreur lors de la modification du cours";
+    showInfoModal.value = !showInfoModal.value;
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
+  }
+}
+
+function displayDeleteModal(id) {
+  showDeleteModalForm.value = !showDeleteModalForm.value;
+  currentCoursId.value = id;
+}
+
+function deleteCours() {
+  axios
+    .post(BASE_URL + "cours/delete/" + currentCoursId.value, {
+      User: userSession.value,
+    })
+    .then((res) => {
+      //Perform Success Action
+      showDeleteModalForm.value = !showDeleteModalForm.value;
+      messageToUser.value = "Cours supprimé avec succès";
+      showInfoModal.value = !showInfoModal.value;
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    })
+    .catch((error) => {
+      // error.response.status Check status code
+      showDeleteModalForm.value = !showDeleteModalForm.value;
+      messageToUser.value = "Cours supprimé avec succès";
+      showInfoModal.value = !showInfoModal.value;
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    })
+    .finally(() => { });
+}
+
 fetch(BASE_URL + "matiere")
   .then((res) => res.json())
   .then((AllMatiere) => {
-    console.log("----------------------");
-    console.log(matiere);
     var couleurMatiereOb;
     const matiereColor = [];
     var i = 0;
@@ -391,10 +479,14 @@ fetch(BASE_URL + "matiere")
         </button>
       </div>
     </div>
-    <p>Semaine du</p>
-    <ArrowPrev :span="viewLundiSemaine" @click="changeSemaine('previous')" />
-    <span> au </span>
-    <ArrowNext :span="viewVendrediSemaine" @click="changeSemaine('next')" />
+    <p class="mt-5"><b>Semaine du</b></p>
+    <div class="mr-6">
+      <ArrowPrev :span="viewLundiSemaine" @click="changeSemaine('previous')" />
+    </div>
+    <p>au</p>
+    <span class="ml-6">
+      <ArrowNext :span="viewVendrediSemaine" @click="changeSemaine('next')" />
+    </span>
     <div class="charger">Loading...</div>
     <div class="columns is-centered tile is-ancestor">
       <div class="column is-three-quarters">
@@ -410,6 +502,19 @@ fetch(BASE_URL + "matiere")
               <card-cours v-for="cours in day.Cours" :key="cours.id" :data-id="cours.id" :class="cours.matiere_id"
                 class="cours" :debut="cours.HeureDebut" :fin="cours.HeureFin" :cours="cours.matiere_id"
                 :salle="cours.salle_id">
+                <button v-show="role == 'Administration'" class="button is-pulled-right is-white has-background-light"
+                  @click="displayDeleteModal(cours.id)">
+                  <span class="icon is-small">
+                    <i class="fa fa-trash"></i>
+                  </span>
+                </button>
+
+                <button v-show="role == 'Administration'" class="button is-pulled-right is-white has-background-light"
+                  @click="displayUpdateModal(cours.id, cours.salle_id)">
+                  <span class="icon is-small">
+                    <i class="fa fa-pencil"></i>
+                  </span>
+                </button>
               </card-cours>
             </template>
           </template>
@@ -428,10 +533,9 @@ fetch(BASE_URL + "matiere")
       </button>
     </div>
   </div>
-  <!-- MODAL FORM  -->
   <BaseModalForm :class="{ 'is-active': showModalForm }" @close="showModalForm = false">
     <!-- AJOUT COURS  -->
-    <BaseFormModal>
+    <BaseFormModal @submit.prevent="addCours()">
       <h1 class="title is-1">Nouveau cours</h1>
       <div class="field" style="width: 300px">
         <label class="label" for="Années">Années</label>
@@ -453,7 +557,7 @@ fetch(BASE_URL + "matiere")
       <div class="field" style="width: 300px">
         <label class="label" for="Matières">Matières</label>
         <div class="select">
-          <select v-model="matiereForm">
+          <select v-model="matiereForm" required>
             <option value="" disabled selected hidden>Matières</option>
             <option v-for="matiere in MatieresAnnee" v-show="matiere.Annee == selectedAnnee">
               {{ matiere.id }}
@@ -464,13 +568,57 @@ fetch(BASE_URL + "matiere")
       <BaseInput>
         <template v-slot:label>Classe(s)</template>
         <template v-slot:input>
-          <input v-model="classeForm" class="input" type="texte" placeholder="Exemple : M49-1 M49-2" />
+          <input v-model="classeForm" class="input" type="texte" placeholder="Exemple : M49-1 M49-2" required />
         </template>
       </BaseInput>
       <BaseInput>
         <template v-slot:label>Date</template>
         <template v-slot:input>
-          <input v-model="dateCoursForm" class="input" type="date" placeholder="Entrez une date" />
+          <input v-model="dateCoursForm" class="input" type="date" placeholder="Entrez une date" required
+            :min="todayDate" />
+        </template>
+      </BaseInput>
+      <BaseInput>
+        <template v-slot:label>Heure de début</template>
+        <template v-slot:input>
+          <input v-model="heureDebutForm" class="input" type="time" placeholder="Entrez une heure de début" required />
+        </template>
+      </BaseInput>
+      <BaseInput>
+        <template v-slot:label>Heure de fin</template>
+        <template v-slot:input>
+          <input v-model="heureFinForm" class="input" type="time" placeholder="Entrez une heure de fin" required />
+        </template>
+      </BaseInput>
+      <BaseInput>
+        <template v-slot:label>Professeur</template>
+        <template v-slot:input>
+          <input v-model="profForm" class="input" type="texte" placeholder="Exemple : JHS" required />
+        </template>
+      </BaseInput>
+      <BaseInput>
+        <template v-slot:label>Salle(s)</template>
+        <template v-slot:input>
+          <input v-model="lieuForm" class="input" type="text" placeholder="Exemple: T153 T154" required />
+        </template>
+      </BaseInput>
+
+      <BaseInputSubmit>
+        <input type="submit" class="button is-danger is-rounded" value="Ajouter le cours" />
+      </BaseInputSubmit>
+    </BaseFormModal>
+  </BaseModalForm>
+
+  <!-- MODAL FORM UPDATE  -->
+  <BaseModalForm :class="{ 'is-active': showUpdateModalForm }" @close="showUpdateModalForm = false">
+    <!-- UPDATE COURS  -->
+    <BaseFormModal @submit.prevent="updateCours()">
+      <h1 class="title is-1">Modification cours</h1>
+
+      <BaseInput>
+        <template v-slot:label>Date</template>
+        <template v-slot:input>
+          <input v-model="dateCoursForm" class="input" type="date" placeholder="Entrez une date" :min="todayDate" />
         </template>
       </BaseInput>
       <BaseInput>
@@ -486,20 +634,27 @@ fetch(BASE_URL + "matiere")
         </template>
       </BaseInput>
       <BaseInput>
-        <template v-slot:label>Professeur</template>
+        <template v-slot:label>Classe(s)</template>
         <template v-slot:input>
-          <input v-model="profForm" class="input" type="texte" placeholder="Exemple : JHS" />
+          <input v-model="lieuForm" class="input" type="text" placeholder="Entrez la/les classe(s)" />
         </template>
       </BaseInput>
-      <BaseInput>
-        <template v-slot:label>Salle(s)</template>
-        <template v-slot:input>
-          <input v-model="lieuForm" class="input" type="text" placeholder="Exemple: T153 T154" />
-        </template>
-      </BaseInput>
-
       <BaseInputSubmit>
-        <input type="submit" class="button is-danger is-rounded" value="Ajouter le cours" @click="addCours()" />
+        <input type="submit" class="button is-danger is-rounded" value="Modifier le cours" />
+      </BaseInputSubmit>
+    </BaseFormModal>
+  </BaseModalForm>
+
+  <!-- MODAL FORM DELETE  -->
+  <BaseModalForm :class="{ 'is-active': showDeleteModalForm }" @close="showDeleteModalForm = false">
+    <!-- DELETE EVENT  -->
+    <BaseFormModal>
+      <h1 class="title is-2">Voulez-vous vraiment supprimer le cours ?</h1>
+      <BaseInputSubmit>
+        <input type="submit" class="button is-danger is-rounded" value="Supprimer le cours ?" @click="deleteCours()" />
+      </BaseInputSubmit>
+      <BaseInputSubmit>
+        <input type="submit" class="button is-primary is-rounded" value="Retour" @click="showDeleteModalForm = false" />
       </BaseInputSubmit>
     </BaseFormModal>
   </BaseModalForm>
