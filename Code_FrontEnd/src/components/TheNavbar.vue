@@ -21,6 +21,29 @@ window.addEventListener("load", () => {
 
 window.addEventListener("hashchange", () => {
   page.value = window.location.hash;
+  if (page.value === "#accueil") {
+  var e = document.querySelector("select");
+  e.value = "Tous les cours";
+  const cours = document.querySelectorAll(".cours");
+  const spanCours = document.querySelectorAll(".spanCours");
+  cours.forEach((coursSolo) => {
+    coursSolo.style.display = "block";
+  });
+  spanCours.forEach((coursSolo) => {
+    coursSolo.style.display = "block";
+  });
+  }else if(page.value === "#agendaClasse"){
+     var e = document.querySelector("select");
+  e.value = "Tous les cours";
+  const cours = document.querySelectorAll(".cours");
+  const spanCours = document.querySelectorAll(".spanCours");
+  cours.forEach((coursSolo) => {
+    coursSolo.style.display = "block";
+  });
+  spanCours.forEach((coursSolo) => {
+    coursSolo.style.display = "block";
+  });
+  }
   userSession.value = sessionStorage.getItem("user");
   document.querySelector("#navMenu").classList.remove("is-active");
   document.querySelector("#navBurger").classList.remove("is-active");
