@@ -14,24 +14,22 @@ defineProps({
       rel="stylesheet"
       href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
     />
-    <p class="is-size-4 has-text-weight-bold">{{ titre }}</p>
-    <p class="is-size-6">{{ description }}</p>
-    <p class="is-size-5">
-      {{ matiere_id }}
-    </p>
-    <span v-if="Visibilite == 'public'">
-      <span id="eye" class="icon is-medium">
-        <i class="fa fa-eye"></i>
+    <div class="is-size-4 has-text-weight-bold columns is-mobile my-1">
+      <span class="is-size-5 column"
+        >{{ matiere_id }} - {{ titre }} : {{ description }}</span
+      >
+
+      <span v-if="Visibilite == 'public'">
+        <span id="eye" class="icon is-small">
+          <i class="fa fa-eye"></i>
+        </span>
       </span>
-      <span>Publique</span>
-    </span>
-    <span v-else>
-      <span id="eye" class="icon is-medium">
-        <i class="fa fa-eye-slash"></i>
+      <span v-else>
+        <span id="eye" class="icon is-small">
+          <i class="fa fa-eye-slash"></i>
+        </span>
       </span>
-      <span>Privée</span>
-    </span>
-    <slot></slot>
+    </div>
   </article>
 </template>
 
@@ -43,6 +41,13 @@ article {
   border-right-width: 0px;
   border-top-width: 0px;
   border-bottom-width: 0px;
-  padding-bottom: 40px;
+  padding: 0px;
+}
+
+article div {
+  padding: 1rem;
+}
+#eye {
+  margin-right: 1rem;
 }
 </style>
