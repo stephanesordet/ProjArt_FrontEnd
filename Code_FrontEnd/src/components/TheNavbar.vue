@@ -107,6 +107,7 @@ watchEffect(() => {
   });
 });
 
+// Get if a new notification is available
 setInterval(() => {
   if (userSession.value != null) {
     fetch(BASE_URL + "notifications/" + userSession.value)
@@ -114,6 +115,10 @@ setInterval(() => {
       .then((notifResults) => (notifications.value = notifResults));
   }
 }, 60000);
+
+watchEffect(() => {
+  console.log(newNotifs.value);
+})
 </script>
 
 <template>

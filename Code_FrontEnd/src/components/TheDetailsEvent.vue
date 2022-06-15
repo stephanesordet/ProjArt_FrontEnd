@@ -10,14 +10,9 @@ defineProps({
 </script>
 
 <template>
-  <link
-    rel="stylesheet"
-    href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-  />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
   <div class="columns is-family-sans-serif is-responsive">
-    <div
-      class="box content is-half is-offset-one-quarter has-background-light has-text-left column"
-    >
+    <div class="box content is-half is-offset-one-quarter has-background-light has-text-left column ">
       <h2 class="is-size-1">
         {{ Titre }}
       </h2>
@@ -57,6 +52,7 @@ defineProps({
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
 }
+
 .content h4 {
   margin-top: 1.5rem;
   margin-bottom: 0.5rem;

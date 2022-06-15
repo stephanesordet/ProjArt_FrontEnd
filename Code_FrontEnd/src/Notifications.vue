@@ -19,9 +19,7 @@ window.addEventListener("hashchange", () => {
   role.value = sessionStorage.getItem("role");
   if (window.location.hash == "#notifications" && newNotifs.value != "") {
     updateNotifs();
-    window.addEventListener("hashchange", () => {
-
-    });
+    newNotifs.value = "";
   }
 });
 
@@ -68,14 +66,16 @@ const allNotifications = computed(() => {
         newNotifs.value += "," + element.notification.id;
       }
     });
+    /* tabNotifications.sort((a, b) => {
+      return b.notification.EnvoiHeureDebut - a.notification.EnvoiHeureDebut;
+    }) */
+    return tabNotifications.reverse();
   }
-
-  tabNotifications.sort((a, b) => {
-    return b.notification.date - a.notification.date;
-  });
-
-  return tabNotifications
 });
+
+setInterval(() => {
+  console.log(newNotifs.value);
+}, 5000);
 
 // ---------------------- Boolean for showing the modal form -----------------------------
 let showModalForm = ref(false);
@@ -116,12 +116,17 @@ function updateNotifs() {
     .then((res) => {
       //Perform Success Action
       console.log(res);
+      newNotifs.value = "";
     })
     .catch((error) => {
       // error.response.status Check status code
       console.log(error);
+      newNotifs.value = "";
     })
-    .finally(() => { });
+    .finally(() => {
+      newNotifs.value = "";
+
+    });
 
   newNotifs.value = "";
 }
