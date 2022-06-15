@@ -64,6 +64,7 @@ function formatDateView(date) {
   let monthDate = month[date.getMonth()];
   let year = date.getFullYear().toString().slice(-2);
   let dates = date.getDate() + "." + monthDate + "." + year;
+  console.log(dates);
   return dates;
 }
 
@@ -462,18 +463,18 @@ fetch(BASE_URL + "matiere")
     <p class="mt-5"><b>Semaine du</b></p>
     <div
       class="semaineContainer"
-      style="display: flex; align-items: center; justify-content: center; margin-left: 5%"
+      style="display: flex; align-items: center; justify-content: center"
     >
       <div
         class="selecteurSemaine"
         style="display: flex; align-items: center; justify-content: center"
       >
-        <div class="mr-6">
-          <ArrowPrev :p="viewLundiSemaine" @click="changeSemaine('previous')" />
+        <div class="mr-4">
+          <ArrowPrev :span="viewLundiSemaine" @click="changeSemaine('previous')" />
         </div>
         <p>au</p>
-        <div class="ml-6">
-          <ArrowNext :p="viewVendrediSemaine" @click="changeSemaine('next')" />
+        <div class="ml-4">
+          <ArrowNext :span="viewVendrediSemaine" @click="changeSemaine('next')" />
         </div>
       </div>
     </div>
