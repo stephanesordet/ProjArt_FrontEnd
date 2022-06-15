@@ -2,6 +2,7 @@
 import { def } from "@vue/shared";
 import { computed, ref, nextTick, watchEffect } from "vue";
 import CardCours from "./components/CardCoursLink.vue";
+import CardCours from "./components/CardCours.vue";
 import BaseFormModal from "./components/BaseFormModal.vue";
 import BaseInputSubmit from "./components/BaseInputSubmit.vue";
 import BaseInput from "./components/BaseInput.vue";
