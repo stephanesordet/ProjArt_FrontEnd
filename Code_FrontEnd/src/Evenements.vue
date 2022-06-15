@@ -19,6 +19,7 @@ const userSession = ref(sessionStorage.getItem("user"));
 const role = ref(sessionStorage.getItem("role"));
 const auteur = ref(false);
 
+
 const date = new Date();
 const dateStr =
   date.getFullYear() +
