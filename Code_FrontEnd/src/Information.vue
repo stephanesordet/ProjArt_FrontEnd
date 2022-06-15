@@ -14,6 +14,8 @@ import { changeFormatDateWithoutHoursMinutes } from "../composables/function.js"
 import randomColor from "randomcolor";
 import CardInfoVue from "./components/CardInfo.vue";
 import CardProf from "./components/CardProf.vue";
+import CardLink from "./components/CardLink.vue";
+import Menu from "./components/Menu.vue";
 
 const filiereStore = ref("COMEM+");
 const filiereView = ref(true);
@@ -22,9 +24,14 @@ const classeView = ref(false);
 const detailView = ref(false);
 const etudiantView = ref(false);
 const profView = ref(false);
+const linkView = ref(false);
+const cafeteriaView = ref(false);
+const actualiteView = ref(false);
 
 // ---------------------- Fetch data for all events -----------------------------
 const { data: filiere } = useFetch(BASE_URL + "filiere/");
+const { data: news } = useFetch("https://intra.heig-vd.ch/_layouts/15/prada/api/news.ashx");
+const { data: menu } = useFetch("https://apix.blacktree.io/top-chef/today/");
 const etudiant = ref([]);
 watchEffect(() => {
   fetch(BASE_URL + "etudiant/"+ classeStore.value +"/")
@@ -57,6 +64,40 @@ const allFiliere = computed(() => {
     });
   }
   return tabFiliere;
+});
+
+/** 
+const allNews = computed(() => {
+  const tabFNews = [];
+  if (!news.value?.length) {
+    return [];
+  } else {
+    news.value.forEach((element) => {
+        tabFNews.push(element);
+    });
+  }
+  return tabFNews;
+});*/
+
+const allMenu = computed(() => {
+  const tabMenu = [];
+  if (!menu.value) {
+    return [];
+  } else {
+        menu.value.date = changeFormatDateWithoutHoursMinutes(menu.value.day);
+        var objMenu = menu.value.menus;
+        var objMenu2 = [];
+        objMenu.forEach((element) => {
+            element.mainCourse = element.mainCourse.join(", ");
+            if(element.mainCourse !== ""){
+              objMenu2.push(element);
+            }
+        });
+        menu.value.menus = objMenu2;
+        tabMenu.push(menu.value);
+        console.log(tabMenu);
+}
+  return tabMenu;
 });
 
 const allClasse = computed(() => {
@@ -103,6 +144,9 @@ fetch(BASE_URL + "filiere")
     detailView.value = false;
     etudiantView.value = false;
     profView.value = false;
+    cafeteriaView.value = false;
+    linkView.value = false;
+    actualiteView.value = false;
   }
 
   function changeVueClasse(classe) {
@@ -112,6 +156,9 @@ fetch(BASE_URL + "filiere")
     filiereView.value = false;
     etudiantView.value = false;
     profView.value = false;
+    cafeteriaView.value = false;
+    linkView.value = false;
+    actualiteView.value = false;
   }
 
   function changeVueEtudiant() {
@@ -120,6 +167,9 @@ fetch(BASE_URL + "filiere")
     filiereView.value = false;
     profView.value = false;
     detailView.value = false;
+    cafeteriaView.value = false;
+    linkView.value = false;
+    actualiteView.value = false;
   }
 
   function changeVue() {
@@ -128,6 +178,9 @@ fetch(BASE_URL + "filiere")
     filiereView.value = true;
     profView.value = false;
     detailView.value = false;
+    cafeteriaView.value = false;
+    linkView.value = false;
+    actualiteView.value = false;
   }
 
    const allEtudiant = computed(() => {
@@ -148,6 +201,42 @@ fetch(BASE_URL + "filiere")
     etudiantView.value = false;
     detailView.value = false;
     profView.value = true;
+    cafeteriaView.value = false;
+    linkView.value = false;
+    actualiteView.value = false;
+  }
+
+  function changeVueCafeteria() {
+    cafeteriaView.value = true;
+    classeView.value = false;
+    filiereView.value = false;
+    etudiantView.value = false;
+    detailView.value = false;
+    profView.value = false;
+    linkView.value = false;
+    actualiteView.value = false;
+  }
+
+  function changeVueLink() {
+    linkView.value = true;
+    classeView.value = false;
+    filiereView.value = false;
+    etudiantView.value = false;
+    detailView.value = false;
+    profView.value = false;
+    cafeteriaView.value = false;
+    actualiteView.value = false;
+  }
+
+  function changeVueNews() {
+    linkView.value = false;
+    classeView.value = false;
+    filiereView.value = false;
+    etudiantView.value = false;
+    detailView.value = false;
+    profView.value = false;
+    cafeteriaView.value = false;
+    actualiteView.value = true;
   }
 
       const allProf = computed(() => {
@@ -186,6 +275,13 @@ fetch(BASE_URL + "filiere")
       );
     });
   });
+
+  function link(link){
+    let a = document.createElement('a');
+    a.target= '_blank';
+    a.href= link;
+    a.click();
+  }
 </script>
 
 <template>
@@ -222,12 +318,51 @@ fetch(BASE_URL + "filiere")
               </span>
           </button>
       </template>
-      <span><a v-if="filiereView || classeView || detailView || etudiant || profView" @click="changeVue()">Filiere</a>  <a v-if="classeView || detailView || etudiantView || profView" @click="changeVueFiliere(filiereStore)">> Classe</a>  <a v-if="detailView || etudiantView" @click="changeVueClasse(classeStore)">> Details</a>  <a v-if="profView" @click="changeVueProf()">> Prof</a>  <a v-if="etudiantView" @click="changeVueEtudiant()">> Etudiant</a></span>
+      <template v-if="linkView">
+          <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+          <button @click="changeVue()" class="button is-white is-large is-responsive is-flex is-align-self-flex-end icon-text">
+              <span class="icon">
+                  <i class="fa fa-arrow-left is-flex  has-text-black"></i>
+              </span>
+          </button>
+      </template>
+      <template v-if="cafeteriaView">
+          <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+          <button @click="changeVue()" class="button is-white is-large is-responsive is-flex is-align-self-flex-end icon-text">
+              <span class="icon">
+                  <i class="fa fa-arrow-left is-flex  has-text-black"></i>
+              </span>
+          </button>
+      </template>
+       <template v-if="actualiteView">
+          <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+          <button @click="changeVue()" class="button is-white is-large is-responsive is-flex is-align-self-flex-end icon-text">
+              <span class="icon">
+                  <i class="fa fa-arrow-left is-flex  has-text-black"></i>
+              </span>
+          </button>
+      </template>
+      <span><a v-if="filiereView || classeView || detailView || etudiant || profView" @click="changeVue()">Informations </a>  <a v-if="classeView || detailView || etudiantView || profView" @click="changeVueFiliere(filiereStore)">> Classe</a>  <a v-if="cafeteriaView" @click="changeVueCafeteria()">> Caféteria</a>  <a v-if="actualiteView" @click="changeVueNews()">> Actualités</a>  <a v-if="linkView" @click="changeVueLink()">> Liens utiles</a>  <a v-if="detailView || etudiantView" @click="changeVueClasse(classeStore)">> Details</a>  <a v-if="profView" @click="changeVueProf()">> Prof</a>  <a v-if="etudiantView" @click="changeVueEtudiant()">> Etudiant</a></span>
       <template v-if="filiereView">
         <card-info-vue  v-for="filiere in allFiliere"
         :info="filiere.id"
         :class="filiere.id"
         @click="changeVueFiliere(filiere.id)">
+        </card-info-vue>
+        <card-info-vue
+        info="Liens utiles"
+        class="links"
+        @click="changeVueLink()">
+        </card-info-vue>
+        <card-info-vue
+        info="Actualités"
+        class="news"
+        @click="changeVueNews()">
+        </card-info-vue>
+        <card-info-vue
+        info="Caféteria"
+        class="cafeteria"
+        @click="changeVueCafeteria()">
         </card-info-vue>
         </template>
         <template v-if="classeView">
@@ -240,6 +375,46 @@ fetch(BASE_URL + "filiere")
         info="Liste Professeurs"
         @click="changeVueProf()">
         </card-info-vue>
+        </template>
+        <template v-if="linkView">
+        <card-link 
+        info="Attestation d'études"
+        @click='link("https://intra.heig-vd.ch/academique/attestation-etude/Pages/default.aspx")'>
+        </card-link>
+        <card-link 
+        info="Calendrier Académique"
+        @click='link("https://intra.heig-vd.ch/academique/calendriers-academiques/Pages/calendriers-academiques.aspx")'>
+        </card-link>
+        <card-link 
+        info="Justificatif d'absences"
+        @click='link("https://intra.heig-vd.ch/academique/formulaire-absence/Pages/default.aspx")'>
+        </card-link>
+        <card-link 
+        info="Webmail"
+        @click='link("https://webmail.heig-vd.ch/owa")'>
+        </card-link>
+         <card-link 
+        info="Bulletin de notes"
+        @click='link("https://gaps.heig-vd.ch/consultation/notes/bulletin.php?id=17484&format=pdf&timestamp=1655105738532")'>
+        </card-link>
+        <card-link 
+        info="Contrôles continus"
+        @click='link("https://gaps.heig-vd.ch/consultation/controlescontinus/consultation.php?idst=17484")'>
+        </card-link>
+        <card-link 
+        info="Enseignement à choix"
+        @click='link("https://gaps.heig-vd.ch/consultation/choixOption/")'>
+        </card-link>
+        <card-link 
+        info="Eval. des enseignants"
+        @click='link("https://gaps.heig-vd.ch/consultation/evaluationenseignements/index.php")'>
+        </card-link>
+        </template>
+        <template v-if="actualiteView">
+        <card-link v-for="news in allNews"
+        :info="news.title"
+        @click='link("https://intra.heig-vd.ch"+ news.link)'>
+        </card-link>
         </template>
         <template v-if="detailView">
         <card-info-vue 
@@ -262,6 +437,16 @@ fetch(BASE_URL + "filiere")
         :email="prof.Email"
         :acronyme="prof.Email">
         </card-prof>
+        </template>
+        <template v-if="cafeteriaView">
+        <template v-for="day in allMenu">
+        <p class="ProjArt spanCours" data-v-37ffd5dc="" style="text-align: center; margin-top: 30px; font-size: 1.2rem; ">{{day.date}}</p>
+        <Menu  v-for="menu in day.menus"
+        :starter="menu.starter"
+        :mainCourse="menu.mainCourse"
+        :dessert="menu.dessert">
+        </Menu>
+        </template>
         </template>
     </div>
 </template>
