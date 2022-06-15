@@ -168,6 +168,15 @@ const CoursClasse = computed(() => {
           tabCours[i].salle_id += " " + element.salle_id;
         }
       });
+      tabCours.forEach((element) => {
+        var salle = element.salle_id;
+        if (salle !== undefined) {
+          var tabSalle = salle.split(" ");
+          var uniqueSalle = new Set(tabSalle);
+          var txtUniqueSalle = Array.from(uniqueSalle).join(" ");
+          element.salle_id = txtUniqueSalle;
+        }
+    });
     }
     let duplicatesHistorique = [];
     const tempArrayHistorique = tabCoursHistorique.sort();
@@ -186,6 +195,15 @@ const CoursClasse = computed(() => {
         }
       });
     }
+    tabCoursHistorique.forEach((element) => {
+        var salle = element.salle_id;
+        if (salle !== undefined) {
+          var tabSalle = salle.split(" ");
+          var uniqueSalle = new Set(tabSalle);
+          var txtUniqueSalle = Array.from(uniqueSalle).join(" ");
+          element.salle_id = txtUniqueSalle;
+        }
+    });
   }
   let coursObj;
   const tabCoursByDate = [];

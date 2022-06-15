@@ -128,6 +128,7 @@ const CoursClasse = computed(() => {
         element.HeureDebut = heureDebut;
         element.HeureFin = heureFin;
         element.Name = "Cours";
+        console.log(element.salle_id);
         tabCours.push(element);
       } else {
         const month = [
@@ -254,6 +255,15 @@ const CoursClasse = computed(() => {
         }
       });
     }
+    tabCours.forEach((element) => {
+        var salle = element.salle_id;
+        if (salle !== undefined) {
+          var tabSalle = salle.split(" ");
+          var uniqueSalle = new Set(tabSalle);
+          var txtUniqueSalle = Array.from(uniqueSalle).join(" ");
+          element.salle_id = txtUniqueSalle;
+        }
+    });
     let duplicatesHistorique = [];
     const tempArrayHistorique = tabCoursHistorique.sort();
     for (let i = 0; i < tempArrayHistorique.length; i++) {
@@ -271,6 +281,15 @@ const CoursClasse = computed(() => {
         }
       });
     }
+        tabCoursHistorique.forEach((element) => {
+        var salle = element.salle_id;
+        if (salle !== undefined) {
+          var tabSalle = salle.split(" ");
+          var uniqueSalle = new Set(tabSalle);
+          var txtUniqueSalle = Array.from(uniqueSalle).join(" ");
+          element.salle_id = txtUniqueSalle;
+        }
+    });
   }
   let coursObj;
   const tabCoursByDate = [];
