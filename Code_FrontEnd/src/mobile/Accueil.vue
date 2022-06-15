@@ -505,14 +505,14 @@ fetch(BASE_URL + "matiere")
                 <button v-show="role == 'Administration'" class="button is-pulled-right is-white has-background-light"
                   @click="displayDeleteModal(cours.id)">
                   <span class="icon is-small">
-                    <i class="fa fa-trash"></i>
+                    <i class="fa fa-trash ml-6"></i>
                   </span>
                 </button>
 
                 <button v-show="role == 'Administration'" class="button is-pulled-right is-white has-background-light"
                   @click="displayUpdateModal(cours.id, cours.salle_id)">
                   <span class="icon is-small">
-                    <i class="fa fa-pencil"></i>
+                    <i class="fa fa-pencil ml-6"></i>
                   </span>
                 </button>
               </card-cours>
@@ -528,7 +528,7 @@ fetch(BASE_URL + "matiere")
       <button v-show="role == 'Administration'" class="button is-right js-modal-trigger" data-target="modal-js-example"
         id="fixedbutton" @click="showModalForm = !showModalForm">
         <span class="icon is-large has-text-danger">
-          <i class="fa fa-4x fa-plus-square"></i>
+          <i class="fa fa-3x fa-plus-square"></i>
         </span>
       </button>
     </div>
@@ -536,7 +536,7 @@ fetch(BASE_URL + "matiere")
   <BaseModalForm :class="{ 'is-active': showModalForm }" @close="showModalForm = false">
     <!-- AJOUT COURS  -->
     <BaseFormModal @submit.prevent="addCours()">
-      <h1 class="title is-1">Nouveau cours</h1>
+      <h3 class="title">Nouveau cours</h3>
       <div class="field" style="width: 300px">
         <label class="label" for="Années">Années</label>
         <div class="buttons are-small is-mobile is-centered mx-1 my-1">
@@ -613,7 +613,7 @@ fetch(BASE_URL + "matiere")
   <BaseModalForm :class="{ 'is-active': showUpdateModalForm }" @close="showUpdateModalForm = false">
     <!-- UPDATE COURS  -->
     <BaseFormModal @submit.prevent="updateCours()">
-      <h1 class="title is-1">Modification cours</h1>
+      <h3 class="title">Modification cours</h3>
 
       <BaseInput>
         <template v-slot:label>Date</template>
@@ -649,7 +649,7 @@ fetch(BASE_URL + "matiere")
   <BaseModalForm :class="{ 'is-active': showDeleteModalForm }" @close="showDeleteModalForm = false">
     <!-- DELETE EVENT  -->
     <BaseFormModal>
-      <h1 class="title is-2">Voulez-vous vraiment supprimer le cours ?</h1>
+      <h3 class="title">Voulez-vous vraiment supprimer le cours ?</h3>
       <BaseInputSubmit>
         <input type="submit" class="button is-danger is-rounded" value="Supprimer le cours ?" @click="deleteCours()" />
       </BaseInputSubmit>
@@ -663,7 +663,7 @@ fetch(BASE_URL + "matiere")
   <BaseModalForm :class="{ 'is-active': showInfoModal }" @close="showInfoModal = false">
     <!-- CRUD ACTION  -->
     <BaseFormModal>
-      <h1 class="title is-2">{{ messageToUser }}</h1>
+      <h3 class="title">{{ messageToUser }}</h3>
     </BaseFormModal>
   </BaseModalForm>
 </template>
@@ -671,7 +671,7 @@ fetch(BASE_URL + "matiere")
 #fixedbutton {
   position: fixed;
   bottom: 20px;
-  right: 40px;
+  right: 30px;
 }
 
 .charger,
