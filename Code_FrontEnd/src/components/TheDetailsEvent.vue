@@ -10,18 +10,13 @@ defineProps({
 </script>
 
 <template>
-  <link
-    rel="stylesheet"
-    href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-  />
-  <div class="columns is-family-sans-serif is-responsive">
-    <div
-      class="box content is-half is-offset-one-quarter has-background-light has-text-left column"
-    >
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <div class="columns is-family-sans-serif is-responsive mx-3">
+    <div class="box content is-half is-offset-one-quarter has-background-light has-text-left column  ">
       <h2 class="is-size-1">
         {{ Titre }}
       </h2>
-      <p class="is-size-6">Créateur de l'évènement : {{ user_Email }}</p>
+      <p class="is-size-6">Créateur de l'évènement :<br> {{ user_Email }}</p>
       <h3>Description de l'événement</h3>
 
       <p class="is-size-6">
@@ -57,6 +52,7 @@ defineProps({
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
 }
+
 .content h4 {
   margin-top: 1.5rem;
   margin-bottom: 0.5rem;

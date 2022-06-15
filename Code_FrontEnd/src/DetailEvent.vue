@@ -40,15 +40,9 @@ const allEvents = computed(() => {
 
 <template>
   <TheReturnButton></TheReturnButton>
-  <the-details-event
-    v-for="events in allEvents"
-    :Debut="changeFormatDateWithoutHoursMinutes(events.Debut)"
-    :Fin="changeFormatDateWithoutHoursMinutes(events.Fin)"
-    :Lieu="events.Lieu"
-    :user_Email="events.user_Email"
-    :Description="events.Description"
-    :Titre="events.Titre"
-  ></the-details-event>
+  <the-details-event v-for="events in allEvents" :Debut="changeFormatDateWithoutHoursMinutes(events.Debut)"
+    :Fin="changeFormatDateWithoutHoursMinutes(events.Fin)" :Lieu="events.Lieu" :user_Email="events.user_Email"
+    :Description="events.Description" :Titre="events.Titre"></the-details-event>
 </template>
 
 <style scoped>

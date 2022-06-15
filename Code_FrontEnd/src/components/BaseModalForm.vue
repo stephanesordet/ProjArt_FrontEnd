@@ -5,17 +5,14 @@
     <div class="modal-background"></div>
 
     <div class="modal-content">
-      <div class="box">
+      <div class="box mx-3">
         <slot></slot>
       </div>
     </div>
 
-    <button
-      class="modal-close is-large"
-      aria-label="close"
-      @click="$emit('close')"
-    ></button>
+    <button class="modal-close is-large" aria-label="close" @click="$emit('close')"></button>
   </div>
 </template>
 
-<style></style>
+<style>
+</style>
