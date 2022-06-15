@@ -65,7 +65,6 @@ function useFetchLogin(password, email) {
       })
       .catch((error) => {
         // error.response.status Check status code
-        console.log(error);
       })
       .finally(() => {
         //Perform action in always
@@ -81,10 +80,7 @@ function useFetchLogin(password, email) {
   <TheLoader></TheLoader>
   <section class="hero">
     <!-- To accept bulma's icons -->
-    <link
-      rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-    />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
     <div class="hero-body">
       <div class="container">
         <div class="columns is-centered">
@@ -93,13 +89,7 @@ function useFetchLogin(password, email) {
               <div class="field">
                 <label for="" class="label">Adresse mail</label>
                 <div class="control has-icons-left">
-                  <input
-                    v-model="email"
-                    type="email"
-                    placeholder="prenom.nom@heig-vd.ch"
-                    class="input"
-                    required
-                  />
+                  <input v-model="email" type="email" placeholder="prenom.nom@heig-vd.ch" class="input" required />
                   <span class="icon is-small is-left">
                     <i class="fa fa-envelope"></i>
                   </span>
@@ -108,13 +98,7 @@ function useFetchLogin(password, email) {
               <div class="field">
                 <label for="" class="label">Mot de passe</label>
                 <div class="control has-icons-left">
-                  <input
-                    v-model="password"
-                    type="password"
-                    placeholder="*******"
-                    class="input"
-                    required
-                  />
+                  <input v-model="password" type="password" placeholder="*******" class="input" required />
                   <span class="icon is-small is-left">
                     <i class="fa fa-lock"></i>
                   </span>
@@ -122,9 +106,7 @@ function useFetchLogin(password, email) {
               </div>
               <div class="field">
                 <button class="button is-danger">Connexion</button><br /><br />
-                <a href="#PasswordReset" class="is-size-7"
-                  >Mot de passe oublié ?</a
-                >
+                <a href="#PasswordReset" class="is-size-7">Mot de passe oublié ?</a>
               </div>
             </form>
           </div>
@@ -134,11 +116,8 @@ function useFetchLogin(password, email) {
   </section>
 
   <!-- MODAL FORM WELCOME -->
-  <BaseModalForm
-    :class="{ 'is-active': showWelcomeModalForm }"
-    @close="showWelcomeModalForm = false"
-    style="z-index: index 9999"
-  >
+  <BaseModalForm :class="{ 'is-active': showWelcomeModalForm }" @close="showWelcomeModalForm = false"
+    style="z-index: index 9999">
     <BaseFormModal>
       <h2 class="title is-4">
         Lors de votre première connexion, nous chargeons les données de GAPS. Ce
@@ -146,54 +125,37 @@ function useFetchLogin(password, email) {
       </h2>
     </BaseFormModal>
     <BaseInputSubmit>
-      <input
-        type="submit"
-        class="button is-primary is-rounded"
-        value="Je vais y aller !"
-        @click="showWelcomeModalForm = false"
-      />
+      <input type="submit" class="button is-primary is-rounded" value="Je vais y aller !"
+        @click="showWelcomeModalForm = false" />
     </BaseInputSubmit>
   </BaseModalForm>
 
   <!-- MODAL FORM @MAIL ERROR -->
-  <BaseModalForm
-    :class="{ 'is-active': showMailErrorModalForm }"
-    @close="showMailErrorModalForm = false"
-  >
+  <BaseModalForm :class="{ 'is-active': showMailErrorModalForm }" @close="showMailErrorModalForm = false">
     <BaseFormModal>
       <h2 class="title is-4">
         Utilisez votre mail <b>@heig-vd.ch</b> pour vous connecter
       </h2>
     </BaseFormModal>
     <BaseInputSubmit>
-      <input
-        type="submit"
-        class="button is-primary is-rounded"
-        value="Compris"
-        @click="showMailErrorModalForm = false"
-      />
+      <input type="submit" class="button is-primary is-rounded" value="Compris"
+        @click="showMailErrorModalForm = false" />
     </BaseInputSubmit>
   </BaseModalForm>
 
   <!-- MODAL FORM USER OR PASSWORD ERROR -->
-  <BaseModalForm
-    :class="{ 'is-active': showUserPswErrorModalForm }"
-    @close="showUserPswErrorModalForm = false"
-  >
+  <BaseModalForm :class="{ 'is-active': showUserPswErrorModalForm }" @close="showUserPswErrorModalForm = false">
     <BaseFormModal>
       <h2 class="title is-4">
         Erreur dans le <b>nom d'utilisateur</b> ou le <b>mot de passe</b>
       </h2>
     </BaseFormModal>
     <BaseInputSubmit>
-      <input
-        type="submit"
-        class="button is-primary is-rounded"
-        value="Retour"
-        @click="showUserPswErrorModalForm = false"
-      />
+      <input type="submit" class="button is-primary is-rounded" value="Retour"
+        @click="showUserPswErrorModalForm = false" />
     </BaseInputSubmit>
   </BaseModalForm>
 </template>
 
-<style scoped></style>
+<style scoped>
+</style>

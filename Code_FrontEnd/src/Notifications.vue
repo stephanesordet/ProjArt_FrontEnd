@@ -33,7 +33,6 @@ window.addEventListener("hashchange", () => {
   }
 });
 
-
 watchEffect(() => {
   if (userSession.value != null) {
     fetch(BASE_URL + "notifications/" + userSession.value)
@@ -57,7 +56,7 @@ const allNotifications = computed(() => {
     return [];
   } else {
     notifications.value.forEach((element) => {
-      element.roles = element.roles + ""
+      element.roles = element.roles + "";
       tabNotifications.push(element);
       if (
         element.status == false &&
@@ -66,16 +65,12 @@ const allNotifications = computed(() => {
         newNotifs.value += "," + element.notification.id;
       }
     });
-    /* tabNotifications.sort((a, b) => {
-      return b.notification.EnvoiHeureDebut - a.notification.EnvoiHeureDebut;
-    }) */
-    return tabNotifications.reverse();
+    const sortedNotifs = tabNotifications.sort((a, b) => {
+      b.notification.EnvoiHeureDebut - a.notification.EnvoiHeureDebut;
+    })
+    return sortedNotifs;
   }
 });
-
-setInterval(() => {
-  console.log(newNotifs.value);
-}, 5000);
 
 // ---------------------- Boolean for showing the modal form -----------------------------
 let showModalForm = ref(false);
@@ -93,7 +88,6 @@ fetch(BASE_URL + "role")
       matiereColor.push(couleurMatiereOb);
       i += 7;
     });
-    console.log(matiereColor);
     matiereColor.forEach((element) => {
       document.head.insertAdjacentHTML(
         "beforeend",
@@ -115,17 +109,14 @@ function updateNotifs() {
     })
     .then((res) => {
       //Perform Success Action
-      console.log(res);
       newNotifs.value = "";
     })
     .catch((error) => {
       // error.response.status Check status code
-      console.log(error);
       newNotifs.value = "";
     })
     .finally(() => {
       newNotifs.value = "";
-
     });
 
   newNotifs.value = "";
