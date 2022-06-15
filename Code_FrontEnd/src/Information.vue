@@ -392,8 +392,17 @@ function link(link) {
     </template>
     <template v-if="cafeteriaView">
       <template v-for="day in allMenu">
+<<<<<<< HEAD
         <p class="ProjArt spanCours" data-v-37ffd5dc="" style="text-align: center; margin-top: 30px; font-size: 1.2rem">
           {{ day.date }}
+=======
+        <p
+          class="mb-3"
+          data-v-37ffd5dc=""
+          style="text-align: center; margin-top: 30px; font-size: 1.2rem"
+        >
+          Menus du : <strong>{{ day.date }}</strong>
+>>>>>>> 0f0e65aa1bffb0393f6fceef106de1ec5178b5e4
         </p>
         <Menu v-for="menu in day.menus" :starter="menu.starter" :mainCourse="menu.mainCourse" :dessert="menu.dessert">
         </Menu>
