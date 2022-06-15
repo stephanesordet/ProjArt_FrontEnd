@@ -2,7 +2,6 @@
 import { def } from "@vue/shared";
 import { computed, ref, nextTick, watchEffect } from "vue";
 import CardCours from "./components/CardCoursLink.vue";
-import CardCours from "./components/CardCours.vue";
 import BaseFormModal from "./components/BaseFormModal.vue";
 import BaseInputSubmit from "./components/BaseInputSubmit.vue";
 import BaseInput from "./components/BaseInput.vue";
@@ -521,7 +520,7 @@ fetch(BASE_URL + "matiere")
 
 <template>
   <div class="main mx-4 my-1">
-    <h1>
+    <h1 class="mb-3">
       Vous êtes connectés en tant que : <b>{{ userSession }}</b>
     </h1>
     <div class="select is-danger">
