@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from "vue";
 import axios from "axios";
-import { BASE_URL } from "../../composables/store";
+import { BASE_URL } from "../../composables/store.js";
 import BaseFormModal from "./BaseFormModal.vue";
 import BaseModalForm from "./BaseModalForm.vue";
 
@@ -81,7 +81,10 @@ function deleteRemarque(id) {
       </button>
     </div>
     <p>
-      <span>Pour la date du : {{ DateRemarque }} </span>
+      <span
+        >Pour la date du :
+        {{ DateRemarque }}
+      </span>
     </p>
     <p>
       <strong>{{ Titre }} : </strong><span>{{ Description }}</span>
