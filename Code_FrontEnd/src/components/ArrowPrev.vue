@@ -1,7 +1,7 @@
 <template>
   <a @click="$emit('click', 'previous')" class="previous round">&#8249;</a>
   <span @click="$emit('click', 'previous')" class="dateSemaine">{{
-    span
+      span
   }}</span>
 </template>
 
@@ -22,8 +22,7 @@ export default {
   text-decoration: none;
   display: inline-block;
   padding: 8px 16px;
-  margin-left: 50px;
-  margin-right: 50px;
+  margin-right: 30px;
 }
 
 .round:hover {

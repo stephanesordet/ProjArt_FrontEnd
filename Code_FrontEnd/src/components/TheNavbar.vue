@@ -78,7 +78,8 @@ document.addEventListener("DOMContentLoaded", () => {
 function logout() {
   sessionStorage.removeItem("user");
   sessionStorage.removeItem("role");
-  window.location.hash = "#";
+  window.location.hash = "#accueil";
+  window.location.reload();
 }
 
 const props = defineProps({
@@ -99,7 +100,6 @@ watchEffect(() => {
 });
 
 watchEffect(() => {
-  console.log("watch");
   notifications.value.forEach((element) => {
     if (element.status == false) {
       newNotifs.value = true;
@@ -114,31 +114,16 @@ setInterval(() => {
       .then((notifResults) => (notifications.value = notifResults));
   }
 }, 60000);
-
-watchEffect(() => {
-  console.log(newNotifs.value);
-});
 </script>
 
 <template>
-  <nav
-    v-show="session"
-    class="navbar is-transparent"
-    role="navigation"
-    aria-label="main navigation"
-  >
+  <nav v-show="session" class="navbar is-transparent" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
       <a class="navbar-item" href="#accueil">
         <img id="logoNavbar" src="../assets/logoProjArt.png" />
       </a>
-      <a
-        id="navBurger"
-        role="button"
-        class="navbar-burger mt-6"
-        data-target="navMenu"
-        aria-label="menu"
-        aria-expanded="false"
-      >
+      <a id="navBurger" role="button" class="navbar-burger mt-6" data-target="navMenu" aria-label="menu"
+        aria-expanded="false">
         <span aria-hidden="true"></span>
         <span aria-hidden="true"></span>
         <span aria-hidden="true"></span>
@@ -148,26 +133,13 @@ watchEffect(() => {
     <div id="navMenu" class="navbar-menu">
       <div class="navbar-start">
         <a class="navbar-item" href="#accueil"> Horaires des classes </a>
-        <a
-          v-show="role != 'Administration' && role != 'AGE'"
-          class="navbar-item"
-          href="#agendaClasse"
-        >
+        <a v-show="role != 'Administration' && role != 'AGE'" class="navbar-item" href="#agendaClasse">
           Agenda personnel
         </a>
         <a class="navbar-item" href="#evenements"> Evenements </a>
-        <a
-          v-show="role != 'Administration' && role != 'AGE'"
-          class="navbar-item"
-          href="#notifications"
-        >
+        <a v-show="role != 'Administration' && role != 'AGE'" class="navbar-item" href="#notifications">
           <span class="icon">
-            <i
-              v-show="newNotifs == true"
-              class="fa fa-bell"
-              style="color: red"
-              @click="newNotifs = false"
-            ></i>
+            <i v-show="newNotifs == true" class="fa fa-bell" style="color: red" @click="newNotifs = false"></i>
             <i v-show="newNotifs == false" class="fa fa-bell"></i>
           </span>
         </a>
