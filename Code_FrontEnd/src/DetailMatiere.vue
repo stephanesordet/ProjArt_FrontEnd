@@ -100,7 +100,7 @@ function addRemarqueCours() {
       messageToUser.value = "Remarque ajoutée avec succès";
       showInfoModal.value = !showInfoModal.value;
       setTimeout(() => {
-        //window.location.reload();
+        window.location.reload();
       }, 1000);
     })
     .catch((error) => {
@@ -110,7 +110,7 @@ function addRemarqueCours() {
       messageToUser.value = "Remarque ajoutée avec succès";
       showInfoModal.value = !showInfoModal.value;
       setTimeout(() => {
-        //window.location.reload();
+        window.location.reload();
       }, 1000);
     })
     .finally(() => {
