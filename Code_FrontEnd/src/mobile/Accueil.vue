@@ -228,10 +228,6 @@ const Matiere = computed(() => {
   return { uniqueMatiere };
 });
 
-function afficheForm() {
-  console.log(4);
-}
-
 const MatieresAnnee = computed(() => {
   const tabMatiere = [];
   if (!matieres.value?.length) {
@@ -241,7 +237,6 @@ const MatieresAnnee = computed(() => {
       tabMatiere.push(element);
     });
   }
-  console.log(tabMatiere.value);
   return tabMatiere;
 });
 
@@ -286,9 +281,7 @@ async function addCours() {
         }, 1000);
       })
       .then(() => { });
-    console.log(cours);
   } catch (e) {
-    console.log(e);
     showModalForm.value = !showModalForm.value;
     messageToUser.value = "Erreur lors de l'ajout du cours";
     showInfoModal.value = !showInfoModal.value;
@@ -315,7 +308,6 @@ function valueHasClicked(event) {
   document.querySelector(".charger").style.display = "block";
   const classe = event.target.innerHTML;
   selectedClasses.value = classe;
-  console.log(selectedClasses.value);
   setTimeout(hideLoader, 1000);
 }
 
@@ -400,9 +392,7 @@ async function updateCours() {
           window.location.reload();
         }, 1000);
       });
-    console.log(cours);
   } catch (e) {
-    console.log(e);
     showUpdateModalForm.value = !showUpdateModalForm.value;
     messageToUser.value = "Erreur lors de la modification du cours";
     showInfoModal.value = !showInfoModal.value;
@@ -456,7 +446,6 @@ fetch(BASE_URL + "matiere")
       matiereColor.push(couleurMatiereOb);
       i++;
     });
-    console.log(matiereColor);
     matiereColor.forEach((element) => {
       document.head.insertAdjacentHTML(
         "beforeend",

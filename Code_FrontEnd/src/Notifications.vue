@@ -65,16 +65,12 @@ const allNotifications = computed(() => {
         newNotifs.value += "," + element.notification.id;
       }
     });
-    /* tabNotifications.sort((a, b) => {
-      return b.notification.EnvoiHeureDebut - a.notification.EnvoiHeureDebut;
-    }) */
-    return tabNotifications.reverse();
+    const sortedNotifs = tabNotifications.sort((a, b) => {
+      b.notification.EnvoiHeureDebut - a.notification.EnvoiHeureDebut;
+    })
+    return sortedNotifs;
   }
 });
-
-setInterval(() => {
-  console.log(newNotifs.value);
-}, 5000);
 
 // ---------------------- Boolean for showing the modal form -----------------------------
 let showModalForm = ref(false);
@@ -92,15 +88,14 @@ fetch(BASE_URL + "role")
       matiereColor.push(couleurMatiereOb);
       i += 7;
     });
-    console.log(matiereColor);
     matiereColor.forEach((element) => {
       document.head.insertAdjacentHTML(
         "beforeend",
         "<style>." +
-          element.id +
-          "{border-color:" +
-          element.color +
-          " !important}</style>"
+        element.id +
+        "{border-color:" +
+        element.color +
+        " !important}</style>"
       );
     });
   });
@@ -114,12 +109,10 @@ function updateNotifs() {
     })
     .then((res) => {
       //Perform Success Action
-      console.log(res);
       newNotifs.value = "";
     })
     .catch((error) => {
       // error.response.status Check status code
-      console.log(error);
       newNotifs.value = "";
     })
     .finally(() => {
@@ -132,14 +125,9 @@ function updateNotifs() {
 
 <template>
   <the-card-wrapper>
-    <card-notif
-      v-for="response in allNotifications"
-      :user="response.roles"
-      :object="response.notification.Objet"
-      :envoiHeure="changeFormatDate(response.notification.EnvoiHeureDate)"
-      :message="response.notification.Message"
-      :class="response.roles"
-    >
+    <card-notif v-for="response in allNotifications" :user="response.roles" :object="response.notification.Objet"
+      :envoiHeure="changeFormatDate(response.notification.EnvoiHeureDate)" :message="response.notification.Message"
+      :class="response.roles">
       <span v-if="response.status == false" class="icon">
         <i class="fa fa-solid fa-circle fa-lg"></i>
       </span>

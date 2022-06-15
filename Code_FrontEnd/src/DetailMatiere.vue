@@ -32,16 +32,13 @@ watchEffect(() => {
 
   fetch(
     BASE_URL +
-      "remarque/user/" +
-      userSession.value +
-      "/" +
-      matiere_idDetailsMatiere.value
+    "remarque/user/" +
+    userSession.value +
+    "/" +
+    matiere_idDetailsMatiere.value
   )
     .then((res) => res.json())
     .then((remarqueMatiere) => (remarques.value = remarqueMatiere));
-  /* .then(() => {
-      console.log(remarques.value);
-    }) */
 });
 
 const allCours = computed(() => {
@@ -67,7 +64,6 @@ const allRemarques = computed(() => {
       tabRemarques.push(element);
     });
   }
-  //console.log(tabRemarques);
   return tabRemarques;
 });
 
@@ -95,7 +91,6 @@ function addRemarqueCours() {
     })
     .then((res) => {
       //Perform Success Action
-      console.log(res);
       showModalForm.value = !showModalForm.value;
       messageToUser.value = "Remarque ajoutée avec succès";
       showInfoModal.value = !showInfoModal.value;
@@ -105,7 +100,6 @@ function addRemarqueCours() {
     })
     .catch((error) => {
       // error.response.status Check status code
-      console.log(error);
       showModalForm.value = !showModalForm.value;
       messageToUser.value = "Remarque ajoutée avec succès";
       showInfoModal.value = !showInfoModal.value;
@@ -121,36 +115,22 @@ function addRemarqueCours() {
 
 <template>
   <TheReturnButton></TheReturnButton>
-  <TheDetailsMatieres
-    v-for="cours in allCours"
-    :matiere="cours.matiere_id"
-    :prof="cours.FullName"
-  >
-    <TheDetailsMatieresRemarques
-      v-for="remarque in allRemarques"
-      :user_Email="remarque.user_Email"
-      :DateRemarque="changeFormatDateBasic(remarque.Date)"
-      :Description="remarque.Description"
-      :Titre="remarque.Titre"
-      :Visibilite="remarque.Visibilite"
-      :id="remarque.id"
-    >
+  <TheDetailsMatieres v-for="cours in allCours" :matiere="cours.matiere_id" :prof="cours.FullName">
+    <TheDetailsMatieresRemarques v-for="remarque in allRemarques" :user_Email="remarque.user_Email"
+      :DateRemarque="changeFormatDateBasic(remarque.Date)" :Description="remarque.Description" :Titre="remarque.Titre"
+      :Visibilite="remarque.Visibilite" :id="remarque.id">
     </TheDetailsMatieresRemarques>
     <div class="column buttons">
       <button class="button is-danger" @click="showModalForm = !showModalForm">
         <span class="icon is-medium has-text-danger-dark">
           <i class="fa fa-solid fa-plus"></i>
         </span>
-        <span>Ajouter une remarque</span></button
-      ><br />
+        <span>Ajouter une remarque</span></button><br />
     </div>
   </TheDetailsMatieres>
 
   <!-- MODAL FORM  -->
-  <BaseModalForm
-    :class="{ 'is-active': showModalForm }"
-    @close="showModalForm = false"
-  >
+  <BaseModalForm :class="{ 'is-active': showModalForm }" @close="showModalForm = false">
     <!-- AJOUT REMARQUE COURS -->
     <BaseFormModal @submit.prevent="addRemarqueCours()">
       <h1 class="title is-1">Nouvelle remarque</h1>
@@ -172,58 +152,33 @@ function addRemarqueCours() {
       <BaseInput>
         <template v-slot:label>Date</template>
         <template v-slot:input>
-          <input
-            v-model="DateRemarque"
-            class="input"
-            type="date"
-            placeholder="Entrez une date de début"
-            required
-            :min="todayDate"
-          />
+          <input v-model="DateRemarque" class="input" type="date" placeholder="Entrez une date de début" required
+            :min="todayDate" />
         </template>
       </BaseInput>
 
       <BaseInput>
         <template v-slot:label>Titre</template>
         <template v-slot:input>
-          <input
-            v-model="Titre"
-            class="input"
-            type="text"
-            placeholder="Entrez le nom de la remarque"
-            required
-          />
+          <input v-model="Titre" class="input" type="text" placeholder="Entrez le nom de la remarque" required />
         </template>
       </BaseInput>
 
       <BaseInput>
         <template v-slot:label>Description</template>
         <template v-slot:input>
-          <input
-            v-model="Description"
-            class="input"
-            type="text"
-            placeholder="Entrez une description"
-            required
-          />
+          <input v-model="Description" class="input" type="text" placeholder="Entrez une description" required />
         </template>
       </BaseInput>
 
       <BaseInputSubmit>
-        <input
-          type="submit"
-          class="button is-danger is-rounded"
-          value="Ajouter la remarque"
-        />
+        <input type="submit" class="button is-danger is-rounded" value="Ajouter la remarque" />
       </BaseInputSubmit>
     </BaseFormModal>
   </BaseModalForm>
 
   <!-- MODAL FORM INFO  -->
-  <BaseModalForm
-    :class="{ 'is-active': showInfoModal }"
-    @close="showInfoModal = false"
-  >
+  <BaseModalForm :class="{ 'is-active': showInfoModal }" @close="showInfoModal = false">
     <!-- CRUD ACTION  -->
     <BaseFormModal>
       <h1 class="title is-2">{{ messageToUser }}</h1>
@@ -233,7 +188,8 @@ function addRemarqueCours() {
 
 <style scoped>
 @import "https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css";
-div > select {
+
+div>select {
   width: 300px;
 }
 </style>

@@ -290,7 +290,6 @@ const MatieresAnnee = computed(() => {
       tabMatiere.push(element);
     });
   }
-  console.log(tabMatiere.value);
   return tabMatiere;
 });
 
@@ -332,9 +331,8 @@ async function addCours() {
         }, 1000);
       })
       .then(() => { });
-    console.log(cours);
+    (cours);
   } catch (e) {
-    console.log(e);
     showModalForm.value = !showModalForm.value;
     messageToUser.value = "Erreur lors de l'ajout du cours";
     showInfoModal.value = !showInfoModal.value;
@@ -475,9 +473,7 @@ async function updateCours() {
           window.location.reload();
         }, 1000);
       });
-    console.log(cours);
   } catch (e) {
-    console.log(e);
     showUpdateModalForm.value = !showUpdateModalForm.value;
     messageToUser.value = "Erreur lors de la modification du cours";
     showInfoModal.value = !showInfoModal.value;
@@ -526,7 +522,6 @@ fetch(BASE_URL + "matiere")
       matiereColor.push(couleurMatiereOb);
       i++;
     });
-    console.log(matiereColor);
     matiereColor.forEach((element) => {
       document.head.insertAdjacentHTML(
         "beforeend",

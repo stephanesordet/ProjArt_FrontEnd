@@ -15,8 +15,6 @@ watchEffect(() => {
       .then((res) => res.json())
       .then((eventsResults) => (events.value = eventsResults))
       .then(() => {
-        console.log(events.value);
-        console.log(idDetailsEvent.value);
       });
   }
 });
@@ -32,8 +30,6 @@ const allEvents = computed(() => {
       }
     });
   }
-  console.log("tabEvents");
-  console.log(tabEvents);
   return tabEvents;
 });
 </script>
