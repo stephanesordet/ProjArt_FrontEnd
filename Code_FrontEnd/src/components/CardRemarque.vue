@@ -49,6 +49,6 @@ article div {
   padding: 1rem;
 }
 #eye {
-  margin-right: 1rem;
+  margin-right: 3rem;
 }
 </style>

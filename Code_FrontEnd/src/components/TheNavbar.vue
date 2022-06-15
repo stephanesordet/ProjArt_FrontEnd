@@ -67,7 +67,6 @@ document.addEventListener("DOMContentLoaded", () => {
       // Get the target from the "data-target" attribute
       const target = el.dataset.target;
       const $target = document.getElementById(target);
-      console.log(el);
       // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
       el.classList.toggle("is-active");
       $target.classList.toggle("is-active");
@@ -116,9 +115,6 @@ setInterval(() => {
   }
 }, 60000);
 
-watchEffect(() => {
-  console.log(newNotifs.value);
-})
 </script>
 
 <template>

@@ -19,7 +19,6 @@ const userSession = ref(sessionStorage.getItem("user"));
 const role = ref(sessionStorage.getItem("role"));
 const auteur = ref(false);
 
-
 const date = new Date();
 const dateStr =
   date.getFullYear() +
@@ -69,7 +68,6 @@ function addEvent() {
     })
     .then((res) => {
       //Perform Success Action
-      console.log(res);
       showModalForm.value = !showModalForm.value;
       messageToUser.value = "L'événement a été créé avec succès";
       showInfoModal.value = !showInfoModal.value;
@@ -117,7 +115,6 @@ function updateEvent(user) {
     })
     .then((res) => {
       //Perform Success Action
-      console.log(res);
       showUpdateModalForm.value = !showUpdateModalForm.value;
       messageToUser.value = "L'événement a été modifié avec succès";
       showInfoModal.value = !showInfoModal.value;
@@ -127,7 +124,6 @@ function updateEvent(user) {
     })
     .catch((error) => {
       // error.response.status Check status code
-      console.log(error);
       showUpdateModalForm.value = !showUpdateModalForm.value;
       messageToUser.value = "Erreur lors de la modification de l'événement";
       showInfoModal.value = !showInfoModal.value;
@@ -153,7 +149,6 @@ function deleteEvent() {
     .post(BASE_URL + "event/delete/" + currentEventId.value)
     .then((res) => {
       //Perform Success Action
-      console.log(res);
       showDeleteModalForm.value = !showDeleteModalForm.value;
       messageToUser.value = "L'événement a été supprimé avec succès";
       showInfoModal.value = !showInfoModal.value;
@@ -163,7 +158,6 @@ function deleteEvent() {
     })
     .catch((error) => {
       // error.response.status Check status code
-      console.log(error);
       messageToUser.value = "L'événement a été supprimé avec succès";
       showInfoModal.value = !showInfoModal.value;
       setTimeout(() => {
@@ -206,12 +200,12 @@ fetch(BASE_URL + "role")
   });
 
 function addEventModal() {
-  Titre.value = ""
-  Description.value = ""
-  Lieu.value = ""
-  Debut.value = ""
-  Fin.value = ""
-  showModalForm.value = !showModalForm.value
+  Titre.value = "";
+  Description.value = "";
+  Lieu.value = "";
+  Debut.value = "";
+  Fin.value = "";
+  showModalForm.value = !showModalForm.value;
 }
 </script>
 
@@ -258,7 +252,7 @@ function addEventModal() {
           :debut="changeFormatDateWithoutHoursMinutes(events.Debut)"
           :fin="changeFormatDateWithoutHoursMinutes(events.Fin)" :titre="events.Titre" :lieu="events.Lieu"
           :description="events.Description" :class="events.role_id" @click="voirDetails(events.id)"
-          style="cursor: pointer;">
+          style="cursor: pointer">
           <button class="button btnAdmin is-pulled-right is-white has-background-light" @click="voirDetails(events.id)">
             <span class="icon is-small">
               <i class="fa fa-info"></i>
