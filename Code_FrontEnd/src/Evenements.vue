@@ -204,113 +204,96 @@ fetch(BASE_URL + "role")
       );
     });
   });
+
+function addEventModal() {
+  Titre.value = ""
+  Description.value = ""
+  Lieu.value = ""
+  Debut.value = ""
+  Fin.value = ""
+  showModalForm.value = !showModalForm.value
+}
 </script>
 
 <template>
   <div class="main my-4 mx-4">
     <the-card-wrapper>
       <template v-if="role == 'Administration' || role == 'AGE'">
-       <card-event
-        v-for="events in allEvents"
-        :id="events.id"
-        :debut="changeFormatDateWithoutHoursMinutes(events.Debut)"
-        :fin="changeFormatDateWithoutHoursMinutes(events.Fin)"
-        :titre="events.Titre"
-        :lieu="events.Lieu"
-        :description="events.Description"
-        :class="events.role_id"
-      >
-        <button
-          class="button btnAdmin is-pulled-right is-white has-background-light"
-          @click="voirDetails(events.id)"
-        >
-          <span class="icon is-small">
-            <i class="fa fa-info"></i>
-          </span>
-        </button>
-        <button v-show="role == 'Administration' || role == 'AGE'"
-          class="button is-pulled-right is-white has-background-light"
-          @click="displayDeleteModal(events.id, events.user_Email)">
-          <span class="icon is-small">
-            <i class="fa fa-trash"></i>
-          </span>
-        </button>
-        <button
-          v-show="role == 'Administration' || role == 'AGE'"
-          class="button btnAdmin is-pulled-right is-white has-background-light"
-          @click="
-            displayUpdateModal(
-              events.id,
-              events.Titre,
-              events.Description,
-              events.Lieu,
-              events.Debut,
-              events.Fin,
-              events.user_Email
-            )
-          "
-        >
-          <span class="icon is-small">
-            <i class="fa fa-pencil"></i>
-          </span>
-        </button>
-      </card-event>
+        <card-event v-for="events in allEvents" :id="events.id"
+          :debut="changeFormatDateWithoutHoursMinutes(events.Debut)"
+          :fin="changeFormatDateWithoutHoursMinutes(events.Fin)" :titre="events.Titre" :lieu="events.Lieu"
+          :description="events.Description" :class="events.role_id">
+          <button class="button btnAdmin is-pulled-right is-white has-background-light" @click="voirDetails(events.id)">
+            <span class="icon is-small">
+              <i class="fa fa-info"></i>
+            </span>
+          </button>
+          <button v-show="role == 'Administration' || role == 'AGE'"
+            class="button is-pulled-right is-white has-background-light"
+            @click="displayDeleteModal(events.id, events.user_Email)">
+            <span class="icon is-small">
+              <i class="fa fa-trash"></i>
+            </span>
+          </button>
+          <button v-show="role == 'Administration' || role == 'AGE'"
+            class="button btnAdmin is-pulled-right is-white has-background-light" @click="
+              displayUpdateModal(
+                events.id,
+                events.Titre,
+                events.Description,
+                events.Lieu,
+                events.Debut,
+                events.Fin,
+                events.user_Email
+              )
+            ">
+            <span class="icon is-small">
+              <i class="fa fa-pencil"></i>
+            </span>
+          </button>
+        </card-event>
       </template>
       <template v-else>
-              <card-event
-        v-for="events in allEvents"
-        :id="events.id"
-        :debut="changeFormatDateWithoutHoursMinutes(events.Debut)"
-        :fin="changeFormatDateWithoutHoursMinutes(events.Fin)"
-        :titre="events.Titre"
-        :lieu="events.Lieu"
-        :description="events.Description"
-        :class="events.role_id"
-        @click="voirDetails(events.id)"
-        style="cursor: pointer;"
-      >
-        <button
-          class="button btnAdmin is-pulled-right is-white has-background-light"
-          @click="voirDetails(events.id)"
-        >
-          <span class="icon is-small">
-            <i class="fa fa-info"></i>
-          </span>
-        </button>
-        <button
-          v-show="role == 'Administration' || role == 'AGE'"
-          class="button btnAdmin is-pulled-right is-white has-background-light"
-          @click="displayDeleteModal(events.id, events.user_Email)"
-        >
-          <span class="icon is-small">
-            <i class="fa fa-trash"></i>
-          </span>
-        </button>
-        <button
-          v-show="role == 'Administration' || role == 'AGE'"
-          class="button btnAdmin is-pulled-right is-white has-background-light"
-          @click="
-            displayUpdateModal(
-              events.id,
-              events.Titre,
-              events.Description,
-              events.Lieu,
-              events.Debut,
-              events.Fin,
-              events.user_Email
-            )
-          ">
-          <span class="icon is-small">
-            <i class="fa fa-pencil"></i>
-          </span>
-        </button>
-      </card-event>
+        <card-event v-for="events in allEvents" :id="events.id"
+          :debut="changeFormatDateWithoutHoursMinutes(events.Debut)"
+          :fin="changeFormatDateWithoutHoursMinutes(events.Fin)" :titre="events.Titre" :lieu="events.Lieu"
+          :description="events.Description" :class="events.role_id" @click="voirDetails(events.id)"
+          style="cursor: pointer;">
+          <button class="button btnAdmin is-pulled-right is-white has-background-light" @click="voirDetails(events.id)">
+            <span class="icon is-small">
+              <i class="fa fa-info"></i>
+            </span>
+          </button>
+          <button v-show="role == 'Administration' || role == 'AGE'"
+            class="button btnAdmin is-pulled-right is-white has-background-light"
+            @click="displayDeleteModal(events.id, events.user_Email)">
+            <span class="icon is-small">
+              <i class="fa fa-trash"></i>
+            </span>
+          </button>
+          <button v-show="role == 'Administration' || role == 'AGE'"
+            class="button btnAdmin is-pulled-right is-white has-background-light" @click="
+              displayUpdateModal(
+                events.id,
+                events.Titre,
+                events.Description,
+                events.Lieu,
+                events.Debut,
+                events.Fin,
+                events.user_Email
+              )
+            ">
+            <span class="icon is-small">
+              <i class="fa fa-pencil"></i>
+            </span>
+          </button>
+        </card-event>
       </template>
     </the-card-wrapper>
     <button v-show="role == 'Administration' || role == 'AGE'" class="button is-right js-modal-trigger"
-      data-target="modal-js-example" id="fixedbutton" @click="showModalForm = !showModalForm">
+      data-target="modal-js-example" id="fixedbutton" @click="addEventModal()">
       <span class="icon is-large has-text-danger">
-        <i class="fa fa-4x fa-plus-square"></i>
+        <i class="fa fa-3x fa-plus-square"></i>
       </span>
     </button>
   </div>
@@ -319,7 +302,7 @@ fetch(BASE_URL + "role")
   <BaseModalForm :class="{ 'is-active': showModalForm }" @close="showModalForm = false">
     <!-- AJOUT EVENT  -->
     <BaseFormModal @submit.prevent="addEvent()">
-      <h1 class="title is-1">Nouvel évènement</h1>
+      <h3 class="title">Nouvel évènement</h3>
 
       <BaseInput>
         <template v-slot:label>Titre</template>
@@ -369,7 +352,7 @@ fetch(BASE_URL + "role")
   <BaseModalForm :class="{ 'is-active': showUpdateModalForm }" @close="showUpdateModalForm = false">
     <!-- UPDATE EVENT  -->
     <BaseFormModal v-if="auteur" @submit.prevent="updateEvent()">
-      <h1 class="title is-1">Modifier évènement</h1>
+      <h3 class="title">Modifier évènement</h3>
 
       <BaseInput>
         <template v-slot:label>Titre</template>
@@ -415,7 +398,7 @@ fetch(BASE_URL + "role")
     </BaseFormModal>
 
     <BaseFormModal v-else>
-      <h1 class="title is-1">Vous ne pouvez pas modifier cet évènement</h1>
+      <h3 class="title">Vous ne pouvez pas modifier cet évènement</h3>
 
       <BaseInput>
         <template v-slot:label>Titre</template>
@@ -462,7 +445,7 @@ fetch(BASE_URL + "role")
 
     <!-- UPDATE EVENT  -->
     <BaseFormModal v-else>
-      <h1 class="title is-2">Vous ne pouvez pas modifier cet évènement</h1>
+      <h3 class="title">Vous ne pouvez pas modifier cet évènement</h3>
 
       <BaseInputSubmit>
         <input type="submit" class="button is-primary is-rounded" value="Retour" @click="showUpdateModalForm = false" />
@@ -474,7 +457,7 @@ fetch(BASE_URL + "role")
   <BaseModalForm :class="{ 'is-active': showDeleteModalForm }" @close="showDeleteModalForm = false">
     <!-- DELETE EVENT  -->
     <BaseFormModal v-if="auteur">
-      <h1 class="title is-2">Voulez-vous vraiment supprimer l'évènement ?</h1>
+      <h3 class="title">Voulez-vous vraiment supprimer l'évènement ?</h3>
       <BaseInputSubmit>
         <input type="submit" class="button is-danger is-rounded" value="Supprimer l'événement" @click="deleteEvent()" />
       </BaseInputSubmit>
@@ -483,7 +466,7 @@ fetch(BASE_URL + "role")
       </BaseInputSubmit>
     </BaseFormModal>
     <BaseFormModal v-else>
-      <h1 class="title is-2">Vous ne pouvez pas supprimer l'évènement</h1>
+      <h3 class="title">Vous ne pouvez pas supprimer l'évènement</h3>
       <BaseInputSubmit>
         <input type="submit" class="button is-primary is-rounded" value="Retour" @click="showDeleteModalForm = false" />
       </BaseInputSubmit>
@@ -494,7 +477,7 @@ fetch(BASE_URL + "role")
   <BaseModalForm :class="{ 'is-active': showInfoModal }" @close="showInfoModal = false">
     <!-- CRUD ACTION  -->
     <BaseFormModal>
-      <h1 class="title is-2">{{ messageToUser }}</h1>
+      <h3 class="title">{{ messageToUser }}</h3>
     </BaseFormModal>
   </BaseModalForm>
 </template>
@@ -503,6 +486,6 @@ fetch(BASE_URL + "role")
 #fixedbutton {
   position: fixed;
   bottom: 20px;
-  right: 40px;
+  right: 30px;
 }
 </style>
