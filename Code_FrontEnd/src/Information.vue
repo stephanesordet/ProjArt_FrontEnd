@@ -471,11 +471,11 @@ function link(link) {
     <template v-if="cafeteriaView">
       <template v-for="day in allMenu">
         <p
-          class="ProjArt spanCours"
+          class="mb-3"
           data-v-37ffd5dc=""
           style="text-align: center; margin-top: 30px; font-size: 1.2rem"
         >
-          {{ day.date }}
+          Menus du : <strong>{{ day.date }}</strong>
         </p>
         <Menu
           v-for="menu in day.menus"
