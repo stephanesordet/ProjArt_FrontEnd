@@ -108,7 +108,7 @@ fetch(BASE_URL + "role")
 
 function updateNotifs() {
   axios
-    .post(BASE_URL + "notifications/read/", {
+    .post(BASE_URL + "read/notifications", {
       User: userSession.value,
       Notifications: newNotifs.value.substring(1),
       // ---------------------- !!!!!!!!! CHANGER !!!!!!!!! -----------------------------

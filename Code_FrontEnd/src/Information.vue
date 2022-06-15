@@ -27,28 +27,33 @@ const profView = ref(false);
 const linkView = ref(false);
 const cafeteriaView = ref(false);
 const actualiteView = ref(false);
-
-// ---------------------- Fetch data for all events -----------------------------
+const prof = ref([]);
+const classe = ref([]);
+const etudiant = ref([]);
 const { data: filiere } = useFetch(BASE_URL + "filiere/");
 const { data: menu } = useFetch("https://apix.blacktree.io/top-chef/today/");
-const etudiant = ref([]);
+
+// ---------------------- Fetch data for all events -----------------------------
+if (window.location.hash == "#Information" || location){
+
 watchEffect(() => {
   fetch(BASE_URL + "etudiant/"+ classeStore.value +"/")
     .then((res) => res.json())
     .then((etudiants) => (etudiant.value = etudiants));
 });
-const prof = ref([]);
+
 watchEffect(() => {
   fetch(BASE_URL + "prof/"+ filiereStore.value)
     .then((res) => res.json())
     .then((profs) => (prof.value = profs));
 });
-const classe = ref([]);
+
 watchEffect(() => {
   fetch(BASE_URL + "classes/filiere/"+filiereStore.value)
     .then((res) => res.json())
     .then((classes) => (classe.value = classes));
 });
+  }
 
 const userSession = ref(sessionStorage.getItem("user"));
 const role = ref(sessionStorage.getItem("role"));
