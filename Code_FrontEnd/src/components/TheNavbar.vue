@@ -8,7 +8,6 @@ const role = ref(null);
 const notifications = ref([]);
 const newNotifs = ref(false);
 
-
 window.addEventListener("load", () => {
   if (sessionStorage.getItem("user")) {
     userSession.value = sessionStorage.getItem("user");
@@ -22,27 +21,27 @@ window.addEventListener("load", () => {
 window.addEventListener("hashchange", () => {
   page.value = window.location.hash;
   if (page.value === "#accueil") {
-  var e = document.querySelector("select");
-  e.value = "Tous les cours";
-  const cours = document.querySelectorAll(".cours");
-  const spanCours = document.querySelectorAll(".spanCours");
-  cours.forEach((coursSolo) => {
-    coursSolo.style.display = "block";
-  });
-  spanCours.forEach((coursSolo) => {
-    coursSolo.style.display = "block";
-  });
-  }else if(page.value === "#agendaClasse"){
-     var e = document.querySelector("select");
-  e.value = "Tous les cours";
-  const cours = document.querySelectorAll(".cours");
-  const spanCours = document.querySelectorAll(".spanCours");
-  cours.forEach((coursSolo) => {
-    coursSolo.style.display = "block";
-  });
-  spanCours.forEach((coursSolo) => {
-    coursSolo.style.display = "block";
-  });
+    var e = document.querySelector("select");
+    e.value = "Tous les cours";
+    const cours = document.querySelectorAll(".cours");
+    const spanCours = document.querySelectorAll(".spanCours");
+    cours.forEach((coursSolo) => {
+      coursSolo.style.display = "block";
+    });
+    spanCours.forEach((coursSolo) => {
+      coursSolo.style.display = "block";
+    });
+  } else if (page.value === "#agendaClasse") {
+    var e = document.querySelector("select");
+    e.value = "Tous les cours";
+    const cours = document.querySelectorAll(".cours");
+    const spanCours = document.querySelectorAll(".spanCours");
+    cours.forEach((coursSolo) => {
+      coursSolo.style.display = "block";
+    });
+    spanCours.forEach((coursSolo) => {
+      coursSolo.style.display = "block";
+    });
   }
   userSession.value = sessionStorage.getItem("user");
   document.querySelector("#navMenu").classList.remove("is-active");
@@ -79,7 +78,8 @@ document.addEventListener("DOMContentLoaded", () => {
 function logout() {
   sessionStorage.removeItem("user");
   sessionStorage.removeItem("role");
-  window.location.hash = "#";
+  window.location.hash = "#accueil";
+  window.location.reload();
 }
 
 const props = defineProps({
@@ -100,13 +100,12 @@ watchEffect(() => {
 });
 
 watchEffect(() => {
-  console.log('watch')
-  notifications.value.forEach(element => {
+  notifications.value.forEach((element) => {
     if (element.status == false) {
-      newNotifs.value = true
+      newNotifs.value = true;
     }
   });
-})
+});
 
 setInterval(() => {
   if (userSession.value != null) {
@@ -115,10 +114,6 @@ setInterval(() => {
       .then((notifResults) => (notifications.value = notifResults));
   }
 }, 60000);
-
-watchEffect(() => {
-  console.log(newNotifs.value)
-})
 </script>
 
 <template>
@@ -137,7 +132,7 @@ watchEffect(() => {
 
     <div id="navMenu" class="navbar-menu">
       <div class="navbar-start">
-        <a class="navbar-item" href="#accueil"> Accueil </a>
+        <a class="navbar-item" href="#accueil"> Horaires des classes </a>
         <a v-show="role != 'Administration' && role != 'AGE'" class="navbar-item" href="#agendaClasse">
           Agenda personnel
         </a>
@@ -145,7 +140,7 @@ watchEffect(() => {
         <a class="navbar-item" href="#Information"> Informations </a>
         <a v-show="role != 'Administration' && role != 'AGE'" class="navbar-item" href="#notifications">
           <span class="icon">
-            <i v-show="newNotifs == true" class="fa fa-bell" style="color:red" @click="newNotifs = false"></i>
+            <i v-show="newNotifs == true" class="fa fa-bell" style="color: red" @click="newNotifs = false"></i>
             <i v-show="newNotifs == false" class="fa fa-bell"></i>
           </span>
         </a>
@@ -195,6 +190,5 @@ watchEffect(() => {
 
 .navbar-item img {
   max-height: 7.5rem;
-
 }
 </style>

@@ -20,14 +20,21 @@ window.addEventListener("hashchange", () => {
   if (window.location.hash == "#notifications" && newNotifs.value != "") {
     updateNotifs();
     window.addEventListener("hashchange", () => {
-      if (window.location.hash != "#notifications") {
-        fetch(BASE_URL + "notifications/" + userSession.value)
-          .then((res) => res.json())
-          .then((notifResults) => (notifications.value = notifResults));
-      }
+
     });
   }
 });
+
+window.addEventListener("hashchange", () => {
+  if (newNotifs.value != "") {
+    if (window.location.hash != "#notifications") {
+      fetch(BASE_URL + "notifications/" + userSession.value)
+        .then((res) => res.json())
+        .then((notifResults) => (notifications.value = notifResults));
+    }
+  }
+});
+
 
 watchEffect(() => {
   if (userSession.value != null) {
@@ -52,6 +59,7 @@ const allNotifications = computed(() => {
     return [];
   } else {
     notifications.value.forEach((element) => {
+      element.roles = element.roles + ""
       tabNotifications.push(element);
       if (
         element.status == false &&
@@ -90,10 +98,10 @@ fetch(BASE_URL + "role")
       document.head.insertAdjacentHTML(
         "beforeend",
         "<style>." +
-          element.id +
-          "{border-color:" +
-          element.color +
-          " !important}</style>"
+        element.id +
+        "{border-color:" +
+        element.color +
+        " !important}</style>"
       );
     });
   });
@@ -113,29 +121,17 @@ function updateNotifs() {
       // error.response.status Check status code
       console.log(error);
     })
-    .finally(() => {});
+    .finally(() => { });
 
   newNotifs.value = "";
 }
-watchEffect(() => {
-  console.log(newNotifs.value);
-});
-
-setInterval(() => {
-  console.log(newNotifs.value);
-}, 5000);
 </script>
 
 <template>
   <the-card-wrapper>
-    <card-notif
-      v-for="response in allNotifications"
-      :user="role"
-      :object="response.notification.Objet"
-      :envoiHeure="changeFormatDate(response.notification.EnvoiHeureDate)"
-      :message="response.notification.Message"
-      :class="response.roles"
-    >
+    <card-notif v-for="response in allNotifications" :user="response.roles" :object="response.notification.Objet"
+      :envoiHeure="changeFormatDate(response.notification.EnvoiHeureDate)" :message="response.notification.Message"
+      :class="response.roles">
       <span v-if="response.status == false" class="icon">
         <i class="fa fa-solid fa-circle fa-lg"></i>
       </span>

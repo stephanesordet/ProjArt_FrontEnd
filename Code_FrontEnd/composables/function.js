@@ -33,3 +33,10 @@ export function changeFormatDate(date) {
     });
     return time.split(',')[0];
   }
+
+    // ---------------------- Function that transform date to format YYYY-MM-DD, to DD/MM/YYYY  -----------------------------
+    export function changeFormatDateBasic(date) {
+      const [year, month, day] = date.split('-');
+      const result = [day, month, year].join(' / ');
+      return result;
+    }

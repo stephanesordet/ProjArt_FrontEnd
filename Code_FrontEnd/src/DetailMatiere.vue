@@ -15,7 +15,7 @@ import {
   todayDate,
 } from "../composables/store.js";
 import axios from "axios";
-import { changeFormatDateWithoutHoursMinutes } from "../composables/function.js";
+import { changeFormatDateBasic } from "../composables/function.js";
 
 let userSession = ref(sessionStorage.getItem("user"));
 
@@ -129,7 +129,7 @@ function addRemarqueCours() {
     <TheDetailsMatieresRemarques
       v-for="remarque in allRemarques"
       :user_Email="remarque.user_Email"
-      :DateRemarque="changeFormatDateWithoutHoursMinutes(remarque.Date)"
+      :DateRemarque="changeFormatDateBasic(remarque.Date)"
       :Description="remarque.Description"
       :Titre="remarque.Titre"
       :Visibilite="remarque.Visibilite"
