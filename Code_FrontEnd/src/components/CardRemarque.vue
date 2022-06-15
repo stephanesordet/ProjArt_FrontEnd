@@ -42,6 +42,7 @@ article {
   border-top-width: 0px;
   border-bottom-width: 0px;
   padding: 0px;
+  cursor: pointer;
 }
 
 article div {

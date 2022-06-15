@@ -30,7 +30,6 @@ const actualiteView = ref(false);
 
 // ---------------------- Fetch data for all events -----------------------------
 const { data: filiere } = useFetch(BASE_URL + "filiere/");
-const { data: news } = useFetch("https://intra.heig-vd.ch/_layouts/15/prada/api/news.ashx");
 const { data: menu } = useFetch("https://apix.blacktree.io/top-chef/today/");
 const etudiant = ref([]);
 watchEffect(() => {
@@ -65,19 +64,6 @@ const allFiliere = computed(() => {
   }
   return tabFiliere;
 });
-
-/** 
-const allNews = computed(() => {
-  const tabFNews = [];
-  if (!news.value?.length) {
-    return [];
-  } else {
-    news.value.forEach((element) => {
-        tabFNews.push(element);
-    });
-  }
-  return tabFNews;
-});*/
 
 const allMenu = computed(() => {
   const tabMenu = [];
@@ -228,17 +214,6 @@ fetch(BASE_URL + "filiere")
     actualiteView.value = false;
   }
 
-  function changeVueNews() {
-    linkView.value = false;
-    classeView.value = false;
-    filiereView.value = false;
-    etudiantView.value = false;
-    detailView.value = false;
-    profView.value = false;
-    cafeteriaView.value = false;
-    actualiteView.value = true;
-  }
-
       const allProf = computed(() => {
   const tabProf = new Set();
   if (!prof.value?.length) {
@@ -334,15 +309,7 @@ fetch(BASE_URL + "filiere")
               </span>
           </button>
       </template>
-       <template v-if="actualiteView">
-          <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-          <button @click="changeVue()" class="button is-white is-large is-responsive is-flex is-align-self-flex-end icon-text">
-              <span class="icon">
-                  <i class="fa fa-arrow-left is-flex  has-text-black"></i>
-              </span>
-          </button>
-      </template>
-      <span><a v-if="filiereView || classeView || detailView || etudiant || profView" @click="changeVue()">Informations </a>  <a v-if="classeView || detailView || etudiantView || profView" @click="changeVueFiliere(filiereStore)">> Classe</a>  <a v-if="cafeteriaView" @click="changeVueCafeteria()">> Caféteria</a>  <a v-if="actualiteView" @click="changeVueNews()">> Actualités</a>  <a v-if="linkView" @click="changeVueLink()">> Liens utiles</a>  <a v-if="detailView || etudiantView" @click="changeVueClasse(classeStore)">> Details</a>  <a v-if="profView" @click="changeVueProf()">> Prof</a>  <a v-if="etudiantView" @click="changeVueEtudiant()">> Etudiant</a></span>
+      <span><a v-if="filiereView || classeView || detailView || etudiant || profView" @click="changeVue()">Informations </a>  <a v-if="classeView || detailView || etudiantView || profView" @click="changeVueFiliere(filiereStore)">> Classe</a>  <a v-if="cafeteriaView" @click="changeVueCafeteria()">> Caféteria</a>  <a v-if="linkView" @click="changeVueLink()">> Liens utiles</a>  <a v-if="detailView || etudiantView" @click="changeVueClasse(classeStore)">> Details</a>  <a v-if="profView" @click="changeVueProf()">> Prof</a>  <a v-if="etudiantView" @click="changeVueEtudiant()">> Etudiant</a></span>
       <template v-if="filiereView">
         <card-info-vue  v-for="filiere in allFiliere"
         :info="filiere.id"
@@ -353,11 +320,6 @@ fetch(BASE_URL + "filiere")
         info="Liens utiles"
         class="links"
         @click="changeVueLink()">
-        </card-info-vue>
-        <card-info-vue
-        info="Actualités"
-        class="news"
-        @click="changeVueNews()">
         </card-info-vue>
         <card-info-vue
         info="Caféteria"
