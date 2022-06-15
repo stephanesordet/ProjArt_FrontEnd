@@ -33,7 +33,6 @@ window.addEventListener("hashchange", () => {
   }
 });
 
-
 watchEffect(() => {
   if (userSession.value != null) {
     fetch(BASE_URL + "notifications/" + userSession.value)
@@ -57,7 +56,7 @@ const allNotifications = computed(() => {
     return [];
   } else {
     notifications.value.forEach((element) => {
-      element.roles = element.roles + ""
+      element.roles = element.roles + "";
       tabNotifications.push(element);
       if (
         element.status == false &&
@@ -98,10 +97,10 @@ fetch(BASE_URL + "role")
       document.head.insertAdjacentHTML(
         "beforeend",
         "<style>." +
-        element.id +
-        "{border-color:" +
-        element.color +
-        " !important}</style>"
+          element.id +
+          "{border-color:" +
+          element.color +
+          " !important}</style>"
       );
     });
   });
@@ -125,7 +124,6 @@ function updateNotifs() {
     })
     .finally(() => {
       newNotifs.value = "";
-
     });
 
   newNotifs.value = "";
@@ -134,9 +132,14 @@ function updateNotifs() {
 
 <template>
   <the-card-wrapper>
-    <card-notif v-for="response in allNotifications" :user="response.roles" :object="response.notification.Objet"
-      :envoiHeure="changeFormatDate(response.notification.EnvoiHeureDate)" :message="response.notification.Message"
-      :class="response.roles">
+    <card-notif
+      v-for="response in allNotifications"
+      :user="response.roles"
+      :object="response.notification.Objet"
+      :envoiHeure="changeFormatDate(response.notification.EnvoiHeureDate)"
+      :message="response.notification.Message"
+      :class="response.roles"
+    >
       <span v-if="response.status == false" class="icon">
         <i class="fa fa-solid fa-circle fa-lg"></i>
       </span>
