@@ -363,6 +363,13 @@ async function addCours() {
       regex = false;
     }
   });
+  var dateDebut = dateCoursForm.value + " " + heureDebutForm.value;
+  var dateFin = dateCoursForm.value + " " + heureFinForm.value;
+  if (dateDebut > dateFin) {
+    messageToUser.value = "Erreur lors de la modification du cours, la date de début doit être inférieure à la date de fin";
+    showInfoModal.value = !showInfoModal.value;
+    regex = false;
+  }
   if (regex) {
   try {
     const cours = await axios

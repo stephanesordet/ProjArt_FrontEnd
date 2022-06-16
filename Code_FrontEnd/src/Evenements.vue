@@ -56,6 +56,13 @@ const Fin = ref("");
 const messageToUser = ref("");
 
 function addEvent() {
+  var testDate = true;
+  if (Debut.value > Fin.value) {
+    testDate = false;
+    messageToUser.value = "La date de fin est antérieure à la date de début";
+    showInfoModal.value = !showInfoModal.value;
+  }
+  if(testDate){
   axios
     .post(BASE_URL + "event/create", {
       Titre: Titre.value,
@@ -82,6 +89,7 @@ function addEvent() {
       }, 1000);
     })
     .finally(() => { });
+}
 }
 
 // ---------------------- Function for add event -----------------------------
