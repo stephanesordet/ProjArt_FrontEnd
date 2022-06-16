@@ -145,4 +145,8 @@ function updateNotifs() {
   right: 10px;
   top: 10px;
 }
+
+body {
+   overflow-x: hidden; 
+}
 </style>
