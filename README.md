@@ -4,7 +4,7 @@
 
 Installation en local: 
 - Installer le backend --> https://github.com/eloicoquoz/ProjArt_BackEnd
-- Cloner le repository 
+- Cloner ce repository 
 - Installer npm dans le dossier "Code_FrontEnd" --> npm install
 - Pour lancer le projet --> npm run dev
 
