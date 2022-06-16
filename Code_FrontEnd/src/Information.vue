@@ -1,15 +1,7 @@
 <script setup>
-import { ref, computed, watchEffect, nextTick } from "vue";
-import CardEvent from "./components/CardEvent.vue";
-import TheCardWrapper from "./components/TheCardWrapper.vue";
-import BaseFormModal from "./components/BaseFormModal.vue";
-import BaseInputSubmit from "./components/BaseInputSubmit.vue";
-import BaseInput from "./components/BaseInput.vue";
-import BaseModalForm from "./components/BaseModalForm.vue";
-import { currentEventId } from "../composables/store";
-import axios from "axios";
+import { ref, computed, watchEffect } from "vue";
 import { useFetch } from "../composables/fetch.js";
-import { BASE_URL, idDetailsEvent, todayDate } from "../composables/store.js";
+import { BASE_URL } from "../composables/store.js";
 import { changeFormatDateWithoutHoursMinutes } from "../composables/function.js";
 import randomColor from "randomcolor";
 import CardInfoVue from "./components/CardInfo.vue";
@@ -34,8 +26,10 @@ const { data: filiere } = useFetch(BASE_URL + "filiere/");
 const { data: menu } = useFetch("https://apix.blacktree.io/top-chef/today/");
 
 // ---------------------- Fetch data for all events -----------------------------
-if (window.location.hash == "#Information" || location) {
+const userSession = ref(sessionStorage.getItem("user"));
+const role = ref(sessionStorage.getItem("role"));
 
+if (window.location.hash == "#Information" || location) {
   watchEffect(() => {
     fetch(BASE_URL + "etudiant/" + classeStore.value + "/")
       .then((res) => res.json())
@@ -55,8 +49,91 @@ if (window.location.hash == "#Information" || location) {
   });
 }
 
-const userSession = ref(sessionStorage.getItem("user"));
-const role = ref(sessionStorage.getItem("role"));
+fetch(BASE_URL + "filiere")
+  .then((res) => res.json())
+  .then((AllMatiere) => {
+    var couleurMatiereOb;
+    const matiereColor = [];
+    var i = 0;
+    AllMatiere.forEach((matiere) => {
+      couleurMatiereOb = Object();
+      couleurMatiereOb.id = matiere.id;
+      couleurMatiereOb.color = randomColor({ seed: i });
+      matiereColor.push(couleurMatiereOb);
+      i += 7;
+    });
+    matiereColor.forEach((element) => {
+      document.head.insertAdjacentHTML(
+        "beforeend",
+        "<style>." +
+          element.id +
+          "{border-color:" +
+          element.color +
+          " !important}</style>"
+      );
+    });
+  });
+
+fetch(BASE_URL + "classes/filiere/" + filiereStore.value + "/")
+  .then((res) => res.json())
+  .then((AllMatiere) => {
+    var couleurMatiereOb;
+    const matiereColor = [];
+    var i = 0;
+    AllMatiere.forEach((matiere) => {
+      couleurMatiereOb = Object();
+      couleurMatiereOb.id = matiere.id;
+      couleurMatiereOb.color = randomColor({ seed: i });
+      matiereColor.push(couleurMatiereOb);
+      i += 7;
+    });
+    matiereColor.forEach((element) => {
+      document.head.insertAdjacentHTML(
+        "beforeend",
+        "<style>." +
+          element.id +
+          "{border-color:" +
+          element.color +
+          " !important}</style>"
+      );
+    });
+  });
+
+const allEtudiant = computed(() => {
+  const tabEtudiant = new Set();
+  if (!etudiant.value?.length) {
+    return [];
+  } else {
+    etudiant.value.forEach((element) => {
+      tabEtudiant.add(element);
+    });
+  }
+  return tabEtudiant;
+});
+
+const allProf = computed(() => {
+  const tabProf = new Set();
+  if (!prof.value?.length) {
+    return [];
+  } else {
+    prof.value.forEach((element) => {
+      tabProf.add(element);
+    });
+  }
+  return tabProf;
+});
+
+const allClasse = computed(() => {
+  const tabCalsse = [];
+  if (!classe.value?.length) {
+    return [];
+  } else {
+    classe.value.forEach((element) => {
+      tabCalsse.push(element);
+    });
+  }
+  return tabCalsse;
+});
 
 const allFiliere = computed(() => {
   const tabFiliere = [];
@@ -90,43 +167,7 @@ const allMenu = computed(() => {
   return tabMenu;
 });
 
-const allClasse = computed(() => {
-  const tabCalsse = [];
-  if (!classe.value?.length) {
-    return [];
-  } else {
-    classe.value.forEach((element) => {
-      tabCalsse.push(element);
-    });
-  }
-  return tabCalsse;
-});
-
-fetch(BASE_URL + "filiere")
-  .then((res) => res.json())
-  .then((AllMatiere) => {
-    var couleurMatiereOb;
-    const matiereColor = [];
-    var i = 0;
-    AllMatiere.forEach((matiere) => {
-      couleurMatiereOb = Object();
-      couleurMatiereOb.id = matiere.id;
-      couleurMatiereOb.color = randomColor({ seed: i });
-      matiereColor.push(couleurMatiereOb);
-      i += 7;
-    });
-    matiereColor.forEach((element) => {
-      document.head.insertAdjacentHTML(
-        "beforeend",
-        "<style>." +
-        element.id +
-        "{border-color:" +
-        element.color +
-        " !important}</style>"
-      );
-    });
-  });
-
+// ---------------------- Functions to display all the views -----------------------------
 function changeVueFiliere(filiere) {
   filiereStore.value = filiere;
   filiereView.value = false;
@@ -173,18 +214,6 @@ function changeVue() {
   actualiteView.value = false;
 }
 
-const allEtudiant = computed(() => {
-  const tabEtudiant = new Set();
-  if (!etudiant.value?.length) {
-    return [];
-  } else {
-    etudiant.value.forEach((element) => {
-      tabEtudiant.add(element);
-    });
-  }
-  return tabEtudiant;
-});
-
 function changeVueProf() {
   classeView.value = false;
   filiereView.value = false;
@@ -218,43 +247,6 @@ function changeVueLink() {
   actualiteView.value = false;
 }
 
-const allProf = computed(() => {
-  const tabProf = new Set();
-  if (!prof.value?.length) {
-    return [];
-  } else {
-    prof.value.forEach((element) => {
-      tabProf.add(element);
-    });
-  }
-  return tabProf;
-});
-
-fetch(BASE_URL + "classes/filiere/" + filiereStore.value + "/")
-  .then((res) => res.json())
-  .then((AllMatiere) => {
-    var couleurMatiereOb;
-    const matiereColor = [];
-    var i = 0;
-    AllMatiere.forEach((matiere) => {
-      couleurMatiereOb = Object();
-      couleurMatiereOb.id = matiere.id;
-      couleurMatiereOb.color = randomColor({ seed: i });
-      matiereColor.push(couleurMatiereOb);
-      i += 7;
-    });
-    matiereColor.forEach((element) => {
-      document.head.insertAdjacentHTML(
-        "beforeend",
-        "<style>." +
-        element.id +
-        "{border-color:" +
-        element.color +
-        " !important}</style>"
-      );
-    });
-  });
-
 function link(link) {
   let a = document.createElement("a");
   a.target = "_blank";
@@ -264,121 +256,190 @@ function link(link) {
 </script>
 
 <template>
+  <!--- Change vue depending which button was clicked --->
   <div v-if="userSession" class="main my-4 mx-4">
     <template v-if="classeView">
-      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-      <button @click="changeVue()"
-        class="button is-white is-large is-responsive is-flex is-align-self-flex-end icon-text">
+      <link
+        rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+      />
+      <button
+        @click="changeVue()"
+        class="button is-white is-large is-responsive is-flex is-align-self-flex-end icon-text"
+      >
         <span class="icon">
           <i class="fa fa-arrow-left is-flex has-text-black"></i>
         </span>
       </button>
     </template>
     <template v-if="detailView">
-      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-      <button @click="changeVueFiliere(filiereStore)"
-        class="button is-white is-large is-responsive is-flex is-align-self-flex-end icon-text">
+      <link
+        rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+      />
+      <button
+        @click="changeVueFiliere(filiereStore)"
+        class="button is-white is-large is-responsive is-flex is-align-self-flex-end icon-text"
+      >
         <span class="icon">
           <i class="fa fa-arrow-left is-flex has-text-black"></i>
         </span>
       </button>
     </template>
     <template v-if="etudiantView">
-      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-      <button @click="changeVueClasse(classeStore)"
-        class="button is-white is-large is-responsive is-flex is-align-self-flex-end icon-text">
+      <link
+        rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+      />
+      <button
+        @click="changeVueClasse(classeStore)"
+        class="button is-white is-large is-responsive is-flex is-align-self-flex-end icon-text"
+      >
         <span class="icon">
           <i class="fa fa-arrow-left is-flex has-text-black"></i>
         </span>
       </button>
     </template>
     <template v-if="profView">
-      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-      <button @click="changeVueFiliere(filiereStore)"
-        class="button is-white is-large is-responsive is-flex is-align-self-flex-end icon-text">
+      <link
+        rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+      />
+      <button
+        @click="changeVueFiliere(filiereStore)"
+        class="button is-white is-large is-responsive is-flex is-align-self-flex-end icon-text"
+      >
         <span class="icon">
           <i class="fa fa-arrow-left is-flex has-text-black"></i>
         </span>
       </button>
     </template>
     <template v-if="linkView">
-      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-      <button @click="changeVue()"
-        class="button is-white is-large is-responsive is-flex is-align-self-flex-end icon-text">
+      <link
+        rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+      />
+      <button
+        @click="changeVue()"
+        class="button is-white is-large is-responsive is-flex is-align-self-flex-end icon-text"
+      >
         <span class="icon">
           <i class="fa fa-arrow-left is-flex has-text-black"></i>
         </span>
       </button>
     </template>
     <template v-if="cafeteriaView">
-      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-      <button @click="changeVue()"
-        class="button is-white is-large is-responsive is-flex is-align-self-flex-end icon-text">
+      <link
+        rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+      />
+      <button
+        @click="changeVue()"
+        class="button is-white is-large is-responsive is-flex is-align-self-flex-end icon-text"
+      >
         <span class="icon">
           <i class="fa fa-arrow-left is-flex has-text-black"></i>
         </span>
       </button>
     </template>
+    <!--- Vfor insert infos relating to the vue selected --->
     <template v-if="filiereView">
-      <card-info-vue v-for="filiere in allFiliere" :info="filiere.id" :class="filiere.id"
-        @click="changeVueFiliere(filiere.id)">
+      <card-info-vue
+        v-for="filiere in allFiliere"
+        :info="filiere.id"
+        :class="filiere.id"
+        @click="changeVueFiliere(filiere.id)"
+      >
       </card-info-vue>
       <card-info-vue info="Liens utiles" class="links" @click="changeVueLink()">
       </card-info-vue>
-      <card-info-vue info="Caféteria" class="cafeteria" @click="changeVueCafeteria()">
+      <card-info-vue
+        info="Caféteria"
+        class="cafeteria"
+        @click="changeVueCafeteria()"
+      >
       </card-info-vue>
     </template>
     <template v-if="classeView">
-      <card-info-vue v-for="classe in allClasse" :info="classe.id" :class="classe.id"
-        @click="changeVueClasse(classe.id)">
+      <card-info-vue
+        v-for="classe in allClasse"
+        :info="classe.id"
+        :class="classe.id"
+        @click="changeVueClasse(classe.id)"
+      >
       </card-info-vue>
       <card-info-vue info="Liste Professeurs" @click="changeVueProf()">
       </card-info-vue>
     </template>
     <template v-if="linkView">
-      <card-link info="Attestation d'études" @click="
-        link(
-          'https://intra.heig-vd.ch/academique/attestation-etude/Pages/default.aspx'
-        )
-      ">
+      <card-link
+        info="Attestation d'études"
+        @click="
+          link(
+            'https://intra.heig-vd.ch/academique/attestation-etude/Pages/default.aspx'
+          )
+        "
+      >
       </card-link>
-      <card-link info="Calendrier Académique" @click="
-        link(
-          'https://intra.heig-vd.ch/academique/calendriers-academiques/Pages/calendriers-academiques.aspx'
-        )
-      ">
+      <card-link
+        info="Calendrier Académique"
+        @click="
+          link(
+            'https://intra.heig-vd.ch/academique/calendriers-academiques/Pages/calendriers-academiques.aspx'
+          )
+        "
+      >
       </card-link>
-      <card-link info="Justificatif d'absences" @click="
-        link(
-          'https://intra.heig-vd.ch/academique/formulaire-absence/Pages/default.aspx'
-        )
-      ">
+      <card-link
+        info="Justificatif d'absences"
+        @click="
+          link(
+            'https://intra.heig-vd.ch/academique/formulaire-absence/Pages/default.aspx'
+          )
+        "
+      >
       </card-link>
       <card-link info="Webmail" @click="link('https://webmail.heig-vd.ch/owa')">
       </card-link>
-      <card-link info="Bulletin de notes" @click="
-        link(
-          'https://gaps.heig-vd.ch/consultation/notes/bulletin.php?id=17484&format=pdf&timestamp=1655105738532'
-        )
-      ">
+      <card-link
+        info="Bulletin de notes"
+        @click="
+          link(
+            'https://gaps.heig-vd.ch/consultation/notes/bulletin.php?id=17484&format=pdf&timestamp=1655105738532'
+          )
+        "
+      >
       </card-link>
-      <card-link info="Contrôles continus" @click="
-        link(
-          'https://gaps.heig-vd.ch/consultation/controlescontinus/consultation.php?idst=17484'
-        )
-      ">
+      <card-link
+        info="Contrôles continus"
+        @click="
+          link(
+            'https://gaps.heig-vd.ch/consultation/controlescontinus/consultation.php?idst=17484'
+          )
+        "
+      >
       </card-link>
-      <card-link info="Enseignement à choix" @click="link('https://gaps.heig-vd.ch/consultation/choixOption/')">
+      <card-link
+        info="Enseignement à choix"
+        @click="link('https://gaps.heig-vd.ch/consultation/choixOption/')"
+      >
       </card-link>
-      <card-link info="Eval. des enseignants" @click="
-        link(
-          'https://gaps.heig-vd.ch/consultation/evaluationenseignements/index.php'
-        )
-      ">
+      <card-link
+        info="Eval. des enseignants"
+        @click="
+          link(
+            'https://gaps.heig-vd.ch/consultation/evaluationenseignements/index.php'
+          )
+        "
+      >
       </card-link>
     </template>
     <template v-if="actualiteView">
-      <card-link v-for="news in allNews" :info="news.title" @click="link('https://intra.heig-vd.ch' + news.link)">
+      <card-link
+        v-for="news in allNews"
+        :info="news.title"
+        @click="link('https://intra.heig-vd.ch' + news.link)"
+      >
       </card-link>
     </template>
     <template v-if="detailView">
@@ -386,21 +447,40 @@ function link(link) {
       </card-info-vue>
     </template>
     <template v-if="profView">
-      <card-prof v-for="prof in allProf" :info="prof.FullName" :class="prof.FullName" :email="prof.Email"
-        :acronyme="prof.Acronyme">
+      <card-prof
+        v-for="prof in allProf"
+        :info="prof.FullName"
+        :class="prof.FullName"
+        :email="prof.Email"
+        :acronyme="prof.Acronyme"
+      >
       </card-prof>
     </template>
     <template v-if="etudiantView">
-      <card-prof v-for="prof in allEtudiant" :info="prof.FullName" :class="prof.FullName" :email="prof.Email"
-        :acronyme="prof.Email">
+      <card-prof
+        v-for="prof in allEtudiant"
+        :info="prof.FullName"
+        :class="prof.FullName"
+        :email="prof.Email"
+        :acronyme="prof.Email"
+      >
       </card-prof>
     </template>
     <template v-if="cafeteriaView">
       <template v-for="day in allMenu">
-        <p class="mb-3" data-v-37ffd5dc="" style="text-align: center; margin-top: 30px; font-size: 1.2rem">
+        <p
+          class="mb-3"
+          data-v-37ffd5dc=""
+          style="text-align: center; margin-top: 30px; font-size: 1.2rem"
+        >
           Menus du : <strong>{{ day.date }}</strong>
         </p>
-        <Menu v-for="menu in day.menus" :starter="menu.starter" :mainCourse="menu.mainCourse" :dessert="menu.dessert">
+        <Menu
+          v-for="menu in day.menus"
+          :starter="menu.starter"
+          :mainCourse="menu.mainCourse"
+          :dessert="menu.dessert"
+        >
         </Menu>
       </template>
     </template>
