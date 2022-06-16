@@ -81,6 +81,9 @@ function deleteRemarque(id) {
       <strong>{{ Titre }} : </strong><span>{{ Description }}</span>
     </p>
   </div>
+
+
+
   <!-- MODAL FORM INFO  -->
   <BaseModalForm :class="{ 'is-active': showInfoModal }" @close="showInfoModal = false">
     <!-- CRUD ACTION  -->

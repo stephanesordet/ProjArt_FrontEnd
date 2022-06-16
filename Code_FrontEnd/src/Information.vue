@@ -34,26 +34,26 @@ const { data: filiere } = useFetch(BASE_URL + "filiere/");
 const { data: menu } = useFetch("https://apix.blacktree.io/top-chef/today/");
 
 // ---------------------- Fetch data for all events -----------------------------
-if (window.location.hash == "#Information" || location){
+if (window.location.hash == "#Information" || location) {
 
-watchEffect(() => {
-  fetch(BASE_URL + "etudiant/" + classeStore.value + "/")
-    .then((res) => res.json())
-    .then((etudiants) => (etudiant.value = etudiants));
-});
+  watchEffect(() => {
+    fetch(BASE_URL + "etudiant/" + classeStore.value + "/")
+      .then((res) => res.json())
+      .then((etudiants) => (etudiant.value = etudiants));
+  });
 
-watchEffect(() => {
-  fetch(BASE_URL + "prof/" + filiereStore.value)
-    .then((res) => res.json())
-    .then((profs) => (prof.value = profs));
-});
+  watchEffect(() => {
+    fetch(BASE_URL + "prof/" + filiereStore.value)
+      .then((res) => res.json())
+      .then((profs) => (prof.value = profs));
+  });
 
-watchEffect(() => {
-  fetch(BASE_URL + "classes/filiere/" + filiereStore.value)
-    .then((res) => res.json())
-    .then((classes) => (classe.value = classes));
-});
-  }
+  watchEffect(() => {
+    fetch(BASE_URL + "classes/filiere/" + filiereStore.value)
+      .then((res) => res.json())
+      .then((classes) => (classe.value = classes));
+  });
+}
 
 const userSession = ref(sessionStorage.getItem("user"));
 const role = ref(sessionStorage.getItem("role"));
@@ -397,11 +397,7 @@ function link(link) {
     </template>
     <template v-if="cafeteriaView">
       <template v-for="day in allMenu">
-        <p
-          class="mb-3"
-          data-v-37ffd5dc=""
-          style="text-align: center; margin-top: 30px; font-size: 1.2rem"
-        >
+        <p class="mb-3" data-v-37ffd5dc="" style="text-align: center; margin-top: 30px; font-size: 1.2rem">
           Menus du : <strong>{{ day.date }}</strong>
         </p>
         <Menu v-for="menu in day.menus" :starter="menu.starter" :mainCourse="menu.mainCourse" :dessert="menu.dessert">
