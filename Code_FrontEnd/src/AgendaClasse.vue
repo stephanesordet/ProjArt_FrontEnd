@@ -155,8 +155,14 @@ const CoursClasse = computed(() => {
           "Vendredi",
           "Samedi",
         ];
-        const d = new Date(element.Debut);
-        const f = new Date(element.Fin);
+
+        let dateDebut2 = element.Debut;
+        dateDebut2 = dateDebut2.replaceAll(" ", "T");
+        const d = new Date(dateDebut2);
+        let dateFin2 = element.Fin;
+        dateFin2 = dateFin2.replaceAll(" ", "T");
+        const f = new Date(dateFin2);
+
         let monthDate = month[d.getMonth()];
         let day = days[d.getDay()];
         let date = d.getDate() + " " + monthDate + " " + d.getFullYear();
