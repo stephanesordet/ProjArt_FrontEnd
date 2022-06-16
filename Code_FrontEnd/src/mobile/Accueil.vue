@@ -159,7 +159,9 @@ const CoursClasse = computed(() => {
   tabCours.forEach((element) => {
     if (coursObj === undefined) {
       dateTest = new Date();
-      dateTest = element.Debut;
+      let dateDebut = element.Debut;
+      dateDebut = dateDebut.replaceAll(" ", "T");
+      dateTest = dateDebut;
       coursObj = new Object();
       coursObj.DateTest = formatDate(new Date(dateTest));
       coursObj.Date = element.Date;
@@ -168,7 +170,9 @@ const CoursClasse = computed(() => {
       coursObj.Cours.push(element);
     } else if (coursObj.Date !== element.Date) {
       dateTest = new Date();
-      dateTest = element.Debut;
+      let dateDebut = element.Debut;
+      dateDebut = dateDebut.replaceAll(" ", "T");
+      dateTest = dateDebut;
       coursObj = new Object();
       coursObj.DateTest = formatDate(new Date(dateTest));
       coursObj.Date = element.Date;
@@ -206,7 +210,9 @@ const Matiere = computed(() => {
   } else {
     classeCours.value.forEach((element) => {
       dateTest = new Date();
-      dateTest = formatDate(new Date(element.Debut));
+      let dateDebut = element.Debut;
+      dateDebut = dateDebut.replaceAll(" ", "T");
+      dateTest = formatDate(new Date(dateDebut));
       element.DateTest = dateTest;
       if (checkDate(element.DateTest)) {
         tabMatiere.push(element.matiere_id);
