@@ -15,6 +15,7 @@ let userSession = ref(false);
 let showWelcomeModalForm = ref(false);
 let showMailErrorModalForm = ref(false);
 let showUserPswErrorModalForm = ref(false);
+let showProblem = ref(false);
 
 function compareMail(email) {
   const refMail = "heig-vd.ch";
@@ -64,7 +65,7 @@ function useFetchLogin(password, email) {
         }
       })
       .catch((error) => {
-        // error.response.status Check status code
+        showProblem.value = !showProblem.value;
       })
       .finally(() => {
         //Perform action in always
@@ -155,6 +156,16 @@ function useFetchLogin(password, email) {
         @click="showUserPswErrorModalForm = false" />
     </BaseInputSubmit>
   </BaseModalForm>
+
+      <!-- MODAL FORM PROBLEM -->
+    <BaseModalForm :class="{ 'is-active': showProblem }" @close="showProblem = false">
+        <BaseFormModal>
+            <h2 class="title is-4">Problème inconnu lors de l'envoi du mail !</h2>
+        </BaseFormModal>
+        <BaseInputSubmit>
+            <input type="submit" class="button is-primary is-rounded" value="Réessayer" @click="showProblem = false" />
+        </BaseInputSubmit>
+    </BaseModalForm>
 </template>
 
 <style scoped>
