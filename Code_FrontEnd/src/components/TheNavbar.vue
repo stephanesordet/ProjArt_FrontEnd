@@ -6,7 +6,7 @@ const userSession = ref(null);
 const session = ref(false);
 const role = ref(null);
 const notifications = ref([]);
-const newNotifs = ref(false);
+var newNotifs = ref(false);
 
 window.addEventListener("load", () => {
   if (sessionStorage.getItem("user")) {
@@ -115,6 +115,12 @@ setInterval(() => {
   }
 }, 60000);
 
+function changeNotif(){
+  if(newNotifs.value == true){
+    newNotifs.value = false
+}
+}
+
 </script>
 
 <template>
@@ -139,9 +145,9 @@ setInterval(() => {
         </a>
         <a class="navbar-item" href="#evenements"> Evenements </a>
         <a class="navbar-item" href="#Information"> Informations </a>
-        <a v-show="role != 'Administration' && role != 'AGE'" class="navbar-item" href="#notifications">
+        <a v-show="role != 'Administration' && role != 'AGE'" class="navbar-item" href="#notifications" @click="changeNotif()">
           <span class="icon">
-            <i v-show="newNotifs == true" class="fa fa-bell" style="color: red" @click="newNotifs = false"></i>
+            <i v-show="newNotifs == true" class="fa fa-bell" style="color: red"></i>
             <i v-show="newNotifs == false" class="fa fa-bell"></i>
           </span>
         </a>

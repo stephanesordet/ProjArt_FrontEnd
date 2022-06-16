@@ -323,6 +323,9 @@ function addEventModal() {
         <i class="fa fa-3x fa-plus-square"></i>
       </span>
     </button>
+    <div v-if="allEvents.length == 0">
+            <h2>Pas d'événement actuellement</h2>
+    </div>
   </div>
 
   <!-- MODAL FORM  -->

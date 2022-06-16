@@ -18,6 +18,8 @@ import { currentCoursId } from "../../composables/store";
 const { data: classes } = useFetch(BASE_URL + "classes");
 const { data: matieres } = useFetch(BASE_URL + "matiere");
 
+const pasCours = ref(false);
+
 const selectedClasses = ref("M49-1");
 
 const classeCours = ref([]);
@@ -64,7 +66,6 @@ function formatDateView(date) {
   let monthDate = month[date.getMonth()];
   let year = date.getFullYear().toString().slice(-2);
   let dates = date.getDate() + "." + monthDate + "." + year;
-  console.log(dates);
   return dates;
 }
 
@@ -349,7 +350,24 @@ function changeSemaine(change) {
 
   viewLundiSemaine.value = formatDateView(new Date(lundiSemaine.value[0]));
   viewVendrediSemaine.value = formatDateView(new Date(vendrediSemaine.value[0]));
+  checkPasCours();
 }
+
+function checkPasCours($tab = CoursClasse.value.uniqueCoursByDate) {
+  var pasCours2 = false;
+  var testPasCours = true;
+  $tab.forEach((element) => {
+    if (checkDate(element.DateTest)) {
+      pasCours2 = false;
+      testPasCours = false;
+    }else if(testPasCours){
+      pasCours2 = true;
+    }
+  });
+
+  return pasCours2;
+}
+
 
 function toggleActiveAnnee(event) {
   const btnClasses = document.querySelectorAll(".btnAnnee");
@@ -507,6 +525,11 @@ fetch(BASE_URL + "matiere")
           </template>
           <div v-if="CoursClasse.uniqueCoursByDate == undefined">
             <h2>Cours en chargement</h2>
+          </div>
+          <div
+            v-else-if="pasCours || checkPasCours()"
+          >
+            <h2>Plus de cours actuellement</h2>
           </div>
         </div>
       </div>

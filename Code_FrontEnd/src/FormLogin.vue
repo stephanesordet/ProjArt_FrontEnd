@@ -105,6 +105,9 @@ function useFetchLogin(password, email) {
                   </span>
                 </div>
               </div>
+              <div class="tooltip"><i class="fa fa-info-circle" aria-hidden="true"></i>
+                <span class="tooltiptext">Veuillez rentrer vos identifiants GAPS lors de la première connexion</span>
+              </div>
               <div class="field">
                 <button class="button is-danger">Connexion</button><br /><br />
                 <a href="#PasswordReset" class="is-size-7">Mot de passe oublié ?</a>
@@ -171,5 +174,37 @@ function useFetchLogin(password, email) {
 <style scoped>
 body {
    overflow-x: hidden; 
+}
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 220px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 10px;
+  position: absolute;
+  z-index: 1;
+  top: -5px;
+  left: 110%;
+}
+
+.tooltip .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 20%;
+  right: 100%;
+  margin-top: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent black transparent transparent;
+}
+.tooltip:hover .tooltiptext {
+  visibility: visible;
 }
 </style>
