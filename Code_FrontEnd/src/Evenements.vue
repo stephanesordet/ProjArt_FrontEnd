@@ -482,4 +482,7 @@ function addEventModal() {
   bottom: 20px;
   right: 30px;
 }
+body {
+   overflow-x: hidden; 
+}
 </style>

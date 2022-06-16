@@ -192,4 +192,7 @@ function addRemarqueCours() {
 div>select {
   width: 300px;
 }
+body {
+   overflow-x: hidden; 
+}
 </style>

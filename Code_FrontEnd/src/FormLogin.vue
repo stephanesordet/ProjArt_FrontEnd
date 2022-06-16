@@ -158,4 +158,7 @@ function useFetchLogin(password, email) {
 </template>
 
 <style scoped>
+body {
+   overflow-x: hidden; 
+}
 </style>

@@ -123,4 +123,7 @@ function changeHash() {
 </template>
 
 <style scoped>
+body {
+   overflow-x: hidden; 
+}
 </style>

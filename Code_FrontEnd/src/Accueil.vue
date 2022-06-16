@@ -1009,4 +1009,7 @@ button.isActive {
     padding-left: 10px;
 }
 }
+body {
+   overflow-x: hidden; 
+}
 </style>

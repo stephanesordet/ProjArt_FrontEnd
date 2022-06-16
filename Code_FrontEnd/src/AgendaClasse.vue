@@ -829,4 +829,7 @@ fetch(BASE_URL + "matiere")
     height: 5em;
   }
 }
+body {
+   overflow-x: hidden; 
+}
 </style>
