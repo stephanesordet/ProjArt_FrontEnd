@@ -389,8 +389,8 @@ function valueHasClicked(event) {
   });
   const classe = event.target.innerHTML;
   selectedClasses.value = classe;
-  setTimeout(hideLoader, 1500);
-  setTimeout(afficheContenuCours, 1500);
+  setTimeout(hideLoader, 2000);
+  setTimeout(afficheContenuCours, 2000);
   document.getElementById("checkBox").checked  = false;
   if (historique.value) {
     historique.value = false;
@@ -1000,5 +1000,13 @@ fetch(BASE_URL + "matiere")
 button.isActive {
   background-color: #f14668 !important;
   color: #ffffff !important;
+}
+
+@media only screen and (max-width: 500px) {
+  .button.is-medium {
+    font-size: 0.8rem !important;
+    padding-top: 7px;
+    padding-left: 10px;
+}
 }
 </style>
