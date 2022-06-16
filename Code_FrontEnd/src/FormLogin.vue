@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import { ref, watch, watchEffect } from "vue";
 import BaseFormModal from "./components/BaseFormModal.vue";
 import BaseModalForm from "./components/BaseModalForm.vue";
 import axios from "axios";
@@ -10,7 +10,8 @@ import TheReturnButton from "./components/TheReturnButton.vue";
 let email = ref("");
 let password = ref("");
 let hash = ref(window.location.hash);
-let userSession = ref(false);
+let userSession = ref(null);
+let role = ref(null);
 let showMailErrorModalForm = ref(false);
 let showUserPswErrorModalForm = ref(false);
 let showProblem = ref(false);
@@ -38,18 +39,20 @@ function useFetchLogin(password, email) {
       .then((res) => {
         if (res.data.includes("connected") || res.data.includes("DB")) {
           sessionStorage.setItem("user", email);
-          userSession.value = sessionStorage.getItem("user");
           if (res.data.includes("Professeur")) {
             sessionStorage.setItem("role", "Professeur");
+            window.location.hash = "#agendaClasse";
           } else if (res.data.includes("Etudiant")) {
             sessionStorage.setItem("role", "Etudiant");
+            window.location.hash = "#agendaClasse";
           } else if (res.data.includes("Administration")) {
             sessionStorage.setItem("role", "Administration");
+            window.location.hash = "#accueil";
           } else {
             sessionStorage.setItem("role", "AGE");
+            window.location.hash = "#accueil";
           }
-
-          window.location.hash = "#agendaClasse";
+          userSession.value = sessionStorage.getItem("user");
           window.location.reload();
           document.querySelector(".loading-box").style.display = "none";
         } else if (
@@ -68,7 +71,6 @@ function useFetchLogin(password, email) {
         showProblem.value = !showProblem.value;
       })
       .finally(() => {
-        //Perform action in always
       });
   } else {
     showMailErrorModalForm.value = !showMailErrorModalForm.value;

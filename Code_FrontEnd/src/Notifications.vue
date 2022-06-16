@@ -124,15 +124,20 @@ function updateNotifs() {
 </script>
 
 <template>
-  <the-card-wrapper>
-    <card-notif v-for="response in allNotifications" :user="response.roles" :object="response.notification.Objet"
-      :envoiHeure="changeFormatDate(response.notification.EnvoiHeureDate)" :message="response.notification.Message"
-      :class="response.roles">
-      <span v-if="response.status == false" class="icon">
-        <i class="fa fa-solid fa-circle fa-lg"></i>
-      </span>
-    </card-notif>
-  </the-card-wrapper>
+  <div v-if="userSession">
+    <the-card-wrapper>
+      <card-notif v-for="response in allNotifications" :user="response.roles" :object="response.notification.Objet"
+        :envoiHeure="changeFormatDate(response.notification.EnvoiHeureDate)" :message="response.notification.Message"
+        :class="response.roles">
+        <span v-if="response.status == false" class="icon">
+          <i class="fa fa-solid fa-circle fa-lg"></i>
+        </span>
+      </card-notif>
+    </the-card-wrapper>
+  </div>
+  <div v-else>
+    <h1>Vous devez être connecté</h1>
+  </div>
 </template>
 
 <style scoped>

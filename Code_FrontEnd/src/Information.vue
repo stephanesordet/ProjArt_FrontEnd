@@ -264,7 +264,7 @@ function link(link) {
 </script>
 
 <template>
-  <div class="main my-4 mx-4">
+  <div v-if="userSession" class="main my-4 mx-4">
     <template v-if="classeView">
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
       <button @click="changeVue()"
@@ -405,6 +405,9 @@ function link(link) {
       </template>
     </template>
   </div>
+  <div v-else>
+    <h1>Vous devez être connecté</h1>
+  </div>
 </template>
 
 <style scoped>
@@ -413,7 +416,8 @@ function link(link) {
   bottom: 20px;
   right: 40px;
 }
+
 body {
-   overflow-x: hidden; 
+  overflow-x: hidden;
 }
 </style>
