@@ -452,12 +452,16 @@ function addEventModal() {
     <!-- DELETE EVENT  -->
     <BaseFormModal v-if="auteur">
       <h3 class="title">Voulez-vous vraiment supprimer l'évènement ?</h3>
-      <BaseInputSubmit>
-        <input type="submit" class="button is-danger is-rounded" value="Supprimer l'événement" @click="deleteEvent()" />
-      </BaseInputSubmit>
-      <BaseInputSubmit>
-        <input type="submit" class="button is-primary is-rounded" value="Retour" @click="showDeleteModalForm = false" />
-      </BaseInputSubmit>
+      <span class="columns">
+        <BaseInputSubmit class="column">
+          <input type="submit" class="button is-primary is-rounded" value="Retour"
+            @click="showDeleteModalForm = false" />
+        </BaseInputSubmit>
+        <BaseInputSubmit class="column">
+          <input type="submit" class="button is-danger is-rounded" value="Supprimer l'événement"
+            @click="deleteEvent()" />
+        </BaseInputSubmit>
+      </span>
     </BaseFormModal>
     <BaseFormModal v-else>
       <h3 class="title">Vous ne pouvez pas supprimer l'évènement</h3>

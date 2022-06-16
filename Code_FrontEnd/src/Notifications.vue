@@ -65,10 +65,7 @@ const allNotifications = computed(() => {
         newNotifs.value += "," + element.notification.id;
       }
     });
-    const sortedNotifs = tabNotifications.sort((a, b) => {
-      b.notification.EnvoiHeureDebut - a.notification.EnvoiHeureDebut;
-    })
-    return sortedNotifs;
+    return tabNotifications;
   }
 });
 

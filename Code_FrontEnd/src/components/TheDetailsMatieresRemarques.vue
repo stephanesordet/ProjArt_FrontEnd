@@ -9,6 +9,8 @@ const user = ref(sessionStorage.getItem("user"));
 let userValue = user.value;
 const messageToUser = ref("");
 let showInfoModal = ref(false);
+let showDeleteModalForm = ref(false);
+let currentId = ref(null);
 
 defineProps({
   user_Email: {},
@@ -19,9 +21,13 @@ defineProps({
   id: {},
 });
 
-function deleteRemarque(id) {
+function displayDeleteModal(id) {
+  showDeleteModalForm.value = !showDeleteModalForm.value;
+  currentId.value = id;
+}
+function deleteRemarque() {
   axios
-    .post(BASE_URL + "remarque/delete/" + id)
+    .post(BASE_URL + "remarque/delete/" + currentId.value)
     .then((res) => {
       //Perform Success Action
       messageToUser.value = "Remarque supprimée avec succès";
@@ -29,6 +35,7 @@ function deleteRemarque(id) {
       setTimeout(() => {
         window.location.reload();
       }, 1000);
+
     })
     .catch((error) => {
       // error.response.status Check status code
@@ -37,6 +44,7 @@ function deleteRemarque(id) {
       setTimeout(() => {
         window.location.reload();
       }, 1000);
+
     })
     .finally(() => { });
 }
@@ -66,7 +74,7 @@ function deleteRemarque(id) {
       </span>
 
       <button v-show="user_Email == userValue" class="button is-pulled-right is-white has-background-light"
-        @click="deleteRemarque(id)">
+        @click="displayDeleteModal(id)">
         <span class="icon is-small">
           <i class="fa fa-trash"></i>
         </span>
@@ -82,13 +90,21 @@ function deleteRemarque(id) {
     </p>
   </div>
 
-
-
-  <!-- MODAL FORM INFO  -->
-  <BaseModalForm :class="{ 'is-active': showInfoModal }" @close="showInfoModal = false">
-    <!-- CRUD ACTION  -->
+  <!-- MODAL FORM DELETE  -->
+  <BaseModalForm :class="{ 'is-active': showDeleteModalForm }" @close="showDeleteModalForm = false">
+    <!-- DELETE REMARQUE  -->
     <BaseFormModal>
-      <h1 class="title is-2">{{ messageToUser }}</h1>
+      <h3 class="title">Voulez-vous vraiment supprimer la remarque ?</h3>
+      <span class="columns">
+        <BaseInputSubmit class="column">
+          <input type="submit" class="button is-primary is-rounded" value="Retour"
+            @click="showDeleteModalForm = false" />
+        </BaseInputSubmit>
+        <BaseInputSubmit class="column">
+          <input type="submit" class="button is-danger is-rounded" value="Supprimer la remarque"
+            @click="deleteRemarque()" />
+        </BaseInputSubmit>
+      </span>
     </BaseFormModal>
   </BaseModalForm>
 </template>
