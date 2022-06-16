@@ -274,7 +274,7 @@ async function addCours() {
           window.location.reload();
         }, 1000);
       })
-      .then(() => {});
+      .then(() => { });
   } catch (e) {
     showModalForm.value = !showModalForm.value;
     messageToUser.value = "Erreur lors de l'ajout du cours";
@@ -424,7 +424,7 @@ function deleteCours() {
         window.location.reload();
       }, 1000);
     })
-    .finally(() => {});
+    .finally(() => { });
 }
 
 fetch(BASE_URL + "matiere")
@@ -444,10 +444,10 @@ fetch(BASE_URL + "matiere")
       document.head.insertAdjacentHTML(
         "beforeend",
         "<style>." +
-          element.id +
-          "{border-color:" +
-          element.color +
-          " !important}</style>"
+        element.id +
+        "{border-color:" +
+        element.color +
+        " !important}</style>"
       );
     });
   });
@@ -456,25 +456,15 @@ fetch(BASE_URL + "matiere")
   <div class="main mx-4 my-1">
     <div>
       <div class="is-mobile buttons columns is-centered mx-1 my-1">
-        <button
-          v-for="classe in Classes"
-          :key="classe"
-          @click="valueHasClicked($event)"
-          class="column button has-background-light has-text-black is-medium is-one-fifth-mobile is-danger btnClasse is-size-6-mobile"
-        >
+        <button v-for="classe in Classes" :key="classe" @click="valueHasClicked($event)"
+          class="column button has-background-light has-text-black is-medium is-one-fifth-mobile is-danger btnClasse is-size-6-mobile">
           {{ classe.id }}
         </button>
       </div>
     </div>
     <p class="mt-5"><b>Semaine du</b></p>
-    <div
-      class="semaineContainer"
-      style="display: flex; align-items: center; justify-content: center"
-    >
-      <div
-        class="selecteurSemaine"
-        style="display: flex; align-items: center; justify-content: center"
-      >
+    <div class="semaineContainer" style="display: flex; align-items: center; justify-content: center">
+      <div class="selecteurSemaine" style="display: flex; align-items: center; justify-content: center">
         <div class="mr-4">
           <ArrowPrev :span="viewLundiSemaine" @click="changeSemaine('previous')" />
         </div>
@@ -491,41 +481,23 @@ fetch(BASE_URL + "matiere")
           <template v-for="day in CoursClasse.uniqueCoursByDate" :key="day.Jour">
             <template v-if="checkDate(day.DateTest)">
               <span style="text-align: left" :class="setClass(day)" class="spanCours">{{
-                day.Date
+                  day.Date
               }}</span>
-              <HR
-                v-if="dateStr == day.Date"
-                :class="setClass(day)"
-                class="spanCours"
-                style="background-color: blue; height: 5px"
-              >
+              <HR v-if="dateStr == day.Date" :class="setClass(day)" class="spanCours"
+                style="background-color: blue; height: 5px">
               </HR>
-              <card-cours
-                v-for="cours in day.Cours"
-                :key="cours.id"
-                :data-id="cours.id"
-                :class="cours.matiere_id"
-                class="cours"
-                :debut="cours.HeureDebut"
-                :fin="cours.HeureFin"
-                :cours="cours.matiere_id"
-                :salle="cours.salle_id"
-              >
-                <button
-                  v-show="role == 'Administration'"
-                  class="button is-pulled-right is-white has-background-light"
-                  @click="displayDeleteModal(cours.id)"
-                >
+              <card-cours v-for="cours in day.Cours" :key="cours.id" :data-id="cours.id" :class="cours.matiere_id"
+                class="cours" :debut="cours.HeureDebut" :fin="cours.HeureFin" :cours="cours.matiere_id"
+                :salle="cours.salle_id">
+                <button v-show="role == 'Administration'" class="button is-pulled-right is-white has-background-light"
+                  @click="displayDeleteModal(cours.id)">
                   <span class="icon is-small">
                     <i class="fa fa-trash ml-6"></i>
                   </span>
                 </button>
 
-                <button
-                  v-show="role == 'Administration'"
-                  class="button is-pulled-right is-white has-background-light"
-                  @click="displayUpdateModal(cours.id, cours.salle_id)"
-                >
+                <button v-show="role == 'Administration'" class="button is-pulled-right is-white has-background-light"
+                  @click="displayUpdateModal(cours.id, cours.salle_id)">
                   <span class="icon is-small">
                     <i class="fa fa-pencil ml-6"></i>
                   </span>
@@ -540,13 +512,8 @@ fetch(BASE_URL + "matiere")
       </div>
     </div>
     <div>
-      <button
-        v-show="role == 'Administration'"
-        class="button is-right js-modal-trigger"
-        data-target="modal-js-example"
-        id="fixedbutton"
-        @click="showModalForm = !showModalForm"
-      >
+      <button v-show="role == 'Administration'" class="button is-right js-modal-trigger" data-target="modal-js-example"
+        id="fixedbutton" @click="showModalForm = !showModalForm">
         <span class="icon is-large has-text-danger">
           <i class="fa fa-3x fa-plus-square"></i>
         </span>
@@ -560,22 +527,16 @@ fetch(BASE_URL + "matiere")
       <div class="field" style="width: 300px">
         <label class="label" for="Années">Années</label>
         <div class="buttons are-small is-mobile is-centered mx-1 my-1">
-          <button
-            @click="(selectedAnnee = 1), toggleActiveAnnee($event)"
-            class="button has-background-light has-text-black is-medium is-one-fifth-mobile is-danger btnAnnee"
-          >
+          <button @click="(selectedAnnee = 1), toggleActiveAnnee($event)"
+            class="button has-background-light has-text-black is-medium is-one-fifth-mobile is-danger btnAnnee">
             1ère
           </button>
-          <button
-            @click="(selectedAnnee = 2), toggleActiveAnnee($event)"
-            class="button has-background-light has-text-black is-medium is-one-fifth-mobile is-danger btnAnnee"
-          >
+          <button @click="(selectedAnnee = 2), toggleActiveAnnee($event)"
+            class="button has-background-light has-text-black is-medium is-one-fifth-mobile is-danger btnAnnee">
             2ème
           </button>
-          <button
-            @click="(selectedAnnee = 3), toggleActiveAnnee($event)"
-            class="button has-background-light has-text-black is-medium is-one-fifth-mobile is-danger btnAnnee"
-          >
+          <button @click="(selectedAnnee = 3), toggleActiveAnnee($event)"
+            class="button has-background-light has-text-black is-medium is-one-fifth-mobile is-danger btnAnnee">
             3ème
           </button>
         </div>
@@ -585,10 +546,7 @@ fetch(BASE_URL + "matiere")
         <div class="select">
           <select v-model="matiereForm" required>
             <option value="" disabled selected hidden>Matières</option>
-            <option
-              v-for="matiere in MatieresAnnee"
-              v-show="matiere.Annee == selectedAnnee"
-            >
+            <option v-for="matiere in MatieresAnnee" v-show="matiere.Annee == selectedAnnee">
               {{ matiere.id }}
             </option>
           </select>
@@ -597,92 +555,49 @@ fetch(BASE_URL + "matiere")
       <BaseInput>
         <template v-slot:label>Classe(s)</template>
         <template v-slot:input>
-          <input
-            v-model="classeForm"
-            class="input"
-            type="texte"
-            placeholder="Exemple : M49-1 M49-2"
-            required
-          />
+          <input v-model="classeForm" class="input" type="texte" placeholder="Exemple : M49-1 M49-2" required />
         </template>
       </BaseInput>
       <BaseInput>
         <template v-slot:label>Date</template>
         <template v-slot:input>
-          <input
-            v-model="dateCoursForm"
-            class="input"
-            type="date"
-            placeholder="Entrez une date"
-            required
-            :min="todayDate"
-          />
+          <input v-model="dateCoursForm" class="input" type="date" placeholder="Entrez une date" required
+            :min="todayDate" />
         </template>
       </BaseInput>
       <BaseInput>
         <template v-slot:label>Heure de début</template>
         <template v-slot:input>
-          <input
-            v-model="heureDebutForm"
-            class="input"
-            type="time"
-            placeholder="Entrez une heure de début"
-            required
-          />
+          <input v-model="heureDebutForm" class="input" type="time" placeholder="Entrez une heure de début" required />
         </template>
       </BaseInput>
       <BaseInput>
         <template v-slot:label>Heure de fin</template>
         <template v-slot:input>
-          <input
-            v-model="heureFinForm"
-            class="input"
-            type="time"
-            placeholder="Entrez une heure de fin"
-            required
-          />
+          <input v-model="heureFinForm" class="input" type="time" placeholder="Entrez une heure de fin" required />
         </template>
       </BaseInput>
       <BaseInput>
         <template v-slot:label>Professeur</template>
         <template v-slot:input>
-          <input
-            v-model="profForm"
-            class="input"
-            type="texte"
-            placeholder="Exemple : JHS"
-            required
-          />
+          <input v-model="profForm" class="input" type="texte" placeholder="Exemple : JHS" required />
         </template>
       </BaseInput>
       <BaseInput>
         <template v-slot:label>Salle(s)</template>
         <template v-slot:input>
-          <input
-            v-model="lieuForm"
-            class="input"
-            type="text"
-            placeholder="Exemple: T153 T154"
-            required
-          />
+          <input v-model="lieuForm" class="input" type="text" placeholder="Exemple: T153 T154" required />
         </template>
       </BaseInput>
 
       <BaseInputSubmit>
-        <input
-          type="submit"
-          class="button is-danger is-rounded"
-          value="Ajouter le cours"
-        />
+        <input type="submit" class="button is-danger is-rounded" value="Ajouter le cours" />
       </BaseInputSubmit>
     </BaseFormModal>
   </BaseModalForm>
 
   <!-- MODAL FORM UPDATE  -->
-  <BaseModalForm
-    :class="{ 'is-active': showUpdateModalForm }"
-    @close="showUpdateModalForm = false"
-  >
+  <BaseModalForm :class="{ 'is-active': showUpdateModalForm }" @close="showUpdateModalForm = false">
     <!-- UPDATE COURS  -->
     <BaseFormModal @submit.prevent="updateCours()">
       <h3 class="title">Modification cours</h3>
@@ -690,82 +605,48 @@ fetch(BASE_URL + "matiere")
       <BaseInput>
         <template v-slot:label>Date</template>
         <template v-slot:input>
-          <input
-            v-model="dateCoursForm"
-            class="input"
-            type="date"
-            placeholder="Entrez une date"
-            :min="todayDate"
-          />
+          <input v-model="dateCoursForm" class="input" type="date" placeholder="Entrez une date" :min="todayDate" />
         </template>
       </BaseInput>
       <BaseInput>
         <template v-slot:label>Heure de début</template>
         <template v-slot:input>
-          <input
-            v-model="heureDebutForm"
-            class="input"
-            type="time"
-            placeholder="Entrez une heure de début"
-          />
+          <input v-model="heureDebutForm" class="input" type="time" placeholder="Entrez une heure de début" />
         </template>
       </BaseInput>
       <BaseInput>
         <template v-slot:label>Heure de fin</template>
         <template v-slot:input>
-          <input
-            v-model="heureFinForm"
-            class="input"
-            type="time"
-            placeholder="Entrez une heure de fin"
-          />
+          <input v-model="heureFinForm" class="input" type="time" placeholder="Entrez une heure de fin" />
         </template>
       </BaseInput>
       <BaseInput>
         <template v-slot:label>Classe(s)</template>
         <template v-slot:input>
-          <input
-            v-model="lieuForm"
-            class="input"
-            type="text"
-            placeholder="Entrez la/les classe(s)"
-          />
+          <input v-model="lieuForm" class="input" type="text" placeholder="Entrez la/les classe(s)" />
         </template>
       </BaseInput>
       <BaseInputSubmit>
-        <input
-          type="submit"
-          class="button is-danger is-rounded"
-          value="Modifier le cours"
-        />
+        <input type="submit" class="button is-danger is-rounded" value="Modifier le cours" />
       </BaseInputSubmit>
     </BaseFormModal>
   </BaseModalForm>
 
   <!-- MODAL FORM DELETE  -->
-  <BaseModalForm
-    :class="{ 'is-active': showDeleteModalForm }"
-    @close="showDeleteModalForm = false"
-  >
+  <BaseModalForm :class="{ 'is-active': showDeleteModalForm }" @close="showDeleteModalForm = false">
     <!-- DELETE EVENT  -->
     <BaseFormModal>
       <h3 class="title">Voulez-vous vraiment supprimer le cours ?</h3>
-      <BaseInputSubmit>
-        <input
-          type="submit"
-          class="button is-danger is-rounded"
-          value="Supprimer le cours ?"
-          @click="deleteCours()"
-        />
-      </BaseInputSubmit>
-      <BaseInputSubmit>
-        <input
-          type="submit"
-          class="button is-primary is-rounded"
-          value="Retour"
-          @click="showDeleteModalForm = false"
-        />
-      </BaseInputSubmit>
+      <span class="columns is-mobile">
+        <BaseInputSubmit class="column">
+          <input type="submit" class="button is-primary is-rounded" value="Retour"
+            @click="showDeleteModalForm = false" />
+        </BaseInputSubmit>
+        <BaseInputSubmit class="column">
+          <input type="submit" class="button is-danger is-rounded" value="Supprimer le cours ?"
+            @click="deleteCours()" />
+        </BaseInputSubmit>
+      </span>
     </BaseFormModal>
   </BaseModalForm>
 
@@ -826,6 +707,7 @@ fetch(BASE_URL + "matiere")
 }
 
 @-webkit-keyframes load1 {
+
   0%,
   80%,
   100% {
@@ -840,6 +722,7 @@ fetch(BASE_URL + "matiere")
 }
 
 @keyframes load1 {
+
   0%,
   80%,
   100% {
