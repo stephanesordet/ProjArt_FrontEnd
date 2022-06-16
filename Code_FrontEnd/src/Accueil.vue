@@ -591,17 +591,6 @@ fetch(BASE_URL + "matiere")
       <div class="column is-three-quarters">
         <div class="tile is-parent is-vertical containerCours">
           <template v-if="historique">
-<<<<<<< HEAD
-            <template v-for="day in CoursClasse.uniqueCoursHistoriqueByDate" :key="day.Jour">
-              <span style="text-align: left" :class="setClass(day)" class="spanCours">{{
-                  day.Date
-              }}</span>
-              <card-cours v-for="cours in day.Cours" :key="cours.id" :data-id="cours.id" :class="cours.matiere_id"
-                class="cours" :debut="cours.HeureDebut" :fin="cours.HeureFin" :cours="cours.matiere_id"
-                :salle="cours.salle_id">
-                <button v-show="role == 'Administration'" class="button is-pulled-right is-white has-background-light"
-                  @click="displayDeleteModal(cours.id)">
-=======
             <template
               v-for="day in CoursClasse.uniqueCoursHistoriqueByDate"
               :key="day.Jour"
@@ -628,7 +617,6 @@ fetch(BASE_URL + "matiere")
                   class="button is-pulled-right is-white has-background-light"
                   @click="displayDeleteModal(cours.id)"
                 >
->>>>>>> 09ed86116c48ab310b69796b02e8f1872a925742
                   <span class="icon is-small">
                     <i class="fa fa-trash"></i>
                   </span>
@@ -643,14 +631,6 @@ fetch(BASE_URL + "matiere")
               </card-cours>
             </template>
           </template>
-<<<<<<< HEAD
-          <template v-for="day in CoursClasse.uniqueCoursByDate" :key="day.Jour">
-            <span style="text-align: left" :class="setClass(day)" class="spanCours">{{
-                day.Date
-            }}</span>
-            <HR v-if="dateStrTest == day.Date && historique" :class="setClass(day)" class="spanCours"
-              style="background-color: blue; height: 5px">
-=======
           <template
             v-for="day in CoursClasse.uniqueCoursByDate"
             :key="day.Jour"
@@ -667,7 +647,6 @@ fetch(BASE_URL + "matiere")
               class="spanCours"
               style="background-color: blue; height: 5px"
             >
->>>>>>> 09ed86116c48ab310b69796b02e8f1872a925742
             </HR>
             <card-cours v-for="cours in day.Cours" :key="cours.id" :data-id="cours.id" :class="cours.matiere_id"
               class="cours" :debut="cours.HeureDebut" :fin="cours.HeureFin" :cours="cours.matiere_id"
