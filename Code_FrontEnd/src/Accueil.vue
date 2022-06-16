@@ -26,7 +26,9 @@ const classeCours = ref([]);
 watchEffect(() => {
   fetch(BASE_URL + "cours/classe/" + selectedClasses.value)
     .then((res) => res.json())
-    .then((coursClasse) => (classeCours.value = coursClasse));
+    .then((coursClasse) => {
+      classeCours.value = coursClasse;
+    });
 });
 
 const dateStr =
@@ -107,8 +109,10 @@ const CoursClasse = computed(() => {
         let monthDate = month[d.getMonth()];
         let day = days[d.getDay()];
         let date = d.getDate() + " " + monthDate + " " + d.getFullYear();
-        let heureDebut = d.getHours() + ":" + String(d.getMinutes()).padStart(2, "0");
-        let heureFin = f.getHours() + ":" + String(f.getMinutes()).padStart(2, "0");
+        let heureDebut =
+          d.getHours() + ":" + String(d.getMinutes()).padStart(2, "0");
+        let heureFin =
+          f.getHours() + ":" + String(f.getMinutes()).padStart(2, "0");
         element.Jour = day;
         element.Date = date;
         element.HeureDebut = heureDebut;
@@ -147,8 +151,10 @@ const CoursClasse = computed(() => {
         let monthDate = month[d.getMonth()];
         let day = days[d.getDay()];
         let date = d.getDate() + " " + monthDate + " " + d.getFullYear();
-        let heureDebut = d.getHours() + ":" + String(d.getMinutes()).padStart(2, "0");
-        let heureFin = f.getHours() + ":" + String(f.getMinutes()).padStart(2, "0");
+        let heureDebut =
+          d.getHours() + ":" + String(d.getMinutes()).padStart(2, "0");
+        let heureFin =
+          f.getHours() + ":" + String(f.getMinutes()).padStart(2, "0");
         element.Jour = day;
         element.Date = date;
         element.HeureDebut = heureDebut;
@@ -561,7 +567,10 @@ fetch(BASE_URL + "matiere")
           </option>
         </template>
         <template v-if="historique">
-          <option v-for="matiere in Matiere.uniqueMatiereHistorique" :key="matiere">
+          <option
+            v-for="matiere in Matiere.uniqueMatiereHistorique"
+            :key="matiere"
+          >
             {{ matiere }}
           </option>
         </template>
@@ -584,9 +593,12 @@ fetch(BASE_URL + "matiere")
               v-for="day in CoursClasse.uniqueCoursHistoriqueByDate"
               :key="day.Jour"
             >
-              <span style="text-align: left" :class="setClass(day)" class="spanCours">{{
-                day.Date
-              }}</span>
+              <span
+                style="text-align: left"
+                :class="setClass(day)"
+                class="spanCours"
+                >{{ day.Date }}</span
+              >
               <card-cours
                 v-for="cours in day.Cours"
                 :key="cours.id"
@@ -620,10 +632,16 @@ fetch(BASE_URL + "matiere")
               </card-cours>
             </template>
           </template>
-          <template v-for="day in CoursClasse.uniqueCoursByDate" :key="day.Jour">
-            <span style="text-align: left" :class="setClass(day)" class="spanCours">{{
-              day.Date
-            }}</span>
+          <template
+            v-for="day in CoursClasse.uniqueCoursByDate"
+            :key="day.Jour"
+          >
+            <span
+              style="text-align: left"
+              :class="setClass(day)"
+              class="spanCours"
+              >{{ day.Date }}</span
+            >
             <HR
               v-if="dateStrTest == day.Date && historique"
               :class="setClass(day)"
@@ -666,7 +684,9 @@ fetch(BASE_URL + "matiere")
           <div v-if="CoursClasse.uniqueCoursByDate == undefined">
             <h2>Cours en chargement</h2>
           </div>
-          <div v-else-if="CoursClasse.uniqueCoursByDate.size == 0 && !historique">
+          <div
+            v-else-if="CoursClasse.uniqueCoursByDate.size == 0 && !historique"
+          >
             <h2>Plus de cours actuellement</h2>
           </div>
         </div>
@@ -687,7 +707,10 @@ fetch(BASE_URL + "matiere")
     </div>
   </div>
   <!-- MODAL FORM  -->
-  <BaseModalForm :class="{ 'is-active': showModalForm }" @close="showModalForm = false">
+  <BaseModalForm
+    :class="{ 'is-active': showModalForm }"
+    @close="showModalForm = false"
+  >
     <!-- AJOUT COURS  -->
     <BaseFormModal @submit.prevent="addCours()">
       <h3 class="title">Nouveau cours</h3>
@@ -904,7 +927,10 @@ fetch(BASE_URL + "matiere")
   </BaseModalForm>
 
   <!-- MODAL FORM INFO  -->
-  <BaseModalForm :class="{ 'is-active': showInfoModal }" @close="showInfoModal = false">
+  <BaseModalForm
+    :class="{ 'is-active': showInfoModal }"
+    @close="showInfoModal = false"
+  >
     <!-- CRUD ACTION  -->
     <BaseFormModal>
       <h3 class="title">{{ messageToUser }}</h3>
