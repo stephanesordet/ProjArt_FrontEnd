@@ -2,7 +2,6 @@
 import { ref, computed, watchEffect } from "vue";
 import TheDetailsMatieres from "./components/TheDetailsMatieres.vue";
 import TheDetailsMatieresRemarques from "./components/TheDetailsMatieresRemarques.vue";
-import TheCardWrapper from "./components/TheCardWrapper.vue";
 import BaseFormModal from "./components/BaseFormModal.vue";
 import BaseInputSubmit from "./components/BaseInputSubmit.vue";
 import BaseInput from "./components/BaseInput.vue";
@@ -90,7 +89,6 @@ function addRemarqueCours() {
       Visibilite: Visibilite.value,
     })
     .then((res) => {
-      //Perform Success Action
       showModalForm.value = !showModalForm.value;
       messageToUser.value = "Remarque ajoutée avec succès";
       showInfoModal.value = !showInfoModal.value;
@@ -99,7 +97,6 @@ function addRemarqueCours() {
       }, 1000);
     })
     .catch((error) => {
-      // error.response.status Check status code
       showModalForm.value = !showModalForm.value;
       messageToUser.value = "Remarque ajoutée avec succès";
       showInfoModal.value = !showInfoModal.value;
@@ -112,22 +109,29 @@ function addRemarqueCours() {
     });
 }
 </script>
-
 <template>
-  <TheReturnButton></TheReturnButton>
-  <TheDetailsMatieres v-for="cours in allCours" :matiere="cours.matiere_id" :prof="cours.FullName">
-    <TheDetailsMatieresRemarques v-for="remarque in allRemarques" :user_Email="remarque.user_Email"
-      :DateRemarque="changeFormatDateBasic(remarque.Date)" :Description="remarque.Description" :Titre="remarque.Titre"
-      :Visibilite="remarque.Visibilite" :id="remarque.id">
-    </TheDetailsMatieresRemarques>
-    <div class="column buttons">
-      <button class="button is-danger" @click="showModalForm = !showModalForm">
-        <span class="icon is-medium has-text-danger-dark">
-          <i class="fa fa-solid fa-plus"></i>
-        </span>
-        <span>Ajouter une remarque</span></button><br />
-    </div>
-  </TheDetailsMatieres>
+  <div v-if="userSession">
+    <TheReturnButton></TheReturnButton>
+    <!--- Vfor insert name cours and prof + vfor insert details of each remarque --->
+    <TheDetailsMatieres v-for="cours in allCours" :matiere="cours.matiere_id" :prof="cours.FullName">
+      <TheDetailsMatieresRemarques v-for="remarque in allRemarques" :user_Email="remarque.user_Email"
+        :DateRemarque="changeFormatDateBasic(remarque.Date)" :Description="remarque.Description" :Titre="remarque.Titre"
+        :Visibilite="remarque.Visibilite" :id="remarque.id">
+      </TheDetailsMatieresRemarques>
+      <!--- Html for add remarque, with modal that open on click --->
+      <div class="column buttons">
+        <button class="button is-danger" @click="showModalForm = !showModalForm">
+          <span class="icon is-medium has-text-danger-dark">
+            <i class="fa fa-solid fa-plus"></i>
+          </span>
+          <span>Ajouter une remarque</span></button><br />
+      </div>
+    </TheDetailsMatieres>
+  </div>
+
+  <div v-else>
+    <h1>Vous devez être connecté</h1>
+  </div>
 
   <!-- MODAL FORM  -->
   <BaseModalForm :class="{ 'is-active': showModalForm }" @close="showModalForm = false">
@@ -192,7 +196,8 @@ function addRemarqueCours() {
 div>select {
   width: 300px;
 }
+
 body {
-   overflow-x: hidden; 
+  overflow-x: hidden;
 }
 </style>

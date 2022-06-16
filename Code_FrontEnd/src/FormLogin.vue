@@ -1,6 +1,5 @@
 <script setup>
-import { watchPostEffect } from "@vue/runtime-core";
-import { ref, computed, watchEffect } from "vue";
+import { ref } from "vue";
 import BaseFormModal from "./components/BaseFormModal.vue";
 import BaseModalForm from "./components/BaseModalForm.vue";
 import axios from "axios";
@@ -11,12 +10,13 @@ import TheReturnButton from "./components/TheReturnButton.vue";
 let email = ref("");
 let password = ref("");
 let hash = ref(window.location.hash);
-let userSession = ref(false);
-let showWelcomeModalForm = ref(false);
+let userSession = ref(null);
+let role = ref(null);
 let showMailErrorModalForm = ref(false);
 let showUserPswErrorModalForm = ref(false);
 let showProblem = ref(false);
 
+//testing that the email is valid --> @heig-vd.ch
 function compareMail(email) {
   const refMail = "heig-vd.ch";
   const userMail = email.substring(email.indexOf("@") + 1);
@@ -27,6 +27,7 @@ function compareMail(email) {
   }
 }
 
+//log the user if he exists on gaps and if the password is correct and then store it in the session and database
 function useFetchLogin(password, email) {
   if (compareMail(email)) {
     document.querySelector(".loading-box").style.display = "flex";
@@ -38,18 +39,20 @@ function useFetchLogin(password, email) {
       .then((res) => {
         if (res.data.includes("connected") || res.data.includes("DB")) {
           sessionStorage.setItem("user", email);
-          userSession.value = sessionStorage.getItem("user");
           if (res.data.includes("Professeur")) {
             sessionStorage.setItem("role", "Professeur");
+            window.location.hash = "#agendaClasse";
           } else if (res.data.includes("Etudiant")) {
             sessionStorage.setItem("role", "Etudiant");
+            window.location.hash = "#agendaClasse";
           } else if (res.data.includes("Administration")) {
             sessionStorage.setItem("role", "Administration");
+            window.location.hash = "#accueil";
           } else {
             sessionStorage.setItem("role", "AGE");
+            window.location.hash = "#accueil";
           }
-
-          window.location.hash = "#accueil";
+          userSession.value = sessionStorage.getItem("user");
           window.location.reload();
           document.querySelector(".loading-box").style.display = "none";
         } else if (
@@ -68,7 +71,6 @@ function useFetchLogin(password, email) {
         showProblem.value = !showProblem.value;
       })
       .finally(() => {
-        //Perform action in always
       });
   } else {
     showMailErrorModalForm.value = !showMailErrorModalForm.value;
@@ -119,21 +121,6 @@ function useFetchLogin(password, email) {
     </div>
   </section>
 
-  <!-- MODAL FORM WELCOME -->
-  <BaseModalForm :class="{ 'is-active': showWelcomeModalForm }" @close="showWelcomeModalForm = false"
-    style="z-index: index 9999">
-    <BaseFormModal>
-      <h2 class="title is-4">
-        Lors de votre première connexion, nous chargeons les données de GAPS. Ce
-        système étant très lent, nous vons coneillons de boire votre café !
-      </h2>
-    </BaseFormModal>
-    <BaseInputSubmit>
-      <input type="submit" class="button is-primary is-rounded" value="Je vais y aller !"
-        @click="showWelcomeModalForm = false" />
-    </BaseInputSubmit>
-  </BaseModalForm>
-
   <!-- MODAL FORM @MAIL ERROR -->
   <BaseModalForm :class="{ 'is-active': showMailErrorModalForm }" @close="showMailErrorModalForm = false">
     <BaseFormModal>
@@ -160,20 +147,20 @@ function useFetchLogin(password, email) {
     </BaseInputSubmit>
   </BaseModalForm>
 
-      <!-- MODAL FORM PROBLEM -->
-    <BaseModalForm :class="{ 'is-active': showProblem }" @close="showProblem = false">
-        <BaseFormModal>
-            <h2 class="title is-4">Problème inconnu lors de l'envoi du mail !</h2>
-        </BaseFormModal>
-        <BaseInputSubmit>
-            <input type="submit" class="button is-primary is-rounded" value="Réessayer" @click="showProblem = false" />
-        </BaseInputSubmit>
-    </BaseModalForm>
+  <!-- MODAL FORM PROBLEM -->
+  <BaseModalForm :class="{ 'is-active': showProblem }" @close="showProblem = false">
+    <BaseFormModal>
+      <h2 class="title is-4">Problème inconnu lors de l'envoi du mail !</h2>
+    </BaseFormModal>
+    <BaseInputSubmit>
+      <input type="submit" class="button is-primary is-rounded" value="Réessayer" @click="showProblem = false" />
+    </BaseInputSubmit>
+  </BaseModalForm>
 </template>
 
 <style scoped>
 body {
-   overflow-x: hidden; 
+  overflow-x: hidden;
 }
 .tooltip {
   position: relative;

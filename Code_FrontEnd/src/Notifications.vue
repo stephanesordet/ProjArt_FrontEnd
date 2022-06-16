@@ -14,6 +14,7 @@ const role = ref(sessionStorage.getItem("role"));
 const notifications = ref([]);
 const newNotifs = ref("");
 
+//when on the notifications page, the not readed notifications are send to the server to be mark as readed
 window.addEventListener("hashchange", () => {
   userSession.value = sessionStorage.getItem("user");
   role.value = sessionStorage.getItem("role");
@@ -22,6 +23,7 @@ window.addEventListener("hashchange", () => {
     newNotifs.value = "";
   }
 });
+
 
 window.addEventListener("hashchange", () => {
   if (newNotifs.value != "") {
@@ -33,6 +35,7 @@ window.addEventListener("hashchange", () => {
   }
 });
 
+//fetch the notifications of the user when logged in
 watchEffect(() => {
   if (userSession.value != null) {
     fetch(BASE_URL + "notifications/" + userSession.value)
@@ -41,6 +44,7 @@ watchEffect(() => {
   }
 });
 
+//interval to update the notifications every 60 seconds
 setInterval(() => {
   if (userSession.value != null) {
     fetch(BASE_URL + "notifications/" + userSession.value)
@@ -60,18 +64,16 @@ const allNotifications = computed(() => {
       tabNotifications.push(element);
       if (
         element.status == false &&
-        !newNotifs.value.includes(element.notification.id)
+        !newNotifs.value.includes(element.notification.id)//if the notification is not readed and not already in the newNotifs
       ) {
-        newNotifs.value += "," + element.notification.id;
+        newNotifs.value += "," + element.notification.id;//add the notification id to the newNotifs string
       }
     });
     return tabNotifications;
   }
 });
 
-// ---------------------- Boolean for showing the modal form -----------------------------
-let showModalForm = ref(false);
-
+// changing the color of the notification
 fetch(BASE_URL + "role")
   .then((res) => res.json())
   .then((AllMatiere) => {
@@ -97,11 +99,12 @@ fetch(BASE_URL + "role")
     });
   });
 
+//update the notifications status to readed
 function updateNotifs() {
   axios
     .post(BASE_URL + "read/notifications", {
       User: userSession.value,
-      Notifications: newNotifs.value.substring(1),
+      Notifications: newNotifs.value.substring(1),//the id of the string will be readed
       // ---------------------- !!!!!!!!! CHANGER !!!!!!!!! -----------------------------
     })
     .then((res) => {
@@ -121,15 +124,20 @@ function updateNotifs() {
 </script>
 
 <template>
-  <the-card-wrapper>
-    <card-notif v-for="response in allNotifications" :user="response.roles" :object="response.notification.Objet"
-      :envoiHeure="changeFormatDate(response.notification.EnvoiHeureDate)" :message="response.notification.Message"
-      :class="response.roles">
-      <span v-if="response.status == false" class="icon">
-        <i class="fa fa-solid fa-circle fa-lg"></i>
-      </span>
-    </card-notif>
-  </the-card-wrapper>
+  <div v-if="userSession">
+    <the-card-wrapper>
+      <card-notif v-for="response in allNotifications" :user="response.roles" :object="response.notification.Objet"
+        :envoiHeure="changeFormatDate(response.notification.EnvoiHeureDate)" :message="response.notification.Message"
+        :class="response.roles">
+        <span v-if="response.status == false" class="icon">
+          <i class="fa fa-solid fa-circle fa-lg"></i>
+        </span>
+      </card-notif>
+    </the-card-wrapper>
+  </div>
+  <div v-else>
+    <h1>Vous devez être connecté</h1>
+  </div>
 </template>
 
 <style scoped>
@@ -147,6 +155,6 @@ function updateNotifs() {
 }
 
 body {
-   overflow-x: hidden; 
+  overflow-x: hidden;
 }
 </style>

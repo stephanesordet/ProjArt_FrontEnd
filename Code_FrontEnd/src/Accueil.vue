@@ -1,7 +1,6 @@
 <script setup>
-import { def } from "@vue/shared";
 import axios from "axios";
-import { computed, ref, watch, watchEffect } from "vue";
+import { computed, ref, watchEffect } from "vue";
 import { useFetch } from "../composables/fetch";
 import CardCours from "./components/CardCours.vue";
 import BaseFormModal from "./components/BaseFormModal.vue";
@@ -15,14 +14,16 @@ import { currentCoursId } from "../composables/store";
 
 const { data: classes } = useFetch(BASE_URL + "classes");
 const { data: matieres } = useFetch(BASE_URL + "matiere");
-
-const role = ref(sessionStorage.getItem("role"));
 const userSession = ref(sessionStorage.getItem("user"));
+const role = ref(sessionStorage.getItem("role"));
+
 const date = new Date();
 const dateStrTest = formatDateView(date);
 const selectedClasses = ref("M49-1");
 const historique = ref(false);
 const classeCours = ref([]);
+
+// ---------------------- Fetch data for cours and matiere -----------------------------
 watchEffect(() => {
   fetch(BASE_URL + "cours/classe/" + selectedClasses.value)
     .then((res) => res.json())
@@ -31,44 +32,31 @@ watchEffect(() => {
     });
 });
 
-const dateStr =
-  date.getFullYear() +
-  "-" +
-  ("00" + (date.getMonth() + 1)).slice(-2) +
-  "-" +
-  ("00" + date.getDate()).slice(-2);
+fetch(BASE_URL + "matiere")
+  .then((res) => res.json())
+  .then((AllMatiere) => {
+    var couleurMatiereOb;
+    const matiereColor = [];
+    var i = 0;
+    AllMatiere.forEach((matiere) => {
+      couleurMatiereOb = Object();
+      couleurMatiereOb.id = matiere.id;
+      couleurMatiereOb.color = randomColor({ seed: i });
+      matiereColor.push(couleurMatiereOb);
+      i++;
+    });
+    matiereColor.forEach((element) => {
+      document.head.insertAdjacentHTML(
+        "beforeend",
+        "<style>." +
+          element.id +
+          "{border-color:" +
+          element.color +
+          " !important}</style>"
+      );
+    });
+  });
 
-function padTo2Digits(num) {
-  return num.toString().padStart(2, "0");
-}
-
-function formatDate(date) {
-  return [
-    padTo2Digits(date.getMonth() + 1),
-    padTo2Digits(date.getDate()),
-    date.getFullYear(),
-  ].join("/");
-}
-
-function formatDateView(date) {
-  const month = [
-    "Janvier",
-    "Fevrier",
-    "Mars",
-    "Avril",
-    "Mai",
-    "Juin",
-    "Juillet",
-    "Aout",
-    "Septembre",
-    "Octobre",
-    "Novembre",
-    "Decembre",
-  ];
-  let monthDate = month[date.getMonth()];
-  let dates = date.getDate() + " " + monthDate + " " + date.getFullYear();
-  return dates;
-}
 const CoursClasse = computed(() => {
   const tabCours = [];
   const tabCoursHistorique = [];
@@ -259,6 +247,7 @@ const CoursClasse = computed(() => {
   const uniqueCoursHistoriqueByDate = new Set(tabCoursHistoriqueByDate);
   return { uniqueCoursByDate, uniqueCoursHistoriqueByDate };
 });
+
 const Classes = computed(() => {
   const tabClasse = [];
   if (!classes.value?.length) {
@@ -270,6 +259,7 @@ const Classes = computed(() => {
   }
   return tabClasse;
 });
+
 const Matiere = computed(() => {
   const tabMatiere = [];
   const tabMatiereHistorique = [];
@@ -303,14 +293,42 @@ const MatieresAnnee = computed(() => {
   return tabMatiere;
 });
 
+// ---------------------- Format date -----------------------------
+const dateStr =
+  date.getFullYear() +
+  "-" +
+  ("00" + (date.getMonth() + 1)).slice(-2) +
+  "-" +
+  ("00" + date.getDate()).slice(-2);
+
+function formatDateView(date) {
+  const month = [
+    "Janvier",
+    "Fevrier",
+    "Mars",
+    "Avril",
+    "Mai",
+    "Juin",
+    "Juillet",
+    "Aout",
+    "Septembre",
+    "Octobre",
+    "Novembre",
+    "Decembre",
+  ];
+  let monthDate = month[date.getMonth()];
+  let dates = date.getDate() + " " + monthDate + " " + date.getFullYear();
+  return dates;
+}
+
+// ---------------------- Boolean for showing the modal form -----------------------------
 let showModalForm = ref(false);
 let showDeleteModalForm = ref(false);
 let showUpdateModalForm = ref(false);
 let showInfoModal = ref(false);
 
-//Traitement du form after submit
+// ---------------------- Traitement du form apres submit -----------------------------
 const dateCoursForm = ref("");
-const selectedclasseForm = ref("");
 const classeForm = ref("");
 const heureDebutForm = ref("");
 const heureFinForm = ref("");
@@ -340,7 +358,7 @@ async function addCours() {
           window.location.reload();
         }, 1000);
       })
-      .then(() => { });
+      .then(() => {});
     cours;
   } catch (e) {
     showModalForm.value = !showModalForm.value;
@@ -352,6 +370,64 @@ async function addCours() {
   }
 }
 
+async function updateCours() {
+  try {
+    const cours = await axios
+      .post(BASE_URL + "cours/modif/" + currentCoursId.value, {
+        Debut: dateCoursForm.value + " " + heureDebutForm.value,
+        Fin: dateCoursForm.value + " " + heureFinForm.value,
+        Salles: lieuForm.value,
+        User: userSession.value,
+      })
+      .then(() => {
+        dateCoursForm.value = "";
+        heureDebutForm.value = "";
+        heureFinForm.value = "";
+        lieuForm.value = "";
+        showUpdateModalForm.value = !showUpdateModalForm.value;
+        messageToUser.value = "Cours modifié avec succès";
+        showInfoModal.value = !showInfoModal.value;
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+      });
+  } catch (e) {
+    showUpdateModalForm.value = !showUpdateModalForm.value;
+    messageToUser.value = "Erreur lors de la modification du cours";
+    showInfoModal.value = !showInfoModal.value;
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
+  }
+}
+
+function deleteCours() {
+  axios
+    .post(BASE_URL + "cours/delete/" + currentCoursId.value, {
+      User: userSession.value,
+    })
+    .then((res) => {
+      //Perform Success Action
+      showDeleteModalForm.value = !showDeleteModalForm.value;
+      messageToUser.value = "Cours supprimé avec succès";
+      showInfoModal.value = !showInfoModal.value;
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    })
+    .catch((error) => {
+      // error.response.status Check status code
+      showDeleteModalForm.value = !showDeleteModalForm.value;
+      messageToUser.value = "Cours supprimé avec succès";
+      showInfoModal.value = !showInfoModal.value;
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    })
+    .finally(() => {});
+}
+
+// ---------------------- Functions for handling events  -----------------------------
 function valueHasChanged(event) {
   const cours = document.querySelectorAll(".cours");
   const spanCours = document.querySelectorAll(".spanCours");
@@ -397,14 +473,14 @@ function valueHasClicked(event) {
   selectedClasses.value = classe;
   setTimeout(hideLoader, 2000);
   setTimeout(afficheContenuCours, 2000);
-  document.getElementById("checkBox").checked  = false;
+  document.getElementById("checkBox").checked = false;
   if (historique.value) {
     historique.value = false;
   }
 }
 
-function afficheContenuCours(){
-    document.querySelector(".containerCours").style.display = "flex";
+function afficheContenuCours() {
+  document.querySelector(".containerCours").style.display = "flex";
 }
 
 function toggleActiveAnnee(event) {
@@ -471,95 +547,17 @@ function displayUpdateModal(id, salle) {
   currentCoursId.value = id;
   lieuForm.value = salle;
 }
-
-async function updateCours() {
-  try {
-    const cours = await axios
-      .post(BASE_URL + "cours/modif/" + currentCoursId.value, {
-        Debut: dateCoursForm.value + " " + heureDebutForm.value,
-        Fin: dateCoursForm.value + " " + heureFinForm.value,
-        Salles: lieuForm.value,
-        User: userSession.value,
-      })
-      .then(() => {
-        dateCoursForm.value = "";
-        heureDebutForm.value = "";
-        heureFinForm.value = "";
-        lieuForm.value = "";
-        showUpdateModalForm.value = !showUpdateModalForm.value;
-        messageToUser.value = "Cours modifié avec succès";
-        showInfoModal.value = !showInfoModal.value;
-        setTimeout(() => {
-          window.location.reload();
-        }, 1000);
-      });
-  } catch (e) {
-    showUpdateModalForm.value = !showUpdateModalForm.value;
-    messageToUser.value = "Erreur lors de la modification du cours";
-    showInfoModal.value = !showInfoModal.value;
-    setTimeout(() => {
-      window.location.reload();
-    }, 1000);
-  }
-}
-
-function deleteCours() {
-  axios
-    .post(BASE_URL + "cours/delete/" + currentCoursId.value, {
-      User: userSession.value,
-    })
-    .then((res) => {
-      //Perform Success Action
-      showDeleteModalForm.value = !showDeleteModalForm.value;
-      messageToUser.value = "Cours supprimé avec succès";
-      showInfoModal.value = !showInfoModal.value;
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000);
-    })
-    .catch((error) => {
-      // error.response.status Check status code
-      showDeleteModalForm.value = !showDeleteModalForm.value;
-      messageToUser.value = "Cours supprimé avec succès";
-      showInfoModal.value = !showInfoModal.value;
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000);
-    })
-    .finally(() => { });
-}
-
-fetch(BASE_URL + "matiere")
-  .then((res) => res.json())
-  .then((AllMatiere) => {
-    var couleurMatiereOb;
-    const matiereColor = [];
-    var i = 0;
-    AllMatiere.forEach((matiere) => {
-      couleurMatiereOb = Object();
-      couleurMatiereOb.id = matiere.id;
-      couleurMatiereOb.color = randomColor({ seed: i });
-      matiereColor.push(couleurMatiereOb);
-      i++;
-    });
-    matiereColor.forEach((element) => {
-      document.head.insertAdjacentHTML(
-        "beforeend",
-        "<style>." +
-        element.id +
-        "{border-color:" +
-        element.color +
-        " !important}</style>"
-      );
-    });
-  });
 </script>
 <template>
   <div class="main mx-4 my-1 contenu">
     <div>
       <div class="buttons is-mobile columns is-centered mx-1 my-1">
-        <button v-for="classe in Classes" :key="classe" @click="valueHasClicked($event)"
-          class="column button has-background-light has-text-black is-medium is-one-fifth-mobile is-danger btnClasse has-text-centered">
+        <button
+          v-for="classe in Classes"
+          :key="classe"
+          @click="valueHasClicked($event)"
+          class="column button has-background-light has-text-black is-medium is-one-fifth-mobile is-danger btnClasse has-text-centered"
+        >
           {{ classe.id }}
         </button>
       </div>
@@ -583,7 +581,11 @@ fetch(BASE_URL + "matiere")
       </select>
     </div>
     <div style="display: flex; justify-content: center; margin-top: 15px">
-      <Switch v-model:checked="shouldReceiveNewsletter" label="Historique" @change="toggleHistorique()" />
+      <Switch
+        v-model:checked="shouldReceiveNewsletter"
+        label="Historique"
+        @change="toggleHistorique()"
+      />
     </div>
     <Toggle v-model="value" />
     <div class="charger">Loading...</div>
@@ -622,8 +624,11 @@ fetch(BASE_URL + "matiere")
                   </span>
                 </button>
 
-                <button v-show="role == 'Administration'" class="button is-pulled-right is-white has-background-light"
-                  @click="displayUpdateModal(cours.id, cours.salle_id)">
+                <button
+                  v-show="role == 'Administration'"
+                  class="button is-pulled-right is-white has-background-light"
+                  @click="displayUpdateModal(cours.id, cours.salle_id)"
+                >
                   <span class="icon is-small">
                     <i class="fa fa-pencil"></i>
                   </span>
@@ -648,18 +653,32 @@ fetch(BASE_URL + "matiere")
               style="background-color: blue; height: 5px"
             >
             </HR>
-            <card-cours v-for="cours in day.Cours" :key="cours.id" :data-id="cours.id" :class="cours.matiere_id"
-              class="cours" :debut="cours.HeureDebut" :fin="cours.HeureFin" :cours="cours.matiere_id"
-              :salle="cours.salle_id">
-              <button v-show="role == 'Administration'" class="button is-pulled-right is-white has-background-light"
-                @click="displayDeleteModal(cours.id)">
+            <card-cours
+              v-for="cours in day.Cours"
+              :key="cours.id"
+              :data-id="cours.id"
+              :class="cours.matiere_id"
+              class="cours"
+              :debut="cours.HeureDebut"
+              :fin="cours.HeureFin"
+              :cours="cours.matiere_id"
+              :salle="cours.salle_id"
+            >
+              <button
+                v-show="role == 'Administration'"
+                class="button is-pulled-right is-white has-background-light"
+                @click="displayDeleteModal(cours.id)"
+              >
                 <span class="icon is-small">
                   <i class="fa fa-trash"></i>
                 </span>
               </button>
 
-              <button v-show="role == 'Administration'" class="button is-pulled-right is-white has-background-light"
-                @click="displayUpdateModal(cours.id, cours.salle_id)">
+              <button
+                v-show="role == 'Administration'"
+                class="button is-pulled-right is-white has-background-light"
+                @click="displayUpdateModal(cours.id, cours.salle_id)"
+              >
                 <span class="icon is-small">
                   <i class="fa fa-pencil"></i>
                 </span>
@@ -667,7 +686,7 @@ fetch(BASE_URL + "matiere")
             </card-cours>
           </template>
           <div v-if="CoursClasse.uniqueCoursByDate == undefined">
-            <div class="charger" style="display:block;">Loading...</div>
+            <div class="charger" style="display: block">Loading...</div>
           </div>
           <div
             v-else-if="CoursClasse.uniqueCoursByDate.size == 0 && !historique"
@@ -678,8 +697,13 @@ fetch(BASE_URL + "matiere")
       </div>
     </div>
     <div>
-      <button v-show="role == 'Administration'" class="button is-right js-modal-trigger" data-target="modal-js-example"
-        id="fixedbutton" @click="showModalForm = !showModalForm">
+      <button
+        v-show="role == 'Administration'"
+        class="button is-right js-modal-trigger"
+        data-target="modal-js-example"
+        id="fixedbutton"
+        @click="showModalForm = !showModalForm"
+      >
         <span class="icon is-large has-text-danger">
           <i class="fa fa-3x fa-plus-square"></i>
         </span>
@@ -697,16 +721,22 @@ fetch(BASE_URL + "matiere")
       <div class="field" style="width: 300px">
         <label class="label" for="Années">Années</label>
         <div class="buttons are-small is-mobile is-centered mx-1 my-1">
-          <button @click="(selectedAnnee = 1), toggleActiveAnnee($event)"
-            class="button has-background-light has-text-black is-medium is-one-fifth-mobile is-danger btnAnnee">
+          <button
+            @click="(selectedAnnee = 1), toggleActiveAnnee($event)"
+            class="button has-background-light has-text-black is-medium is-one-fifth-mobile is-danger btnAnnee"
+          >
             1ère
           </button>
-          <button @click="(selectedAnnee = 2), toggleActiveAnnee($event)"
-            class="button has-background-light has-text-black is-medium is-one-fifth-mobile is-danger btnAnnee">
+          <button
+            @click="(selectedAnnee = 2), toggleActiveAnnee($event)"
+            class="button has-background-light has-text-black is-medium is-one-fifth-mobile is-danger btnAnnee"
+          >
             2ème
           </button>
-          <button @click="(selectedAnnee = 3), toggleActiveAnnee($event)"
-            class="button has-background-light has-text-black is-medium is-one-fifth-mobile is-danger btnAnnee">
+          <button
+            @click="(selectedAnnee = 3), toggleActiveAnnee($event)"
+            class="button has-background-light has-text-black is-medium is-one-fifth-mobile is-danger btnAnnee"
+          >
             3ème
           </button>
         </div>
@@ -716,7 +746,10 @@ fetch(BASE_URL + "matiere")
         <div class="select">
           <select v-model="matiereForm" required>
             <option value="" disabled selected hidden>Matières</option>
-            <option v-for="matiere in MatieresAnnee" v-show="matiere.Annee == selectedAnnee">
+            <option
+              v-for="matiere in MatieresAnnee"
+              v-show="matiere.Annee == selectedAnnee"
+            >
               {{ matiere.id }}
             </option>
           </select>
@@ -725,49 +758,92 @@ fetch(BASE_URL + "matiere")
       <BaseInput>
         <template v-slot:label>Classe(s)</template>
         <template v-slot:input>
-          <input v-model="classeForm" class="input" type="texte" placeholder="Exemple : M49-1 M49-2" required />
+          <input
+            v-model="classeForm"
+            class="input"
+            type="texte"
+            placeholder="Exemple : M49-1 M49-2"
+            required
+          />
         </template>
       </BaseInput>
       <BaseInput>
         <template v-slot:label>Date</template>
         <template v-slot:input>
-          <input v-model="dateCoursForm" class="input" type="date" placeholder="Entrez une date" required
-            :min="todayDate" />
+          <input
+            v-model="dateCoursForm"
+            class="input"
+            type="date"
+            placeholder="Entrez une date"
+            required
+            :min="todayDate"
+          />
         </template>
       </BaseInput>
       <BaseInput>
         <template v-slot:label>Heure de début</template>
         <template v-slot:input>
-          <input v-model="heureDebutForm" class="input" type="time" placeholder="Entrez une heure de début" required />
+          <input
+            v-model="heureDebutForm"
+            class="input"
+            type="time"
+            placeholder="Entrez une heure de début"
+            required
+          />
         </template>
       </BaseInput>
       <BaseInput>
         <template v-slot:label>Heure de fin</template>
         <template v-slot:input>
-          <input v-model="heureFinForm" class="input" type="time" placeholder="Entrez une heure de fin" required />
+          <input
+            v-model="heureFinForm"
+            class="input"
+            type="time"
+            placeholder="Entrez une heure de fin"
+            required
+          />
         </template>
       </BaseInput>
       <BaseInput>
         <template v-slot:label>Professeur</template>
         <template v-slot:input>
-          <input v-model="profForm" class="input" type="texte" placeholder="Exemple : JHS" required />
+          <input
+            v-model="profForm"
+            class="input"
+            type="texte"
+            placeholder="Exemple : JHS"
+            required
+          />
         </template>
       </BaseInput>
       <BaseInput>
         <template v-slot:label>Salle(s)</template>
         <template v-slot:input>
-          <input v-model="lieuForm" class="input" type="text" placeholder="Exemple: T153 T154" required />
+          <input
+            v-model="lieuForm"
+            class="input"
+            type="text"
+            placeholder="Exemple: T153 T154"
+            required
+          />
         </template>
       </BaseInput>
 
       <BaseInputSubmit>
-        <input type="submit" class="button is-danger is-rounded" value="Ajouter le cours" />
+        <input
+          type="submit"
+          class="button is-danger is-rounded"
+          value="Ajouter le cours"
+        />
       </BaseInputSubmit>
     </BaseFormModal>
   </BaseModalForm>
 
   <!-- MODAL FORM UPDATE  -->
-  <BaseModalForm :class="{ 'is-active': showUpdateModalForm }" @close="showUpdateModalForm = false">
+  <BaseModalForm
+    :class="{ 'is-active': showUpdateModalForm }"
+    @close="showUpdateModalForm = false"
+  >
     <!-- UPDATE COURS  -->
     <BaseFormModal @submit.prevent="updateCours()">
       <h3 class="title">Modification cours</h3>
@@ -775,46 +851,86 @@ fetch(BASE_URL + "matiere")
       <BaseInput>
         <template v-slot:label>Date</template>
         <template v-slot:input>
-          <input v-model="dateCoursForm" class="input" type="date" placeholder="Entrez une date" :min="todayDate" />
+          <input
+            v-model="dateCoursForm"
+            class="input"
+            type="date"
+            placeholder="Entrez une date"
+            :min="todayDate"
+            required
+          />
         </template>
       </BaseInput>
       <BaseInput>
         <template v-slot:label>Heure de début</template>
         <template v-slot:input>
-          <input v-model="heureDebutForm" class="input" type="time" placeholder="Entrez une heure de début" />
+          <input
+            v-model="heureDebutForm"
+            class="input"
+            type="time"
+            placeholder="Entrez une heure de début"
+            required
+          />
         </template>
       </BaseInput>
       <BaseInput>
         <template v-slot:label>Heure de fin</template>
         <template v-slot:input>
-          <input v-model="heureFinForm" class="input" type="time" placeholder="Entrez une heure de fin" />
+          <input
+            v-model="heureFinForm"
+            class="input"
+            type="time"
+            placeholder="Entrez une heure de fin"
+            required
+          />
         </template>
       </BaseInput>
       <BaseInput>
         <template v-slot:label>Classe(s)</template>
         <template v-slot:input>
-          <input v-model="lieuForm" class="input" type="text" placeholder="Entrez la/les classe(s)" />
+          <input
+            v-model="lieuForm"
+            class="input"
+            type="text"
+            placeholder="Entrez la/les classe(s)"
+            required
+          />
         </template>
       </BaseInput>
       <BaseInputSubmit>
-        <input type="submit" class="button is-danger is-rounded" value="Modifier le cours" />
+        <input
+          type="submit"
+          class="button is-danger is-rounded"
+          value="Modifier le cours"
+        />
       </BaseInputSubmit>
     </BaseFormModal>
   </BaseModalForm>
 
   <!-- MODAL FORM DELETE  -->
-  <BaseModalForm :class="{ 'is-active': showDeleteModalForm }" @close="showDeleteModalForm = false">
+  <BaseModalForm
+    :class="{ 'is-active': showDeleteModalForm }"
+    @close="showDeleteModalForm = false"
+  >
     <!-- DELETE COURS  -->
     <BaseFormModal>
       <h3 class="title">Voulez-vous vraiment supprimer le cours ?</h3>
       <span class="columns">
         <BaseInputSubmit class="column">
-          <input type="submit" class="button is-primary is-rounded" value="Retour"
-            @click="showDeleteModalForm = false" />
+          <input
+            type="submit"
+            class="button is-primary is-rounded"
+            value="Retour"
+            @click="showDeleteModalForm = false"
+          />
         </BaseInputSubmit>
         <BaseInputSubmit class="column">
-          <input type="submit" class="button is-danger is-rounded" value="Supprimer le cours ?"
-            @click="deleteCours()" />
+          <input
+            type="submit"
+            class="button is-danger is-rounded"
+            value="Supprimer le cours ?"
+            @click="deleteCours()"
+          />
         </BaseInputSubmit>
       </span>
     </BaseFormModal>
@@ -838,7 +954,7 @@ fetch(BASE_URL + "matiere")
   right: 40px;
 }
 
-.spanCours{
+.spanCours {
   text-align: left !important;
 }
 
@@ -884,7 +1000,6 @@ fetch(BASE_URL + "matiere")
 }
 
 @-webkit-keyframes load1 {
-
   0%,
   80%,
   100% {
@@ -899,7 +1014,6 @@ fetch(BASE_URL + "matiere")
 }
 
 @keyframes load1 {
-
   0%,
   80%,
   100% {
@@ -923,9 +1037,9 @@ button.isActive {
     font-size: 0.8rem !important;
     padding-top: 7px;
     padding-left: 10px;
-}
+  }
 }
 body {
-   overflow-x: hidden; 
+  overflow-x: hidden;
 }
 </style>
