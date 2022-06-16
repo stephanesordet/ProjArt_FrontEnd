@@ -1,7 +1,7 @@
 <script setup>
 import { def } from "@vue/shared";
 import axios from "axios";
-import { computed, ref, watch, watchEffect } from "vue";
+import { computed, ref, watchEffect } from "vue";
 import { useFetch } from "../composables/fetch";
 import CardCours from "./components/CardCours.vue";
 import BaseFormModal from "./components/BaseFormModal.vue";
@@ -15,14 +15,15 @@ import { currentCoursId } from "../composables/store";
 
 const { data: classes } = useFetch(BASE_URL + "classes");
 const { data: matieres } = useFetch(BASE_URL + "matiere");
-
-const role = ref(sessionStorage.getItem("role"));
 const userSession = ref(sessionStorage.getItem("user"));
+const role = ref(sessionStorage.getItem("role"));
+
 const date = new Date();
 const dateStrTest = formatDateView(date);
 const selectedClasses = ref("M49-1");
 const historique = ref(false);
 const classeCours = ref([]);
+
 watchEffect(() => {
   fetch(BASE_URL + "cours/classe/" + selectedClasses.value)
     .then((res) => res.json())
@@ -397,14 +398,14 @@ function valueHasClicked(event) {
   selectedClasses.value = classe;
   setTimeout(hideLoader, 2000);
   setTimeout(afficheContenuCours, 2000);
-  document.getElementById("checkBox").checked  = false;
+  document.getElementById("checkBox").checked = false;
   if (historique.value) {
     historique.value = false;
   }
 }
 
-function afficheContenuCours(){
-    document.querySelector(".containerCours").style.display = "flex";
+function afficheContenuCours() {
+  document.querySelector(".containerCours").style.display = "flex";
 }
 
 function toggleActiveAnnee(event) {
@@ -573,10 +574,7 @@ fetch(BASE_URL + "matiere")
           </option>
         </template>
         <template v-if="historique">
-          <option
-            v-for="matiere in Matiere.uniqueMatiereHistorique"
-            :key="matiere"
-          >
+          <option v-for="matiere in Matiere.uniqueMatiereHistorique" :key="matiere">
             {{ matiere }}
           </option>
         </template>
@@ -591,32 +589,13 @@ fetch(BASE_URL + "matiere")
       <div class="column is-three-quarters">
         <div class="tile is-parent is-vertical containerCours">
           <template v-if="historique">
-            <template
-              v-for="day in CoursClasse.uniqueCoursHistoriqueByDate"
-              :key="day.Jour"
-            >
-              <span
-                style="text-align: left"
-                :class="setClass(day)"
-                class="spanCours"
-                >{{ day.Date }}</span
-              >
-              <card-cours
-                v-for="cours in day.Cours"
-                :key="cours.id"
-                :data-id="cours.id"
-                :class="cours.matiere_id"
-                class="cours"
-                :debut="cours.HeureDebut"
-                :fin="cours.HeureFin"
-                :cours="cours.matiere_id"
-                :salle="cours.salle_id"
-              >
-                <button
-                  v-show="role == 'Administration'"
-                  class="button is-pulled-right is-white has-background-light"
-                  @click="displayDeleteModal(cours.id)"
-                >
+            <template v-for="day in CoursClasse.uniqueCoursHistoriqueByDate" :key="day.Jour">
+              <span style="text-align: left" :class="setClass(day)" class="spanCours">{{ day.Date }}</span>
+              <card-cours v-for="cours in day.Cours" :key="cours.id" :data-id="cours.id" :class="cours.matiere_id"
+                class="cours" :debut="cours.HeureDebut" :fin="cours.HeureFin" :cours="cours.matiere_id"
+                :salle="cours.salle_id">
+                <button v-show="role == 'Administration'" class="button is-pulled-right is-white has-background-light"
+                  @click="displayDeleteModal(cours.id)">
                   <span class="icon is-small">
                     <i class="fa fa-trash"></i>
                   </span>
@@ -631,22 +610,10 @@ fetch(BASE_URL + "matiere")
               </card-cours>
             </template>
           </template>
-          <template
-            v-for="day in CoursClasse.uniqueCoursByDate"
-            :key="day.Jour"
-          >
-            <span
-              style="text-align: left"
-              :class="setClass(day)"
-              class="spanCours"
-              >{{ day.Date }}</span
-            >
-            <HR
-              v-if="dateStrTest == day.Date && historique"
-              :class="setClass(day)"
-              class="spanCours"
-              style="background-color: blue; height: 5px"
-            >
+          <template v-for="day in CoursClasse.uniqueCoursByDate" :key="day.Jour">
+            <span style="text-align: left" :class="setClass(day)" class="spanCours">{{ day.Date }}</span>
+            <HR v-if="dateStrTest == day.Date && historique" :class="setClass(day)" class="spanCours"
+              style="background-color: blue; height: 5px">
             </HR>
             <card-cours v-for="cours in day.Cours" :key="cours.id" :data-id="cours.id" :class="cours.matiere_id"
               class="cours" :debut="cours.HeureDebut" :fin="cours.HeureFin" :cours="cours.matiere_id"
@@ -669,9 +636,7 @@ fetch(BASE_URL + "matiere")
           <div v-if="CoursClasse.uniqueCoursByDate == undefined">
             <div class="charger" style="display:block;">Loading...</div>
           </div>
-          <div
-            v-else-if="CoursClasse.uniqueCoursByDate.size == 0 && !historique"
-          >
+          <div v-else-if="CoursClasse.uniqueCoursByDate.size == 0 && !historique">
             <h2>Plus de cours actuellement</h2>
           </div>
         </div>
@@ -687,10 +652,7 @@ fetch(BASE_URL + "matiere")
     </div>
   </div>
   <!-- MODAL FORM  -->
-  <BaseModalForm
-    :class="{ 'is-active': showModalForm }"
-    @close="showModalForm = false"
-  >
+  <BaseModalForm :class="{ 'is-active': showModalForm }" @close="showModalForm = false">
     <!-- AJOUT COURS  -->
     <BaseFormModal @submit.prevent="addCours()">
       <h3 class="title">Nouveau cours</h3>
@@ -821,10 +783,7 @@ fetch(BASE_URL + "matiere")
   </BaseModalForm>
 
   <!-- MODAL FORM INFO  -->
-  <BaseModalForm
-    :class="{ 'is-active': showInfoModal }"
-    @close="showInfoModal = false"
-  >
+  <BaseModalForm :class="{ 'is-active': showInfoModal }" @close="showInfoModal = false">
     <!-- CRUD ACTION  -->
     <BaseFormModal>
       <h3 class="title">{{ messageToUser }}</h3>
@@ -838,7 +797,7 @@ fetch(BASE_URL + "matiere")
   right: 40px;
 }
 
-.spanCours{
+.spanCours {
   text-align: left !important;
 }
 
@@ -923,9 +882,10 @@ button.isActive {
     font-size: 0.8rem !important;
     padding-top: 7px;
     padding-left: 10px;
+  }
 }
-}
+
 body {
-   overflow-x: hidden; 
+  overflow-x: hidden;
 }
 </style>
