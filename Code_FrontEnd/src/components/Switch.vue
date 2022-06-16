@@ -3,6 +3,7 @@
     <input
       v-bind="$attrs"
       class="input"
+      id="checkBox"
       type="checkbox"
       :checked="checked"
       @change="$emit('update:checked', $event.target.checked)"

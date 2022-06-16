@@ -857,4 +857,7 @@ button.isActive {
   background-color: #f14668 !important;
   color: #ffffff !important;
 }
+body {
+   overflow-x: hidden; 
+}
 </style>

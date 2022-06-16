@@ -417,4 +417,7 @@ function link(link) {
   bottom: 20px;
   right: 40px;
 }
+body {
+   overflow-x: hidden; 
+}
 </style>

@@ -378,6 +378,8 @@ function valueHasChanged(event) {
 }
 
 function valueHasClicked(event) {
+  document.querySelector(".charger").style.display = "block";
+  document.querySelector(".containerCours").style.display = "none";
   const btnClasses = document.querySelectorAll(".btnClasse");
   btnClasses.forEach((btnClasse) => {
     btnClasse.classList.remove("isActive");
@@ -391,10 +393,18 @@ function valueHasClicked(event) {
   spanCours.forEach((coursSolo) => {
     coursSolo.style.display = "none";
   });
-  document.querySelector(".charger").style.display = "block";
   const classe = event.target.innerHTML;
   selectedClasses.value = classe;
-  setTimeout(hideLoader, 1000);
+  setTimeout(hideLoader, 2000);
+  setTimeout(afficheContenuCours, 2000);
+  document.getElementById("checkBox").checked  = false;
+  if (historique.value) {
+    historique.value = false;
+  }
+}
+
+function afficheContenuCours(){
+    document.querySelector(".containerCours").style.display = "flex";
 }
 
 function toggleActiveAnnee(event) {
@@ -587,7 +597,7 @@ fetch(BASE_URL + "matiere")
     <div class="charger">Loading...</div>
     <div class="columns is-centered tile is-ancestor">
       <div class="column is-three-quarters">
-        <div class="tile is-parent is-vertical">
+        <div class="tile is-parent is-vertical containerCours">
           <template v-if="historique">
             <template
               v-for="day in CoursClasse.uniqueCoursHistoriqueByDate"
@@ -682,7 +692,7 @@ fetch(BASE_URL + "matiere")
             </card-cours>
           </template>
           <div v-if="CoursClasse.uniqueCoursByDate == undefined">
-            <h2>Cours en chargement</h2>
+            <div class="charger" style="display:block;">Loading...</div>
           </div>
           <div
             v-else-if="CoursClasse.uniqueCoursByDate.size == 0 && !historique"
@@ -1016,5 +1026,16 @@ fetch(BASE_URL + "matiere")
 button.isActive {
   background-color: #f14668 !important;
   color: #ffffff !important;
+}
+
+@media only screen and (max-width: 500px) {
+  .button.is-medium {
+    font-size: 0.8rem !important;
+    padding-top: 7px;
+    padding-left: 10px;
+}
+}
+body {
+   overflow-x: hidden; 
 }
 </style>

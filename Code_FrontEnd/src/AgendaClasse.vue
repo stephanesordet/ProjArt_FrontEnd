@@ -123,10 +123,8 @@ const CoursClasse = computed(() => {
         let monthDate = month[d.getMonth()];
         let day = days[d.getDay()];
         let date = d.getDate() + " " + monthDate + " " + d.getFullYear();
-        let heureDebut =
-          d.getHours() + ":" + String(d.getMinutes()).padStart(2, "0");
-        let heureFin =
-          f.getHours() + ":" + String(f.getMinutes()).padStart(2, "0");
+        let heureDebut = d.getHours() + ":" + String(d.getMinutes()).padStart(2, "0");
+        let heureFin = f.getHours() + ":" + String(f.getMinutes()).padStart(2, "0");
         element.Jour = day;
         element.Date = date;
         element.HeureDebut = heureDebut;
@@ -168,10 +166,8 @@ const CoursClasse = computed(() => {
         let monthDate = month[d.getMonth()];
         let day = days[d.getDay()];
         let date = d.getDate() + " " + monthDate + " " + d.getFullYear();
-        let heureDebut =
-          d.getHours() + ":" + String(d.getMinutes()).padStart(2, "0");
-        let heureFin =
-          f.getHours() + ":" + String(f.getMinutes()).padStart(2, "0");
+        let heureDebut = d.getHours() + ":" + String(d.getMinutes()).padStart(2, "0");
+        let heureFin = f.getHours() + ":" + String(f.getMinutes()).padStart(2, "0");
         element.Jour = day;
         element.Date = date;
         element.HeureDebut = heureDebut;
@@ -205,7 +201,10 @@ const CoursClasse = computed(() => {
           "Vendredi",
           "Samedi",
         ];
-        const d = new Date(element.Date);
+        let dateElement = element.Date;
+        dateElement = dateElement.replaceAll(" ", "T");
+
+        const d = new Date(dateElement);
         let monthDate = month[d.getMonth()];
         let day = days[d.getDay()];
         let date = d.getDate() + " " + monthDate + " " + d.getFullYear();
@@ -237,7 +236,9 @@ const CoursClasse = computed(() => {
           "Vendredi",
           "Samedi",
         ];
-        const d = new Date(element.Date);
+        let dateElement = element.Date;
+        dateElement = dateElement.replaceAll(" ", "T");
+        const d = new Date(dateElement);
         let monthDate = month[d.getMonth()];
         let day = days[d.getDay()];
         let date = d.getDate() + " " + monthDate + " " + d.getFullYear();
@@ -539,10 +540,7 @@ fetch(BASE_URL + "matiere")
           </option>
         </template>
         <template v-if="historique">
-          <option
-            v-for="matiere in Matiere.uniqueMatiereHistorique"
-            :key="matiere"
-          >
+          <option v-for="matiere in Matiere.uniqueMatiereHistorique" :key="matiere">
             {{ matiere }}
           </option>
         </template>
@@ -565,12 +563,9 @@ fetch(BASE_URL + "matiere")
               v-for="day in CoursClasse.uniqueCoursHistoriqueByDate"
               :key="day.Jour"
             >
-              <span
-                style="text-align: left"
-                :class="setClass(day)"
-                class="spanCours"
-                >{{ day.Date }}</span
-              >
+              <span style="text-align: left" :class="setClass(day)" class="spanCours">{{
+                day.Date
+              }}</span>
               <template v-for="cours in day.Cours" :key="cours.id">
                 <card-cours
                   v-if="cours.Name == 'Cours'"
@@ -654,16 +649,10 @@ fetch(BASE_URL + "matiere")
               </template>
             </template>
           </template>
-          <template
-            v-for="day in CoursClasse.uniqueCoursByDate"
-            :key="day.Jour"
-          >
-            <span
-              style="text-align: left"
-              :class="setClass(day)"
-              class="spanCours"
-              >{{ day.Date }}</span
-            >
+          <template v-for="day in CoursClasse.uniqueCoursByDate" :key="day.Jour">
+            <span style="text-align: left" :class="setClass(day)" class="spanCours">{{
+              day.Date
+            }}</span>
             <HR
               v-if="dateStrTest == day.Date && historique"
               :class="setClass(day)"
@@ -755,9 +744,7 @@ fetch(BASE_URL + "matiere")
           <div v-if="CoursClasse.uniqueCoursByDate == undefined">
             <h2>Cours en chargement</h2>
           </div>
-          <div
-            v-else-if="CoursClasse.uniqueCoursByDate.size == 0 && !historique"
-          >
+          <div v-else-if="CoursClasse.uniqueCoursByDate.size == 0 && !historique">
             <h2>Plus de cours actuellement</h2>
           </div>
         </div>
@@ -847,5 +834,8 @@ fetch(BASE_URL + "matiere")
     box-shadow: 0 -2em;
     height: 5em;
   }
+}
+body {
+   overflow-x: hidden; 
 }
 </style>
