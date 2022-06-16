@@ -16,6 +16,7 @@ import { currentCoursId } from "../../composables/store";
 
 const { data: classes } = useFetch(BASE_URL + "classes");
 const { data: matieres } = useFetch(BASE_URL + "matiere");
+const { data: profs } = useFetch(BASE_URL + "prof");
 
 const pasCours = ref(false);
 
@@ -215,6 +216,18 @@ const Matiere = computed(() => {
   return { uniqueMatiere };
 });
 
+const Professeurs = computed(() => {
+  const tabProfs = [];
+  if (!profs.value?.length) {
+    return [];
+  } else {
+    profs.value.forEach((element) => {
+      tabProfs.push(element);
+    });
+  }
+  return tabProfs;
+});
+
 const MatieresAnnee = computed(() => {
   const tabMatiere = [];
   if (!matieres.value?.length) {
@@ -301,6 +314,18 @@ const messageToUser = ref("");
 const profForm = ref("");
 
 async function addCours() {
+    // Regex pour salles
+  const regexSalle = /^[A-Z]{1}[0-9]{3}[a-z]{0,1}([ ]{1}[A-Z]{1}[0-9]{3}[a-z]{0,1})*$/;
+  var tabSalles = lieuForm.value.split(" ");
+  var regex = true;
+  tabSalles.forEach((element) => {
+    if (!regexSalle.test(element)) {
+      messageToUser.value = "Erreur lors de la modification du cours, les salles doivent être au format 1 lettre majuscule et 3 chiffres - Exemple : T153";
+      showInfoModal.value = !showInfoModal.value;
+      regex = false;
+    }
+  });
+  if (regex) {
   try {
     const cours = await axios
       .post(BASE_URL + "cours/create", {
@@ -321,6 +346,7 @@ async function addCours() {
         }, 1000);
       })
       .then(() => {});
+    cours;
   } catch (e) {
     showModalForm.value = !showModalForm.value;
     messageToUser.value = "Erreur lors de l'ajout du cours";
@@ -330,21 +356,77 @@ async function addCours() {
     }, 1000);
   }
 }
+}
 
 async function updateCours() {
-  try {
+  // Regex pour salles
+  const regexSalle = /^[A-Z]{1}[0-9]{3}[a-z]{0,1}([ ]{1}[A-Z]{1}[0-9]{3}[a-z]{0,1})*$/;
+  var tabSalles = lieuForm.value.split(" ");
+  var regex = true;
+  var selectList = document.createElement("select");
+  selectList.id = "mySelect";
+  tabSalles.forEach((element) => {
+    if (!regexSalle.test(element)) {
+      messageToUser.value = "Erreur lors de la modification du cours, les salles doivent être au format 1 lettre majuscule et 3 chiffres - Exemple : T153";
+      showInfoModal.value = !showInfoModal.value;
+      regex = false;
+    }
+  });
+  // Regex pour acronymes
+  const regexAcronyme = /^[A-Z]{3,4}$/;
+  if (!regexAcronyme.test(profForm.value)) {
+    messageToUser.value = "Erreur lors de la modification du cours, les acronymes doivent être au format 3 ou 4 lettres en majuscule - Exemple : JHS";
+    showInfoModal.value = !showInfoModal.value;
+    regex = false;
+  }
+  var tabProfs = Professeurs.value;
+  var profExist = false;
+  var tabAcronyme = [];
+  var prof;
+  tabProfs.forEach((element) => {
+    prof = element.Acronyme + " (" + element.FullName + ")";  
+    var option = document.createElement("option");
+    option.value = element.Acronyme;
+    option.text = prof;
+    selectList.appendChild(option);
+    if (element.Acronyme == profForm.value) {
+      profExist = true;
+    }
+  });
+  if (!profExist) {
+    var modalInfo = document.querySelector(".modal-info");
+    var btnProf = document.querySelector(".btnProf");
+    btnProf.style = "margin-top: 25px;";
+    modalInfo.appendChild(selectList);
+    var button = document.createElement("a");
+    button.classList.add("button", "is-danger");
+    button.innerHTML = "Choisir le professeur";
+    btnProf.appendChild(button);
+    button.addEventListener ("click", function() {
+      profForm.value = document.getElementById("mySelect").value;
+      console.log(profForm.value);
+      updateCours();
+    });
+    messageToUser.value = "Erreur lors de la modification du cours, le professeur n'existe pas dans la base de données, Veuillez utiliser les acronymes existants: " + tabAcronyme.join(", ");
+    showInfoModal.value = !showInfoModal.value;
+    regex = false;
+  }
+  if (regex) {
+try {
     const cours = await axios
       .post(BASE_URL + "cours/modif/" + currentCoursId.value, {
         Debut: dateCoursForm.value + " " + heureDebutForm.value,
         Fin: dateCoursForm.value + " " + heureFinForm.value,
         Salles: lieuForm.value,
         User: userSession.value,
+        Prof: profForm.value,
       })
       .then(() => {
         dateCoursForm.value = "";
         heureDebutForm.value = "";
         heureFinForm.value = "";
         lieuForm.value = "";
+        profForm.value = "";
         showUpdateModalForm.value = !showUpdateModalForm.value;
         messageToUser.value = "Cours modifié avec succès";
         showInfoModal.value = !showInfoModal.value;
@@ -359,6 +441,7 @@ async function updateCours() {
     setTimeout(() => {
       window.location.reload();
     }, 1000);
+  }
   }
 }
 
@@ -493,10 +576,46 @@ function toggleActiveAnnee(event) {
   event.target.classList.add("isActive");
 }
 
-function displayUpdateModal(id, salle) {
+function displayUpdateModal(cours) {
   showUpdateModalForm.value = !showUpdateModalForm.value;
-  currentCoursId.value = id;
-  lieuForm.value = salle;
+  currentCoursId.value = cours.id;
+  lieuForm.value = cours.salle_id;
+  profForm.value = cours.Acronyme;
+  var HeureFin = cours.HeureFin.split(":");
+  var HeureDebut = cours.HeureDebut.split(":");
+  for (var i = 0; i < HeureDebut.length; i++) {
+    if (HeureDebut[i].length == 1) {
+      HeureDebut[i] = "0" + HeureDebut[i];
+    }
+  }
+  for (var i = 0; i < HeureFin.length; i++) {
+    if (HeureFin[i].length == 1) {
+      HeureFin[i] = "0" + HeureFin[i];
+    }
+  }
+  var date = new Date(cours.Debut);
+  var day = date.getDate();
+  var month = date.getMonth() + 1;
+  var year = date.getFullYear();
+  if(month < 10){
+    month = "0" + month;
+  }
+  if(day < 10){
+    day = "0" + day;
+  }
+  var dateString = year + "-" + month + "-" + day;
+  heureFinForm.value = HeureFin[0] + ":" + HeureFin[1];
+  heureDebutForm.value = HeureDebut[0] + ":" + HeureDebut[1];
+  dateCoursForm.value = dateString;
+}
+
+function popupAdd(){
+        dateCoursForm.value = "";
+        heureDebutForm.value = "";
+        heureFinForm.value = "";
+        profForm.value = "";
+        lieuForm.value = "";
+        showModalForm.value = !showModalForm.value;
 }
 </script>
 <template>
@@ -583,7 +702,7 @@ function displayUpdateModal(id, salle) {
                 <button
                   v-show="role == 'Administration'"
                   class="button is-pulled-right is-white has-background-light"
-                  @click="displayUpdateModal(cours.id, cours.salle_id)"
+                  @click="displayUpdateModal(cours)"
                 >
                   <span class="icon is-small">
                     <i class="fa fa-pencil ml-6"></i>
@@ -609,7 +728,7 @@ function displayUpdateModal(id, salle) {
         class="button is-right js-modal-trigger"
         data-target="modal-js-example"
         id="fixedbutton"
-        @click="showModalForm = !showModalForm"
+        @click="popupAdd()"
       >
         <span class="icon is-large has-text-danger">
           <i class="fa fa-3x fa-plus-square"></i>
@@ -617,6 +736,7 @@ function displayUpdateModal(id, salle) {
       </button>
     </div>
   </div>
+  <!-- MODAL FORM  -->
   <BaseModalForm
     :class="{ 'is-active': showModalForm }"
     @close="showModalForm = false"
@@ -661,18 +781,20 @@ function displayUpdateModal(id, salle) {
           </select>
         </div>
       </div>
-      <BaseInput>
-        <template v-slot:label>Classe(s)</template>
-        <template v-slot:input>
-          <input
-            v-model="classeForm"
-            class="input"
-            type="texte"
-            placeholder="Exemple : M49-1 M49-2"
-            required
-          />
-        </template>
-      </BaseInput>
+      <div class="field" style="width: 300px">
+        <label class="label" for="Classe">Classes</label>
+        <div class="select">
+          <select v-model="classeForm" required>
+            <option value="" disabled selected hidden>Classes</option> 
+            <option
+              v-for="classe in Classes"
+              :value="classe.id"
+            >
+              {{ classe.id }}
+            </option>
+          </select>
+        </div>
+      </div>
       <BaseInput>
         <template v-slot:label>Date</template>
         <template v-slot:input>
@@ -710,18 +832,20 @@ function displayUpdateModal(id, salle) {
           />
         </template>
       </BaseInput>
-      <BaseInput>
-        <template v-slot:label>Professeur</template>
-        <template v-slot:input>
-          <input
-            v-model="profForm"
-            class="input"
-            type="texte"
-            placeholder="Exemple : JHS"
-            required
-          />
-        </template>
-      </BaseInput>
+      <div class="field" style="width: 300px">
+        <label class="label" for="Professeurs">Professeurs</label>
+        <div class="select">
+          <select v-model="profForm" required>
+            <option value="" disabled selected hidden>Professeurs</option> 
+            <option
+              v-for="prof in Professeurs"
+              :value="prof.Acronyme"
+            >
+              {{ prof.Acronyme }} ({{ prof.FullName }})
+            </option>
+          </select>
+        </div>
+      </div>
       <BaseInput>
         <template v-slot:label>Salle(s)</template>
         <template v-slot:input>
@@ -792,6 +916,18 @@ function displayUpdateModal(id, salle) {
         </template>
       </BaseInput>
       <BaseInput>
+        <template v-slot:label>Professeur</template>
+        <template v-slot:input>
+          <input
+            v-model="profForm"
+            class="input"
+            type="texte"
+            placeholder="Exemple : JHS"
+            required
+          />
+        </template>
+      </BaseInput>
+      <BaseInput>
         <template v-slot:label>Classe(s)</template>
         <template v-slot:input>
           <input
@@ -818,10 +954,10 @@ function displayUpdateModal(id, salle) {
     :class="{ 'is-active': showDeleteModalForm }"
     @close="showDeleteModalForm = false"
   >
-    <!-- DELETE EVENT  -->
+    <!-- DELETE COURS  -->
     <BaseFormModal>
       <h3 class="title">Voulez-vous vraiment supprimer le cours ?</h3>
-      <span class="columns is-mobile">
+      <span class="columns">
         <BaseInputSubmit class="column">
           <input
             type="submit"
@@ -850,6 +986,8 @@ function displayUpdateModal(id, salle) {
     <!-- CRUD ACTION  -->
     <BaseFormModal>
       <h3 class="title">{{ messageToUser }}</h3>
+      <div class="modal-info select is-danger"></div>
+      <div class="btnProf"></div>
     </BaseFormModal>
   </BaseModalForm>
 </template>

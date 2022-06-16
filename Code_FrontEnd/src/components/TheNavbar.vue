@@ -145,7 +145,7 @@ function changeNotif(){
         </a>
         <a class="navbar-item" href="#evenements"> Evenements </a>
         <a class="navbar-item" href="#Information"> Informations </a>
-        <a v-show="role != 'Administration' && role != 'AGE'" class="navbar-item" href="#notifications" @click="changeNotif()">
+        <a class="navbar-item" href="#notifications" @click="changeNotif()">
           <span class="icon">
             <i v-show="newNotifs == true" class="fa fa-bell" style="color: red"></i>
             <i v-show="newNotifs == false" class="fa fa-bell"></i>
