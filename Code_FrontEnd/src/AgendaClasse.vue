@@ -838,4 +838,7 @@ fetch(BASE_URL + "matiere")
 body {
    overflow-x: hidden; 
 }
+.spanCours{
+  text-align: left !important;
+}
 </style>

@@ -954,6 +954,10 @@ fetch(BASE_URL + "matiere")
   right: 40px;
 }
 
+.spanCours{
+  text-align: left !important;
+}
+
 .charger,
 .charger:before,
 .charger:after {
