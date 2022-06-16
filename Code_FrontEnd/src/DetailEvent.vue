@@ -1,7 +1,6 @@
 <script setup>
 import { ref, computed, watchEffect } from "vue";
 import TheDetailsEvent from "./components/TheDetailsEvent.vue";
-import BaseBoutonRetour from "./components/TheReturnButton.vue";
 import { BASE_URL, idDetailsEvent } from "../composables/store.js";
 import TheReturnButton from "./components/TheReturnButton.vue";
 import { changeFormatDateWithoutHoursMinutes } from "../composables/function.js";
@@ -14,8 +13,7 @@ watchEffect(() => {
     fetch(BASE_URL + "events/id/" + idDetailsEvent.value)
       .then((res) => res.json())
       .then((eventsResults) => (events.value = eventsResults))
-      .then(() => {
-      });
+      .then(() => {});
   }
 });
 
@@ -36,14 +34,22 @@ const allEvents = computed(() => {
 
 <template>
   <TheReturnButton></TheReturnButton>
-  <the-details-event v-for="events in allEvents" :Debut="changeFormatDateWithoutHoursMinutes(events.Debut)"
-    :Fin="changeFormatDateWithoutHoursMinutes(events.Fin)" :Lieu="events.Lieu" :user_Email="events.user_Email"
-    :Description="events.Description" :Titre="events.Titre"></the-details-event>
+  <!--- Vfor insert infos about this event --->
+
+  <the-details-event
+    v-for="events in allEvents"
+    :Debut="changeFormatDateWithoutHoursMinutes(events.Debut)"
+    :Fin="changeFormatDateWithoutHoursMinutes(events.Fin)"
+    :Lieu="events.Lieu"
+    :user_Email="events.user_Email"
+    :Description="events.Description"
+    :Titre="events.Titre"
+  ></the-details-event>
 </template>
 
 <style scoped>
 @import "https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css";
 body {
-   overflow-x: hidden; 
+  overflow-x: hidden;
 }
 </style>

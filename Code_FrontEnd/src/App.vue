@@ -11,7 +11,6 @@ import Notifications from "./Notifications.vue";
 import DetailEvent from "./DetailEvent.vue";
 import PasswordReset from "./PasswordReset.vue";
 import Information from "./Information.vue";
-import TheReturnButton from "./components/TheReturnButton.vue";
 var routes = {};
 let userSession = ref(false);
 isMobileDevice();
@@ -55,7 +54,7 @@ function isMobileDevice() {
         label: "PasswordReset",
         component: PasswordReset,
       },
-       "#Information": {
+      "#Information": {
         label: "Information",
         component: Information,
       },
@@ -94,7 +93,7 @@ function isMobileDevice() {
         label: "PasswordReset",
         component: PasswordReset,
       },
-       "#Information": {
+      "#Information": {
         label: "Information",
         component: Information,
       },
@@ -127,7 +126,6 @@ watchEffect(() => {
 
 <template>
   <TheNavbar :routes="routes" :curHash="curHash"></TheNavbar>
-  <!--   <the-return-button v-if="userSession"></the-return-button> -->
   <main>
     <template v-for="(route, hash) of routes">
       <div v-show="hash == curHash">

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, watchEffect, nextTick } from "vue";
+import { ref, computed, nextTick } from "vue";
 import CardEvent from "./components/CardEvent.vue";
 import TheCardWrapper from "./components/TheCardWrapper.vue";
 import BaseFormModal from "./components/BaseFormModal.vue";
@@ -13,7 +13,7 @@ import { BASE_URL, idDetailsEvent, todayDate } from "../composables/store.js";
 import { changeFormatDateWithoutHoursMinutes } from "../composables/function.js";
 import randomColor from "randomcolor";
 
-// ---------------------- Fetch data for all events -----------------------------
+// ---------------------- Fetch data for all events and format date -----------------------------
 const { data: events } = useFetch(BASE_URL + "events/");
 const userSession = ref(sessionStorage.getItem("user"));
 const role = ref(sessionStorage.getItem("role"));
@@ -66,7 +66,6 @@ function addEvent() {
       user_Email: userSession.value,
     })
     .then((res) => {
-      //Perform Success Action
       showModalForm.value = !showModalForm.value;
       messageToUser.value = "L'événement a été créé avec succès";
       showInfoModal.value = !showInfoModal.value;
@@ -75,7 +74,6 @@ function addEvent() {
       }, 1000);
     })
     .catch((error) => {
-      // error.response.status Check status code
       showModalForm.value = !showModalForm.value;
       messageToUser.value = "Erreur lors de la création de l'événement";
       showInfoModal.value = !showInfoModal.value;
@@ -86,6 +84,17 @@ function addEvent() {
     .finally(() => {});
 }
 
+// ---------------------- Function for add event -----------------------------
+function addEventModal() {
+  Titre.value = "";
+  Description.value = "";
+  Lieu.value = "";
+  Debut.value = "";
+  Fin.value = "";
+  showModalForm.value = !showModalForm.value;
+}
+
+// ---------------------- Function for display update modal -----------------------------
 function displayUpdateModal(id, titre, description, lieu, debut, fin, email) {
   showUpdateModalForm.value = !showUpdateModalForm.value;
   if (email == userSession.value) {
@@ -101,6 +110,7 @@ function displayUpdateModal(id, titre, description, lieu, debut, fin, email) {
   }
 }
 
+// ---------------------- Function for update event -----------------------------
 function updateEvent(user) {
   axios
     .post(BASE_URL + "event/modif/" + currentEventId.value, {
@@ -109,11 +119,9 @@ function updateEvent(user) {
       Lieu: Lieu.value,
       Debut: Debut.value,
       Fin: Fin.value,
-      // ---------------------- !!!!!!!!! CHANGER !!!!!!!!! -----------------------------
       user_Email: userSession.value,
     })
     .then((res) => {
-      //Perform Success Action
       showUpdateModalForm.value = !showUpdateModalForm.value;
       messageToUser.value = "L'événement a été modifié avec succès";
       showInfoModal.value = !showInfoModal.value;
@@ -122,7 +130,6 @@ function updateEvent(user) {
       }, 1000);
     })
     .catch((error) => {
-      // error.response.status Check status code
       showUpdateModalForm.value = !showUpdateModalForm.value;
       messageToUser.value = "Erreur lors de la modification de l'événement";
       showInfoModal.value = !showInfoModal.value;
@@ -133,6 +140,7 @@ function updateEvent(user) {
     .finally(() => {});
 }
 
+// ---------------------- Function for display delete modal -----------------------------
 function displayDeleteModal(id, email) {
   showDeleteModalForm.value = !showDeleteModalForm.value;
   if (email == userSession.value) {
@@ -143,11 +151,11 @@ function displayDeleteModal(id, email) {
   }
 }
 
+// ---------------------- Function for delete event -----------------------------
 function deleteEvent() {
   axios
     .post(BASE_URL + "event/delete/" + currentEventId.value)
     .then((res) => {
-      //Perform Success Action
       showDeleteModalForm.value = !showDeleteModalForm.value;
       messageToUser.value = "L'événement a été supprimé avec succès";
       showInfoModal.value = !showInfoModal.value;
@@ -156,7 +164,6 @@ function deleteEvent() {
       }, 1000);
     })
     .catch((error) => {
-      // error.response.status Check status code
       messageToUser.value = "L'événement a été supprimé avec succès";
       showInfoModal.value = !showInfoModal.value;
       setTimeout(() => {
@@ -166,6 +173,7 @@ function deleteEvent() {
     .finally(() => {});
 }
 
+// ---------------------- Function for details events -----------------------------
 async function voirDetails(id) {
   sessionStorage.setItem("idDetailsEvent", id);
   idDetailsEvent.value = id;
@@ -173,6 +181,7 @@ async function voirDetails(id) {
   window.location.hash = "#detailEvent";
 }
 
+// ---------------------- Function that add a color to a role -----------------------------
 fetch(BASE_URL + "role")
   .then((res) => res.json())
   .then((AllMatiere) => {
@@ -197,21 +206,13 @@ fetch(BASE_URL + "role")
       );
     });
   });
-
-function addEventModal() {
-  Titre.value = "";
-  Description.value = "";
-  Lieu.value = "";
-  Debut.value = "";
-  Fin.value = "";
-  showModalForm.value = !showModalForm.value;
-}
 </script>
 
 <template>
   <div class="main my-4 mx-4">
     <the-card-wrapper>
       <template v-if="role == 'Administration' || role == 'AGE'">
+        <!--- Vfor insert infos relating to events --->
         <card-event
           v-for="events in allEvents"
           :id="events.id"
@@ -222,6 +223,7 @@ function addEventModal() {
           :description="events.Description"
           :class="events.role_id"
         >
+          <!--- Add all buttons i, trash, pencil and show it to the roles concerned --->
           <button
             class="button btnAdmin is-pulled-right is-white has-background-light"
             @click="voirDetails(events.id)"
@@ -312,6 +314,7 @@ function addEventModal() {
         </card-event>
       </template>
     </the-card-wrapper>
+    <!--- Button for add a new event --->
     <button
       v-show="role == 'Administration' || role == 'AGE'"
       class="button is-right js-modal-trigger"
@@ -647,6 +650,6 @@ function addEventModal() {
   right: 30px;
 }
 body {
-   overflow-x: hidden; 
+  overflow-x: hidden;
 }
 </style>
