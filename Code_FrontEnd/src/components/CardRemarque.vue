@@ -15,6 +15,10 @@ defineProps({
       href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
     />
     <div class="is-size-4 has-text-weight-bold columns is-mobile my-1">
+      <span class="circle icon is-small">
+        <i class="fa fa-circle"></i>
+      </span>
+
       <span class="is-size-5 column"
         >{{ matiere_id }} - {{ titre }} : {{ description }}</span
       >
@@ -35,20 +39,11 @@ defineProps({
 
 <style scoped>
 article {
-  border-left-width: 15px;
-  border-style: solid;
-  border-color: #ff3860;
-  border-right-width: 0px;
-  border-top-width: 0px;
-  border-bottom-width: 0px;
-  padding: 0px;
   cursor: pointer;
 }
 
-article div {
-  padding: 1rem;
-}
-#eye {
-  margin-right: 3rem;
+div .columns {
+  display: flex;
+  align-items: center;
 }
 </style>
