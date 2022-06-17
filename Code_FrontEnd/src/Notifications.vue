@@ -71,6 +71,9 @@ const allNotifications = computed(() => {
         newNotifs.value += "," + element.notification.id;//add the notification id to the newNotifs string
       }
     });
+    tabNotifications.sort((a, b) => {
+      return b.notification.id - a.notification.id;
+    });
     return tabNotifications;
   }
 });
