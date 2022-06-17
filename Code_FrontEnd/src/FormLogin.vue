@@ -38,6 +38,7 @@ function useFetchLogin(password, email) {
       })
       .then((res) => {
         if (res.data.includes("connected") || res.data.includes("DB")) {
+          email = email.toLowerCase();
           sessionStorage.setItem("user", email);
           if (res.data.includes("Professeur")) {
             sessionStorage.setItem("role", "Professeur");
@@ -108,7 +109,7 @@ function useFetchLogin(password, email) {
                 </div>
               </div>
               <div class="tooltip"><i class="fa fa-info-circle" aria-hidden="true"></i>
-                <span class="tooltiptext">Veuillez rentrer vos identifiants GAPS lors de la première connexion</span>
+                <span class="tooltiptext">Veuillez rentrer votre mail @heig-vd et votre mot de passe GAPS lors de votre première connexion</span>
               </div>
               <div class="field">
                 <button class="button is-danger">Connexion</button><br /><br />
