@@ -880,20 +880,18 @@ function popupAdd(){
           </select>
         </div>
       </div>
-      <div class="field" style="width: 300px">
-        <label class="label" for="Classe">Classes</label>
-        <div class="select">
-          <select v-model="classeForm" required>
-            <option value="" disabled selected hidden>Classes</option> 
-            <option
-              v-for="classe in Classes"
-              :value="classe.id"
-            >
-              {{ classe.id }}
-            </option>
-          </select>
-        </div>
-      </div>
+      <BaseInput>
+        <template v-slot:label>Classe(s)</template>
+        <template v-slot:input>
+          <input
+            v-model="classeForm"
+            class="input"
+            type="text"
+            placeholder="M49-1 M48 ..."
+            required
+          />
+        </template>
+      </BaseInput>
       <BaseInput>
         <template v-slot:label>Date</template>
         <template v-slot:input>
